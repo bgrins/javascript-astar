@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Astar Search Demo</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
+		<link rel="stylesheet" type="text/css" media="screen, projection" href="demo.css" />
+		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'></script>
+		<script type='text/javascript' src='graph.js'></script>
+		<script type='text/javascript' src='astar.js'></script>
+		<script type="text/javascript">
+	
+		$(function() {
+			
+			var $grid = $("#search_grid");
+			var $selectWallFrequency = $("#selectWallFrequency");
+			var $selectGridSize = $("#selectGridSize");
+			var $checkDebug = $("#checkDebug");
+			
+			var opts = { 
+			    wallFrequency: $selectWallFrequency.val(),
+			    gridSize: $selectGridSize.val(),
+			    debug: $checkDebug.attr("checked")
+			};
+			
+			var grid = new GraphSearch($grid, opts, astar.search);
+			
+			$("#btnGenerate").click(function() {
+				grid.initialize();
+			});
+			
+			$selectWallFrequency.change(function() {
+			    grid.setOption({wallFrequency: $(this).val()});
+			    grid.initialize();
+			});
+			
+			$selectGridSize.change(function() {
+			    grid.setOption({gridSize: $(this).val()});
+			    grid.initialize();
+			});
+			
+			$checkDebug.change(function() {
+			    grid.setOption({debug: $(this).attr("checked")});
+			});
+						
+		});
+
+	</script>
+
+	</head>
+<body>
+	<div id="header">
+		<a href='http://github.com/bgrins/javascript-astar/'>Source Code</a> |
+		<a href='http://www.briangrinstead.com/blog/astar-search-algorithm-in-javascript'>Original Blog Post</a>
+	</div>
+
+	<div id="content">
+		<h2>A* Search Algorithm</h2>
+	
+	    <div id="controls" class='clear'>
+	    	
+	    		<label for="selectWallFrequency">Wall Frequency: </label>
+	    		<select id="selectWallFrequency">
+	    			<option value=".1">10%</option>
+	    			<option value=".2">20%</option>
+	    			<option value=".3">30%</option>
+	    			<option value=".4">40%</option>
+	    		</select>
+	    		<br />
+	    		<label for="selectGridSize">Grid Size: </label>
+	    		<select id="selectGridSize" name="selectGridSize">
+	    			<option value="10">10x10</option>
+	    			<option value="15" selected="selected">15x15</option>
+	    			<option value="20">20x20</option>
+	    			<option value="30">30x30</option>
+	    		</select>
+	    		
+	    		<br />
+	    		<label for="checkDebug">Show search info?</label>
+	    		<input type="checkbox" name="checkDebug" id="checkDebug" />	
+	    		<br />
+	    		<input type="button" id="btnGenerate" value="Generate New Map" />
+				<br />
+		<span id="message">Click on a grid position to search</span>
+	    </div>
+	    
+	    <div id="main">			    
+	    	<div id="search_grid"></div>
+	    </div>
+	
+	</div>
+	<div id="footer"></div>
+
+</body>
+</html>
