@@ -1,7 +1,8 @@
 /* 	astar.js http://github.com/bgrins/javascript-astar
 	Implements the astar search algorithm in javascript
-	Requires Array.prototype.indexOf and Array.prototype.remove from graph.js
 	
+	**Requires graph.js**
+		
 	Example Usage:
 		var graph = new Graph([
 			[0,0,0,0],
