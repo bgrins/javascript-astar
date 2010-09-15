@@ -19,8 +19,10 @@ GraphSearch.prototype.setOption = function(opt) {
 GraphSearch.prototype.initialize = function() {
     
     var self = this;
-	var grid = [];
+	this.grid = [];
+	var nodes = [];
 	var $graph = this.$graph;
+
 	$graph.empty();
 	
     var cellWidth = ($graph.width()/this.opts.gridSize)-2;  // -2 for border
@@ -32,31 +34,35 @@ GraphSearch.prototype.initialize = function() {
         var $row = $("<div class='clear' />");
     	$graph.append($row);
     	
-    	var row = [];
+    	var nodeRow = [];
+    	var gridRow = [];
     	
     	for(var y=0;y<this.opts.gridSize;y++) {
     		var id = "cell_"+x+"_"+y;
     		var $cell = $cellTemplate.clone();
     		$cell.attr("id", id).attr("x", x).attr("y", y);
     		$row.append($cell);
+    		gridRow.push($cell);
     		
     		var isWall = Math.floor(Math.random()*(1/self.opts.wallFrequency));
     		if(isWall == 0) { 
-    			row.push(GraphNodeType.WALL);
+    			nodeRow.push(GraphNodeType.WALL);
     			$cell.addClass(css.wall); 
     		}
     		else  {
-    			row.push(GraphNodeType.OPEN);
+    			nodeRow.push(GraphNodeType.OPEN);
     			if (!startSet) {    			
     				$cell.addClass(css.start);
     				startSet = true;
     			}
     		}
     	}
-    	grid.push(row);
+    	
+    	this.grid.push(gridRow);
+    	nodes.push(nodeRow);
     }
     
-    this.graph = new Graph(grid);
+    this.graph = new Graph(nodes);
 	
     // bind cell event, set start/wall positions
     this.$cells = $graph.find(".grid_item");
@@ -86,7 +92,9 @@ GraphSearch.prototype.cellClicked = function($end) {
 	}
 	else {
 	    $("#message").text("search took " + (fTime-sTime) + "ms.");
-	    this.drawDebugInfo(this.opts.debug);
+    	if(this.opts.debug) {
+	    	this.drawDebugInfo(this.opts.debug);
+	    }
 	    this.animatePath(path);
 	}
 };
@@ -118,20 +126,21 @@ GraphSearch.prototype.animateNoPath = function() {
     jiggle(15);
 };
 GraphSearch.prototype.animatePath = function(path) {
-	var $graph = this.$graph;
+	var grid = this.grid;
 	var elementFromNode = function(node) {
-		return $graph.children().eq(node.x).children().eq(node.y)
+		return grid[node.x][node.y];
 	};
 	
+	var timeout = 100 / this.grid.length;
     var removeClass = function(path, i) {
 	    if(i>=path.length) return;
 	    elementFromNode(path[i]).removeClass(css.active);
-	    setTimeout( function() { removeClass(path, i+1) }, 25);
+	    setTimeout( function() { removeClass(path, i+1) }, timeout);
     }
     var addClass = function(path, i)  {
 	    if(i>=path.length) return removeClass(path, 0);
 	    elementFromNode(path[i]).addClass(css.active);
-	    setTimeout( function() { addClass(path, i+1) }, 25);
+	    setTimeout( function() { addClass(path, i+1) }, timeout);
     };
     
     addClass(path, 0);
