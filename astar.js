@@ -28,8 +28,9 @@ var astar = {
             }   
         }
     },
-    search: function(grid, start, end) {
+    search: function(grid, start, end, heuristic) {
         astar.init(grid);
+        heuristic = heuristic || astar.manhattan;
         
         var openList   = [];
         var closedList = [];
@@ -78,7 +79,7 @@ var astar = {
 				    // Also, we need to take the h (heuristic) score since we haven't done so yet
     				
 				    gScoreIsBest = true;
-				    neighbor.h = astar.heuristic(neighbor.pos, end.pos);
+				    neighbor.h = heuristic(neighbor.pos, end.pos);
 				    openList.push(neighbor);
 			    }
 			    else if(gScore < neighbor.g) {
@@ -100,8 +101,9 @@ var astar = {
         // No result was found -- empty array signifies failure to find path
         return [];
     },
-    heuristic: function(pos0, pos1) {
-    	// This is the Manhattan distance
+    manhattan: function(pos0, pos1) {
+    	// See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
+    	
         var d1 = Math.abs (pos1.x - pos0.x);
         var d2 = Math.abs (pos1.y - pos0.y);
         return d1 + d2;
