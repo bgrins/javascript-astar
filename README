@@ -1,3 +1,19 @@
 javascript-astar
-Author: Brian Grinstead
+An implementation of the A* Search Algorithm in JavaScript
+See a demo at http://www.briangrinstead.com/files/astar/
 
+If you want just the A* search code (not the demo visualization), use code like this:
+
+	<script type='text/javascript' src='graph.js'></script>
+	<script type='text/javascript' src='astar.js'></script>
+	<script type='text/javascript'>
+		var graph = new Graph([
+			[0,0,0,0],
+			[1,0,0,1],
+			[1,1,0,0]
+		]);
+		var start = graph.nodes[0][0];
+		var end = graph.nodes[1][2];
+		var result = astar.search(graph.nodes, start, end);
+		// result is an array containing the shortest path
+	</script>
