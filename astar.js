@@ -1,6 +1,19 @@
-// astar.js
-// Implements the astar search algorithm in javascript
-
+/* 	astar.js http://github.com/bgrins/javascript-astar
+	Implements the astar search algorithm in javascript
+	Requires Array.prototype.indexOf and Array.prototype.remove from graph.js
+	
+	Example Usage:
+		var graph = new Graph([
+			[0,0,0,0],
+			[1,0,0,1],
+			[1,1,0,0]
+		]);
+		var start = graph.nodes[0][0];
+		var end = graph.nodes[1][2];
+		astar.search(graph.nodes, start, end);
+		
+	See graph.js for a more advanced example
+*/
 
 var astar = {
     init: function(grid) {
@@ -31,7 +44,7 @@ var astar = {
 		    var currentNode = openList[lowInd];
 		    
 		    // End case -- result has been found, return the traced path
-		    if(currentNode.pos == end.pos) {
+		    if(currentNode == end) {
 			    var curr = currentNode;
 			    var ret = [];
 			    while(curr.parent) {
@@ -42,13 +55,14 @@ var astar = {
 		    }
     		
 		    // Normal case -- move currentNode from open to closed, process each of its neighbors
-		    openList.removeGraphNode(currentNode);
+		    openList.remove(lowInd);
 		    closedList.push(currentNode);
+		    
 		    var neighbors = astar.neighbors(grid, currentNode);
-    		
 		    for(var i=0; i<neighbors.length;i++) {
 			    var neighbor = neighbors[i];
-			    if(closedList.findGraphNode(neighbor) || neighbor.isWall()) {
+			    
+			    if(neighbor.isWall() || closedList.indexOf(neighbor) >= 0) {
 				    // not a valid node to process, skip to next neighbor
 				    continue;
 			    }
@@ -58,8 +72,7 @@ var astar = {
 			    var gScore = currentNode.g + 1; // 1 is the distance from a node to it's neighbor
 			    var gScoreIsBest = false;
     			
-    			
-			    if(!openList.findGraphNode(neighbor)) {
+			    if(openList.indexOf(neighbor) == -1) {
 				    // This the the first time we have arrived at this node, it must be the best
 				    // Also, we need to take the h (heuristic) score since we haven't done so yet
     				
@@ -94,9 +107,9 @@ var astar = {
     },
     neighbors: function(grid, node) {
         var ret = [];
-	    var x = node.pos.x;
-	    var y = node.pos.y;
-    	
+	    var x = node.x;
+	    var y = node.y;
+	    
 	    if(grid[x-1] && grid[x-1][y]) {
 		    ret.push(grid[x-1][y]);
 	    }
