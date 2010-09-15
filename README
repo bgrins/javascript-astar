@@ -1,7 +1,7 @@
 javascript-astar: An implementation of the A* Search Algorithm in JavaScript
 See a demo at http://www.briangrinstead.com/files/astar/
 
-astar.js: The newest version of the algorithm using a Binary Heap.  It is quite faster than the original.  See http://www.briangrinstead.com/blog/astar-search-algorithm-in-javascript-updated
+astar.js: The newest version of the algorithm using a Binary Heap.  It is quite faster than the original. 			http://www.briangrinstead.com/blog/astar-search-algorithm-in-javascript-updated
 	Binary Heap taken from http://eloquentjavascript.net/appendix2.html
 	with license: http://creativecommons.org/licenses/by/3.0/ 
 	
@@ -12,7 +12,7 @@ astar-list.js: The original version of the algorithm based off the original blog
 	this in another application, I would strongly recommend using astar.js instead.
  
  
-If you want just the A* search code (not the demo visualization), use code like this:
+If you want just the A* search code (not the demo visualization), use code like this (http://gist.github.com/581352):
 
 	<script type='text/javascript' src='graph.js'></script>
 	<script type='text/javascript' src='astar.js'></script>
