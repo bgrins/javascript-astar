@@ -1,6 +1,41 @@
-// demo.js
-// Sets up the page with a graph
+/* 	demo.js http://github.com/bgrins/javascript-astar
+	Set up the demo page for the A* Search
+*/
 
+$(function() {
+    
+    var $grid = $("#search_grid");
+    var $selectWallFrequency = $("#selectWallFrequency");
+    var $selectGridSize = $("#selectGridSize");
+    var $checkDebug = $("#checkDebug");
+    
+    var opts = { 
+        wallFrequency: $selectWallFrequency.val(),
+        gridSize: $selectGridSize.val(),
+        debug: $checkDebug.attr("checked")
+    };
+    
+    var grid = new GraphSearch($grid, opts, astar.search);
+    
+    $("#btnGenerate").click(function() {
+    	grid.initialize();
+    });
+    
+    $selectWallFrequency.change(function() {
+        grid.setOption({wallFrequency: $(this).val()});
+        grid.initialize();
+    });
+    
+    $selectGridSize.change(function() {
+        grid.setOption({gridSize: $(this).val()});
+        grid.initialize();
+    });
+    
+    $checkDebug.change(function() {
+        grid.setOption({debug: $(this).attr("checked")});
+    });
+    			
+});
 
 var css = { start: "start", finish: "finish", wall: "wall", active: "active" };
 
@@ -127,23 +162,25 @@ GraphSearch.prototype.animateNoPath = function() {
 };
 GraphSearch.prototype.animatePath = function(path) {
 	var grid = this.grid;
+	var timeout = 100 / grid.length;
 	var elementFromNode = function(node) {
 		return grid[node.x][node.y];
 	};
 	
-	var timeout = 100 / this.grid.length;
     var removeClass = function(path, i) {
 	    if(i>=path.length) return;
 	    elementFromNode(path[i]).removeClass(css.active);
 	    setTimeout( function() { removeClass(path, i+1) }, timeout);
     }
     var addClass = function(path, i)  {
-	    if(i>=path.length) return removeClass(path, 0);
+	    if(i>=path.length) {  // Finished showing path, now remove
+	    	return removeClass(path, 0);
+	    }
 	    elementFromNode(path[i]).addClass(css.active);
 	    setTimeout( function() { addClass(path, i+1) }, timeout);
     };
     
-    addClass(path, 0);
+    addClass(path, 0)
     this.$graph.find("." + css.start).removeClass(css.start);
     this.$graph.find("." + css.finish).removeClass(css.finish).addClass(css.start);
 };

@@ -52,47 +52,9 @@
 	</div>
 	<div id="footer"></div>
 
-		<script type='text/javascript' src='jquery-1.4.2.min.js'></script>
-		<script type='text/javascript' src='../graph.js'></script>
-		<script type='text/javascript' src='../astar.js'></script>
-		<script type='text/javascript' src='demo.js'></script>
-		<script type="text/javascript">
-	
-		$(function() {
-			
-			var $grid = $("#search_grid");
-			var $selectWallFrequency = $("#selectWallFrequency");
-			var $selectGridSize = $("#selectGridSize");
-			var $checkDebug = $("#checkDebug");
-			
-			var opts = { 
-			    wallFrequency: $selectWallFrequency.val(),
-			    gridSize: $selectGridSize.val(),
-			    debug: $checkDebug.attr("checked")
-			};
-			
-			var grid = new GraphSearch($grid, opts, astar.search);
-			
-			$("#btnGenerate").click(function() {
-				grid.initialize();
-			});
-			
-			$selectWallFrequency.change(function() {
-			    grid.setOption({wallFrequency: $(this).val()});
-			    grid.initialize();
-			});
-			
-			$selectGridSize.change(function() {
-			    grid.setOption({gridSize: $(this).val()});
-			    grid.initialize();
-			});
-			
-			$checkDebug.change(function() {
-			    grid.setOption({debug: $(this).attr("checked")});
-			});
-						
-		});
-
-	</script>
+	<script type='text/javascript' src='jquery-1.4.2.min.js'></script>
+	<script type='text/javascript' src='../graph.js'></script>
+	<script type='text/javascript' src='../astar.js'></script>
+	<script type='text/javascript' src='demo.js'></script>
 </body>
 </html>
