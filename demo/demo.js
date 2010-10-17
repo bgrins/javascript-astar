@@ -67,7 +67,6 @@ GraphSearch.prototype.initialize = function() {
 
     for(var x=0;x<this.opts.gridSize;x++) {
         var $row = $("<div class='clear' />");
-    	$graph.append($row);
 
     	var nodeRow = [];
     	var gridRow = [];
@@ -92,6 +91,7 @@ GraphSearch.prototype.initialize = function() {
     			}
     		}
     	}
+	    $graph.append($row);
 
     	this.grid.push(gridRow);
     	nodes.push(nodeRow);

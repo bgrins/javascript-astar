@@ -102,25 +102,19 @@ BinaryHeap.prototype = {
     return result;
   },
   remove: function(node) {
-    var len = this.content.length;
-    // To remove a value, we must search through the array to find
-    // it.
-    for (var i = 0; i < len; i++) {
-      if (this.content[i] == node) {
-        // When it is found, the process seen in 'pop' is repeated
-        // to fill up the hole.
-        var end = this.content.pop();
-        if (i != len - 1) {
-          this.content[i] = end;
-          if (this.scoreFunction(end) < this.scoreFunction(node))
-            this.sinkDown(i);
-          else
-            this.bubbleUp(i);
-        }
-        return;
-      }
+
+    var i = this.content.indexOf(node);
+
+    // When it is found, the process seen in 'pop' is repeated
+    // to fill up the hole.
+    var end = this.content.pop();
+    if (i != this.content.length - 1) {
+      this.content[i] = end;
+      if (this.scoreFunction(end) < this.scoreFunction(node))
+        this.sinkDown(i);
+      else
+        this.bubbleUp(i);
     }
-    throw new Error("Node not found.");
   },
 
   size: function() {
@@ -136,7 +130,7 @@ BinaryHeap.prototype = {
     // When at 0, an element can not sink any further.
     while (n > 0) {
       // Compute the parent element's index, and fetch it.
-      var parentN = Math.floor((n + 1) / 2) - 1,
+      var parentN = ((n + 1) >> 1) - 1,
           parent = this.content[parentN];
       // Swap the elements if the parent is greater.
       if (this.scoreFunction(element) < this.scoreFunction(parent)) {
@@ -160,7 +154,7 @@ BinaryHeap.prototype = {
 
     while(true) {
       // Compute the indices of the child elements.
-      var child2N = (n + 1) * 2, child1N = child2N - 1;
+      var child2N = (n + 1) << 1, child1N = child2N - 1;
       // This is used to store the new position of the element,
       // if any.
       var swap = null;

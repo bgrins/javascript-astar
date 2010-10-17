@@ -21,7 +21,8 @@
 var astar = {
     init: function(grid) {
         for(var x = 0; x < grid.length; x++) {
-            for(var y = 0; y < grid[x].length; y++) {
+            var l = grid[x].length;
+            for(var y = 0; y < l; y++) {
             	var node = grid[x][y];
                 node.f = 0;
                 node.g = 0;
@@ -46,7 +47,7 @@ var astar = {
             var currentNode = openHeap.pop();
 
 		    // End case -- result has been found, return the traced path
-		    if(currentNode == end) {
+		    if(currentNode === end) {
 			    var curr = currentNode;
 			    var ret = [];
 			    while(curr.parent) {
