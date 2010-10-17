@@ -118,10 +118,10 @@ var astar = {
 	    if(grid[x+1] && grid[x+1][y]) {
 		    ret.push(grid[x+1][y]);
 	    }
-	    if(grid[x][y-1] && grid[x][y-1]) {
+	    if(grid[x] && grid[x][y-1]) {
 		    ret.push(grid[x][y-1]);
 	    }
-	    if(grid[x][y+1] && grid[x][y+1]) {
+	    if(grid[x] && grid[x][y+1]) {
 		    ret.push(grid[x][y+1]);
 	    }
 	    return ret;
