@@ -23,7 +23,6 @@ var astar = {
         for(var x = 0; x < grid.length; x++) {
             for(var y = 0; y < grid[x].length; y++) {
             	var node = grid[x][y];
-            	node.f
                 node.f = 0;
                 node.g = 0;
                 node.h = 0;
@@ -37,10 +36,6 @@ var astar = {
     search: function(grid, start, end, heuristic) {
         astar.init(grid);
         heuristic = heuristic || astar.manhattan;
-
-        var openList   = [];
-        openList.push(start);
-
 
 		var openHeap = new BinaryHeap(function(node){return node.f;});
 		openHeap.push(start);
@@ -77,7 +72,6 @@ var astar = {
 			    //   the path we have arrived at this neighbor is the shortest one we have seen yet
 			    // 1 is the distance from a node to it's neighbor.  This could be variable for weighted paths.
 			    var gScore = currentNode.g + 1;
-			    var gScoreIsBest = false;
 			    var beenVisited = neighbor.visited;
 
 			    if(!beenVisited || gScore < neighbor.g) {
