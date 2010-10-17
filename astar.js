@@ -20,9 +20,8 @@
 
 var astar = {
     init: function(grid) {
-        for(var x = 0; x < grid.length; x++) {
-            var l = grid[x].length;
-            for(var y = 0; y < l; y++) {
+        for(var x = 0, xl = grid.length; x < xl; x++) {
+            for(var y = 0, yl = grid[x].length; y < yl; y++) {
             	var node = grid[x][y];
                 node.f = 0;
                 node.g = 0;
@@ -61,7 +60,7 @@ var astar = {
 		    currentNode.closed = true;
 
 		    var neighbors = astar.neighbors(grid, currentNode);
-		    for(var i=0; i<neighbors.length;i++) {
+		    for(var i=0, il = neighbors.length; i < il; i++) {
 			    var neighbor = neighbors[i];
 
 			    if(neighbor.closed || neighbor.isWall()) {

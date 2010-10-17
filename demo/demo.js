@@ -2,6 +2,12 @@
 	Set up the demo page for the A* Search
 */
 
+window.log = function(){
+	if(this.console){
+		console.log( Array.prototype.slice.call(arguments) );
+	}
+};
+
 $(function() {
 
     var $grid = $("#search_grid");
