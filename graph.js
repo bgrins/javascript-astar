@@ -1,34 +1,36 @@
-// graph.js
-// Sets up the page with a graph
+/* 	graph.js http://github.com/bgrins/javascript-astar
+	MIT License
+	
+	Creates a Graph class used in the astar search algorithm.
+	Includes Binary Heap (with modifications) from Marijn Haverbeke 
+		URL: http://eloquentjavascript.net/appendix2.html
+		License: http://creativecommons.org/licenses/by/3.0/
+*/
 
-if (!Array.prototype.indexOf)
-{
-  Array.prototype.indexOf = function(elt /*, from*/)
-  {
-    var len = this.length;
-
-    var from = Number(arguments[1]) || 0;
-    from = (from < 0)
-         ? Math.ceil(from)
-         : Math.floor(from);
-    if (from < 0)
-      from += len;
-
-    for (; from < len; from++)
-    {
-      if (from in this &&
-          this[from] === elt)
-        return from;
-    }
-    return -1;
-  };
+if (!Array.prototype.indexOf) {
+Array.prototype.indexOf = function(elt /*, from*/) {
+	var len = this.length;
+	var from = Number(arguments[1]) || 0;
+	from = (from < 0) ? Math.ceil(from) : Math.floor(from);
+	if (from < 0) {
+		from += len;
+	}
+	for (; from < len; from++) {
+		if (from in this && this[from] === elt) {
+	    	return from;
+	    }
+	}
+	return -1;
+};
 }
 
+if (!Array.prototype.remove) {
 Array.prototype.remove = function(from, to) {
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
+	var rest = this.slice((to || from) + 1 || this.length);
+	this.length = from < 0 ? this.length + from : from;
+	return this.push.apply(this, rest);
 };
+}
 
 var GraphNodeType = { OPEN: 0, WALL: 1 };
 function Graph(grid) {
@@ -72,9 +74,6 @@ GraphNode.prototype.isWall = function() {
 };
 
 
-// Binary Heap
-// Taken from http://eloquentjavascript.net/appendix2.html
-// License: http://creativecommons.org/licenses/by/3.0/
 function BinaryHeap(scoreFunction){
   this.content = [];
   this.scoreFunction = scoreFunction;

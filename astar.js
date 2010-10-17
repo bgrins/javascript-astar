@@ -1,9 +1,8 @@
 /* 	astar.js http://github.com/bgrins/javascript-astar
+	MIT License
+	
 	Implements the astar search algorithm in javascript using a binary heap
 	**Requires graph.js**
-
-	Binary Heap taken from http://eloquentjavascript.net/appendix2.html
-	with license: http://creativecommons.org/licenses/by/3.0/
 
 	Example Usage:
 		var graph = new Graph([
@@ -14,8 +13,6 @@
 		var start = graph.nodes[0][0];
 		var end = graph.nodes[1][2];
 		astar.search(graph.nodes, start, end);
-
-	See graph.js for a more advanced example
 */
 
 var astar = {

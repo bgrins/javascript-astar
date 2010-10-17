@@ -1,4 +1,8 @@
-
+/* 	test.js http://github.com/bgrins/javascript-astar
+	MIT License
+	
+	Start of a test page for the astar search.  Still needs to be implemented...
+*/
 
 function runTest(grid, start, end) {
 	var graph = new Graph(grid);

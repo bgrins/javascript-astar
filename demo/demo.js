@@ -1,4 +1,6 @@
 /* 	demo.js http://github.com/bgrins/javascript-astar
+	MIT License
+	
 	Set up the demo page for the A* Search
 */
 
