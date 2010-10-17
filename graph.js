@@ -42,7 +42,7 @@ var GraphNodeType = { OPEN: 0, WALL: 1 };
 function Graph(grid) {
 	this.elements = grid;
 	this.nodes = [];
-	
+
 	for (var x = 0; x < grid.length; x++) {
 		var row = grid[x];
 		this.nodes[x] = [];
@@ -95,7 +95,7 @@ BinaryHeap.prototype = {
     // Allow it to sink down.
     this.sinkDown(this.content.length - 1);
   },
-  
+
   pop: function() {
     // Store the first element so we can return it later.
     var result = this.content[0];

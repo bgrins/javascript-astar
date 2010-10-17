@@ -3,26 +3,26 @@ html, body {
 	height:100%;
 	margin:0;
 }
-#content { 
-	margin:0 auto; 
-	width:750px; 
-} 
-#header, #footer { 
-	width:100%; 
-	background:#99b; 
+#content {
+	margin:0 auto;
+	width:750px;
+}
+#header, #footer {
+	width:100%;
+	background:#99b;
 }
 #header {
-	border-bottom:solid 2px #fff; 
+	border-bottom:solid 2px #fff;
 	margin-bottom:15px;
 	padding-bottom:5px;
 }
 #footer {
-	border-top:solid 2px #fff; 
+	border-top:solid 2px #fff;
 	margin-top:20px;
 	padding-top:5px;
 }
-#header a, #footer a { 
-	color: #fff; 
+#header a, #footer a {
+	color: #fff;
 	font-size:1.2em;
 }
 ul.basics {
@@ -31,8 +31,8 @@ ul.basics {
 ul.basics li {
 	margin-bottom: .45em;
 }
-.result-panel { 
-	width:80%; 
+.result-panel {
+	width:80%;
 	padding:10px;
 	margin:10px;
 	-moz-border-radius: 5px;
@@ -40,18 +40,18 @@ ul.basics li {
 	border: 1px solid #000;
 }
 pre {
-	padding-left:10px; 
+	padding-left:10px;
 	border-left: solid 5px #99b;
 }
-.result-panel pre { 
+.result-panel pre {
 	border-left: solid 5px #b99;
 }
-.result-panel pre span { 
+.result-panel pre span {
 	font-size:1.4em;
 	color: #f11;
 	font-weight:bold;
 }
-pre span.key { 
+pre span.key {
 	color: #f11;
 	font-weight:normal;
 }
