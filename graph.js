@@ -15,7 +15,7 @@ Array.prototype.indexOf = function(elt /*, from*/) {
 	if (from < 0) {
 		from += len;
 	}
-	for (; from < len; from++) {
+	for (; from < len; ++from) {
 		if (from in this && this[from] === elt) {
 	    	return from;
 	    }
@@ -37,10 +37,10 @@ function Graph(grid) {
 	this.elements = grid;
 	this.nodes = [];
 
-	for (var x = 0; x < grid.length; x++) {
+	for (var x = 0, len = grid.length; x < len; ++x) {
 		var row = grid[x];
 		this.nodes[x] = [];
-		for (var y = 0; y < row.length; y++) {
+		for (var y = 0, l = row.length; y < l; ++y) {
 			this.nodes[x].push(new GraphNode(x, y, row[y]));
 		}
 	}
@@ -48,10 +48,10 @@ function Graph(grid) {
 Graph.prototype.toString = function() {
 	var graphString = "\n";
 	var nodes = this.nodes;
-	for (var x = 0; x < nodes.length; x++) {
+	for (var x = 0, len = nodes.length; x < len; ++x) {
 		var rowDebug = "";
 		var row = nodes[x];
-		for (var y = 0; y < row.length; y++) {
+		for (var y = 0, l = row.length; y < l; ++y) {
 			rowDebug += row[y].type + " ";
 		}
 		graphString = graphString + rowDebug + "\n";
