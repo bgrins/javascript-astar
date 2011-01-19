@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Astar Search Demo</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" media="screen, projection" href="demo.css" />
+
+		<script type='text/javascript' src='jquery-1.4.2.min.js'></script>
+		<script type='text/javascript' src='../graph.js'></script>
+		<script type='text/javascript' src='../astar.js'></script>
+	</head>
+<body>
+
+<pre id='graph'></pre>
+<div id='summary'></div>
+<ul id='results'></ul>
+
+<script type='text/javascript'>	
+var graph = new Graph([
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],   // 00
+        [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],   // 00
+        [0,1,1,0,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,0],   // 02
+        [0,1,1,0,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,0],   // 03
+        [0,1,0,0,0,0,1,1,0,1,0,1,0,0,0,0,1,1,0,0],   // 04
+        [0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],   // 05
+        [0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0],   // 06
+        [0,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,0],   // 07
+        [0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],   // 08
+        [0,1,0,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,0],   // 01
+        [0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0],   // 00
+        [0,1,1,1,1,1,0,1,0,1,0,1,1,1,1,1,0,0,0,0],   // 00
+        [0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,0],   // 02
+        [0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,0],   // 03
+        [0,1,0,0,0,0,1,1,0,1,0,1,0,0,0,0,1,1,0,0],   // 04
+        [0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],   // 05
+        [0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0],   // 06
+        [0,0,1,1,1,1,1,1,1,0,0,0,1,1,1,0,1,1,1,1],   // 07
+        [0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],   // 08
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],   // 01
+]);
+	
+var start = graph.nodes[0][0];
+var end = graph.nodes[19][19];
+var results = [];
+var times = 0;
+
+for (var i = 0; i < 1000; i++) {
+	var startTime = new Date().getTime();
+	var result = astar.search(graph.nodes, start, end);
+	var endTime = new Date().getTime();
+	times = times + (endTime - startTime);
+	
+	results.push(
+		'<li>Found path with ' + result.length + ' steps.  ' +
+		'Took ' + (endTime - startTime) + ' milliseconds.</li>'
+	);
+}
+
+$("#graph").html(graph.toString());
+$("#summary").html('Average time: ' + (times / 1000) + 'ms');
+$("#results").html(results.join(''));
+</script>
+</body>
