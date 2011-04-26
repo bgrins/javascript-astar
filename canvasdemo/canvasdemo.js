@@ -24,10 +24,10 @@ var astarcanvas = { };
 astarcanvas.activeSearch = 0;
 
 astarcanvas.init = function() {
-	astarcanvas.startDOM();
 	
-	astarcanvas.graph = astarcanvas.getGraph(10, .2);
-	astarcanvas.search(0, 0);
+	astarcanvas.graph = astarcanvas.getGraph(50, .2);
+	
+	astarcanvas.startDOM();
 	
 	log("Intialized");
 };
@@ -36,9 +36,17 @@ astarcanvas.startDOM = function() {
 	var canvas = astarcanvas.canvas = $("#output")[0];
 	var ctx = astarcanvas.ctx = astarcanvas.canvas.getContext("2d");
 	
-	canvas.width = canvas.height = 400;
-	
-	$(canvas).click(limit(astarcanvas.mousemove, 100, true));
+	astarcanvas.resize();
+	$(window).bind("focus resize", astarcanvas.resize);
+	$(canvas).mousemove(limit(astarcanvas.mousemove, 100));
+};
+
+astarcanvas.resize = function() {
+	var canvas = astarcanvas.canvas;
+	$(canvas).removeAttr("width").removeAttr("height");
+	canvas.width = Math.floor($(canvas).width());
+	canvas.height = Math.floor($(canvas).height());
+	astarcanvas.search(0, 0);
 };
 
 astarcanvas.search = function(x, y) {
@@ -82,7 +90,7 @@ astarcanvas.drawGraph = function() {
 	var ROWS = nodes.length,
 		COLS = nodes[0].length,
 		HEIGHT = canvas.height = canvas.height,
-		WIDTH = canvas.width = canvas.width,
+		WIDTH = canvas.width= canvas.width,
 		FILLSTYLE = "white",
 		ALTFILLSTYLE = "black",
 		ACTIVEFILLSTYLE = "red",
@@ -116,7 +124,7 @@ astarcanvas.animatePath = function(path, searchID) {
 		if (searchID == astarcanvas.activeSearch && path.length > currentStep) {
 			astarcanvas.activePos = path[currentStep].pos;
 			astarcanvas.drawGraph();
-			setTimeout(animateStep, 10);
+			setTimeout(animateStep, 0);
 		}
 	}
 	
@@ -141,8 +149,10 @@ astarcanvas.translateEventIntoCoords = function(x, y) {
 		COLWIDTH = Math.floor(WIDTH / COLS),
 		COLHEIGHT = Math.floor(HEIGHT / ROWS);
 	
-	var translatedY = Math.floor(x/COLWIDTH);
-	var translatedX = Math.floor(y/COLHEIGHT);
+	var translatedY = Math.max(0, Math.min(COLS - 1, Math.floor(x/COLWIDTH)));
+	var translatedX = Math.max(0, Math.min(ROWS - 1, Math.floor(y/COLHEIGHT)));
+	
+	
 	log("calculating", x,y, translatedX, translatedY);
 	return {x:translatedX, y: translatedY};
 };

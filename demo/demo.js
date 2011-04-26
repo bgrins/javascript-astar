@@ -185,7 +185,7 @@ GraphSearch.prototype.animatePath = function(path) {
 	    	return removeClass(path, 0);
 	    }
 	    elementFromNode(path[i]).addClass(css.active);
-	    setTimeout( function() { addClass(path, i+1) }, timeout);
+	    setTimeout( function() { addClass(path, i+1); }, timeout);
     };
 
     addClass(path, 0)
