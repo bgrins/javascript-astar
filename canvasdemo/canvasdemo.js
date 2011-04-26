@@ -38,7 +38,7 @@ astarcanvas.startDOM = function() {
 	
 	canvas.width = canvas.height = 400;
 	
-	$(canvas).mousemove(limit(astarcanvas.mousemove, 100));
+	$(canvas).click(limit(astarcanvas.mousemove, 100, true));
 };
 
 astarcanvas.search = function(x, y) {
@@ -53,9 +53,9 @@ astarcanvas.search = function(x, y) {
 	var startY = astarcanvas.activePos.y;
 	var endX = x;
 	var endY = y;
-	log("doing search", startX, startY, endX, endY)
 	var start = graph.nodes[startX][startY];
 	var end = graph.nodes[endX][endY];
+	log("doing search", startX, startY, endX, endY, start, end)
 	
 	var sTime = new Date();
 	var result = astar.search(graph.nodes, start, end);
@@ -141,9 +141,9 @@ astarcanvas.translateEventIntoCoords = function(x, y) {
 		COLWIDTH = Math.floor(WIDTH / COLS),
 		COLHEIGHT = Math.floor(HEIGHT / ROWS);
 	
-	var translatedX = Math.floor(x/COLWIDTH);
-	var translatedY = Math.floor(y/COLHEIGHT);
-	log(x,y, translatedX, translatedY);
+	var translatedY = Math.floor(x/COLWIDTH);
+	var translatedX = Math.floor(y/COLHEIGHT);
+	log("calculating", x,y, translatedX, translatedY);
 	return {x:translatedX, y: translatedY};
 };
 astarcanvas.mousemove = function(e) {
@@ -188,6 +188,7 @@ astarcanvas.getGraph = function(gridSize, wallFrequency) {
     	nodes.push(nodeRow);
     }
 
+	
 	return new Graph(nodes);
 };
 
