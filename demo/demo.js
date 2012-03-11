@@ -10,6 +10,32 @@ window.log = function(){
 	}
 };
 
+
+var generateRandom = function (width, height, wallFrequency) {
+
+	var nodes = [];
+
+    for (var x=0; x < width; x++) {
+    	var nodeRow = [];
+    	var gridRow = [];
+
+    	for(var y=0; y < height; y++) {
+
+    		var isWall = Math.floor(Math.random()*(1/wallFrequency));
+    		if(isWall == 0) {
+    			nodeRow.push(GraphNodeType.WALL);
+    		}
+    		else  {
+    			nodeRow.push(GraphNodeType.OPEN);
+    		}
+    	}
+    	nodes.push(nodeRow);
+    }
+
+
+    return new Graph(nodes);
+};
+
 $(function() {
 
     var $grid = $("#search_grid");
@@ -20,7 +46,7 @@ $(function() {
     var opts = {
         wallFrequency: $selectWallFrequency.val(),
         gridSize: $selectGridSize.val(),
-        debug: $checkDebug.attr("checked")
+        debug: $checkDebug.is("checked")
     };
 
     var grid = new GraphSearch($grid, opts, astar.search);
