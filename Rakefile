@@ -12,7 +12,7 @@ task :build do
   end
   source = File.read('graph.js') + File.read ('astar.js')
   header = source.match(HEADER)
-  File.open('astar-min.js', 'w+') do |file|
+  File.open('dist/astar-min.js', 'w+') do |file|
     compressed = Closure::Compiler.new.compress(source)
     file.write header[1].squeeze(' ') + compressed
   end
