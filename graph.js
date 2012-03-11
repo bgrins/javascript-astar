@@ -35,24 +35,26 @@ if (!Array.prototype.remove) {
 var GraphNodeType = { OPEN: 0, WALL: 1 };
 function Graph(grid) {
     this.elements = grid;
-    this.nodes = [];
+    var nodes = [];
 
-    for (var x = 0, len = grid.length; x < len; ++x) {
-        var row = grid[x];
-        this.nodes[x] = [];
-        for (var y = 0, l = row.length; y < l; ++y) {
-            this.nodes[x].push(new GraphNode(x, y, row[y]));
+    var row, x, y, l, len = len = grid.length;
+    for (x = 0; x < len; ++x) {
+        nodes[x] = new Array(l = (row = grid[x]).length); // optimum array with size
+        for (y = 0; y < l; ++y) {
+            nodes[x][y] = new GraphNode(x, y, row[y]);
         }
     }
+    this.nodes = nodes;
 }
 Graph.prototype.toString = function() {
     var graphString = "\n";
     var nodes = this.nodes;
-    for (var x = 0, len = nodes.length; x < len; ++x) {
-        var rowDebug = "";
-        var row = nodes[x];
-        for (var y = 0, l = row.length; y < l; ++y) {
-            rowDebug += row[y].type + " ";
+    var rowDebug, row, y, l;
+    for (var x = 0, len = nodes.length; x < len;) {
+        rowDebug = "";
+        row = nodes[x++];
+        for (y = 0, l = row.length; y < l;) {
+            rowDebug += row[y++].type + " ";
         }
         graphString = graphString + rowDebug + "\n";
     }
@@ -60,7 +62,7 @@ Graph.prototype.toString = function() {
 };
 
 function GraphNode(x,y,type) {
-    this.data = { };
+    this.data = {};
     this.x = x;
     this.y = y;
     this.pos = {x:x, y:y};
@@ -107,7 +109,7 @@ BinaryHeap.prototype = {
     // When it is found, the process seen in 'pop' is repeated
     // to fill up the hole.
     var end = this.content.pop();
-    if (i != this.content.length - 1) {
+    if (i !== this.content.length - 1) {
       this.content[i] = end;
       if (this.scoreFunction(end) < this.scoreFunction(node))
         this.sinkDown(i);
@@ -170,12 +172,12 @@ BinaryHeap.prototype = {
       if (child2N < length) {
         var child2 = this.content[child2N],
             child2Score = this.scoreFunction(child2);
-        if (child2Score < (swap == null ? elemScore : child1Score))
+        if (child2Score < (swap === null ? elemScore : child1Score))
           swap = child2N;
       }
 
       // If the element needs to be moved, swap it, and continue.
-      if (swap != null) {
+      if (swap !== null) {
         this.content[n] = this.content[swap];
         this.content[swap] = element;
         n = swap;
@@ -187,7 +189,3 @@ BinaryHeap.prototype = {
     }
   }
 };
-
-
-
-
