@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Astar Search Demo</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<link rel="stylesheet" type="text/css" href="../demo/demo.css" />
+    <head>
+        <title>Astar Search Demo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="../demo/demo.css" />
 
-		<script type='text/javascript' src='../demo/jquery-1.7.1.min.js'></script>
-		<script type='text/javascript' src='../graph.js'></script>
-		<script type='text/javascript' src='../astar.js'></script>
-        <script type='text/javascript' src='grid_150x150.js'></script>	
-	</head>
+        <script type='text/javascript' src='../demo/jquery-1.7.1.min.js'></script>
+        <script type='text/javascript' src='../graph.js'></script>
+        <script type='text/javascript' src='../astar.js'></script>
+        <script type='text/javascript' src='grid_150x150.js'></script>  
+    </head>
 <body>
 <style>
 #graph {
@@ -25,7 +25,7 @@
 <div id='summary'></div>
 <ul id='results'></ul>
 
-<script type='text/javascript'>	
+<script type='text/javascript'> 
 var graph = new Graph(grid);
 var start = graph.nodes[0][0];
 var end = graph.nodes[140][140];
@@ -33,15 +33,15 @@ var results = [];
 var times = 0;
 
 for (var i = 0; i < 1000; i++) {
-	var startTime = new Date().getTime();
-	var result = astar.search(graph.nodes, start, end);
-	var endTime = new Date().getTime();
-	times = times + (endTime - startTime);
-	
-	results.push(
-		'<li>Found path with ' + result.length + ' steps.  ' +
-		'Took ' + (endTime - startTime) + ' milliseconds.</li>'
-	);
+    var startTime = new Date().getTime();
+    var result = astar.search(graph.nodes, start, end);
+    var endTime = new Date().getTime();
+    times = times + (endTime - startTime);
+    
+    results.push(
+        '<li>Found path with ' + result.length + ' steps.  ' +
+        'Took ' + (endTime - startTime) + ' milliseconds.</li>'
+    );
 }
 
 $("#graph").html(graph.toString());
