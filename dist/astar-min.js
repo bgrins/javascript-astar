@@ -1,7 +1,7 @@
 // javascript-astar
 // http://github.com/bgrins/javascript-astar
-// MIT License
-// Implements the astar search algorithm in javascript using a binary heap
+// Freely distributable under the MIT License.
+// Implements the astar search algorithm in javascript using a binary heap.
 var astar={init:function(a){for(var c=0,f=a.length;c<f;c++)for(var b=0,e=a[c].length;b<e;b++){var g=a[c][b];g.f=0;g.g=0;g.h=0;g.visited=!1;g.closed=!1;g.debug="";g.parent=null}},search:function(a,c,f,b){astar.init(a);var b=b||astar.manhattan,e=new BinaryHeap(function(a){return a.f});for(e.push(c);0<e.size();){c=e.pop();if(c===f){a=c;for(f=[];a.parent;)f.push(a),a=a.parent;return f.reverse()}c.closed=!0;for(var g=astar.neighbors(a,c),h=0,k=g.length;h<k;h++){var d=g[h];if(!d.closed&&!d.isWall()){var i=
 c.g+1,j=d.visited;if(!j||i<d.g)d.visited=!0,d.parent=c,d.h=d.h||b(d.pos,f.pos),d.g=i,d.f=d.g+d.h,d.debug="F: "+d.f+"<br />G: "+d.g+"<br />H: "+d.h,j?e.rescoreElement(d):e.push(d)}}}return[]},manhattan:function(a,c){var f=Math.abs(c.x-a.x),b=Math.abs(c.y-a.y);return f+b},neighbors:function(a,c){var f=[],b=c.x,e=c.y;a[b-1]&&a[b-1][e]&&f.push(a[b-1][e]);a[b+1]&&a[b+1][e]&&f.push(a[b+1][e]);a[b]&&a[b][e-1]&&f.push(a[b][e-1]);a[b]&&a[b][e+1]&&f.push(a[b][e+1]);return f}};
 Array.prototype.indexOf||(Array.prototype.indexOf=function(a,b){var d=this.length,c=Number(b)||0,c=0>c?Math.ceil(c):Math.floor(c);for(0>c&&(c+=d);c<d;++c)if(c in this&&this[c]===a)return c;return-1});Array.prototype.remove||(Array.prototype.remove=function(a,b){var d=this.slice((b||a)+1||this.length);this.length=0>a?this.length+a:a;return this.push.apply(this,d)});var GraphNodeType={OPEN:0,WALL:1};

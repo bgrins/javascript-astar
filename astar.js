@@ -1,7 +1,7 @@
 // javascript-astar
 // http://github.com/bgrins/javascript-astar
-// MIT License
-// Implements the astar search algorithm in javascript using a binary heap
+// Freely distributable under the MIT License.
+// Implements the astar search algorithm in javascript using a binary heap.
 
 var astar = {
     init: function(grid) {
@@ -30,7 +30,7 @@ var astar = {
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
             var currentNode = openHeap.pop();
 
-            // End case -- result has been found, return the traced path
+            // End case -- result has been found, return the traced path.
             if(currentNode === end) {
                 var curr = currentNode;
                 var ret = [];
@@ -41,7 +41,7 @@ var astar = {
                 return ret.reverse();
             }
 
-            // Normal case -- move currentNode from open to closed, process each of its neighbors
+            // Normal case -- move currentNode from open to closed, process each of its neighbors.
             currentNode.closed = true;
 
             var neighbors = astar.neighbors(grid, currentNode);
@@ -49,13 +49,13 @@ var astar = {
                 var neighbor = neighbors[i];
 
                 if(neighbor.closed || neighbor.isWall()) {
-                    // not a valid node to process, skip to next neighbor
+                    // Not a valid node to process, skip to next neighbor.
                     continue;
                 }
 
-                // g score is the shortest distance from start to current node, we need to check if
-                //   the path we have arrived at this neighbor is the shortest one we have seen yet
-                // 1 is the distance from a node to it's neighbor.  This could be variable for weighted paths.
+                // The g score is the shortest distance from start to current node.
+                // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
+                // 1 is the distance from a node to it's neighbor - this could be variable for weighted paths.
                 var gScore = currentNode.g + 1;
                 var beenVisited = neighbor.visited;
 
@@ -81,7 +81,7 @@ var astar = {
             }
         }
 
-        // No result was found -- empty array signifies failure to find path
+        // No result was found - empty array signifies failure to find path.
         return [];
     },
     manhattan: function(pos0, pos1) {
