@@ -6,14 +6,11 @@
 var astar = {
     init: function(grid) {
         for(var x = 0, xl = grid.length; x < xl; x++) {
-            for(var y = 0, yl = grid[x].length; y < yl; y++) {
-                var node = grid[x][y];
-                node.f = 0;
-                node.g = 0;
-                node.h = 0;
-                node.visited = false;
-                node.closed = false;
-                node.debug = "";
+            for(var y = 0, yl = grid[x].length; y < yl;) {
+                var node = grid[x][y++];
+                node.f = node.g = node.h = 0;
+                node.visited = node.closed = false;
+                node.debug = '';
                 node.parent = null;
             }
         }
@@ -34,8 +31,9 @@ var astar = {
             if(currentNode === end) {
                 var curr = currentNode;
                 var ret = [];
+                var n = 0;
                 while(curr.parent) {
-                    ret.push(curr);
+                    ret[n++] = curr;
                     curr = curr.parent;
                 }
                 return ret.reverse();
@@ -45,10 +43,10 @@ var astar = {
             currentNode.closed = true;
 
             var neighbors = astar.neighbors(grid, currentNode);
+            var neighbor, gScore, beenVisited;
             for(var i=0, il = neighbors.length; i < il; i++) {
-                var neighbor = neighbors[i];
 
-                if(neighbor.closed || neighbor.isWall()) {
+                if(neighbor = neighbors[i]).closed || neighbor.isWall()) {
                     // not a valid node to process, skip to next neighbor
                     continue;
                 }
@@ -56,26 +54,23 @@ var astar = {
                 // g score is the shortest distance from start to current node, we need to check if
                 //   the path we have arrived at this neighbor is the shortest one we have seen yet
                 // 1 is the distance from a node to it's neighbor.  This could be variable for weighted paths.
-                var gScore = currentNode.g + 1;
-                var beenVisited = neighbor.visited;
-
-                if(!beenVisited || gScore < neighbor.g) {
+                gScore = currentNode.g + 1;
+                
+                if(!(beenVisited = neighbor.visited) || gScore < neighbor.g) {
 
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
                     neighbor.visited = true;
                     neighbor.parent = currentNode;
-                    neighbor.h = neighbor.h || heuristic(neighbor.pos, end.pos);
-                    neighbor.g = gScore;
-                    neighbor.f = neighbor.g + neighbor.h;
+                    neighbor.f = (neighbor.g = gScore) + (neighbor.h = neighbor.h || heuristic(neighbor.pos, end.pos));
                     neighbor.debug = "F: " + neighbor.f + "<br />G: " + neighbor.g + "<br />H: " + neighbor.h;
 
-                    if (!beenVisited) {
-                        // Pushing to heap will put it in proper place based on the 'f' value.
-                        openHeap.push(neighbor);
-                    }
-                    else {
+                    if (beenVisited) {
                         // Already seen the node, but since it has been rescored we need to reorder it in the heap
                         openHeap.rescoreElement(neighbor);
+                    }
+                    else {
+                        // Pushing to heap will put it in proper place based on the 'f' value.
+                        openHeap.push(neighbor);
                     }
                 }
             }
@@ -86,27 +81,25 @@ var astar = {
     },
     manhattan: function(pos0, pos1) {
         // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
-
-        var d1 = Math.abs (pos1.x - pos0.x);
-        var d2 = Math.abs (pos1.y - pos0.y);
-        return d1 + d2;
+        return Math.abs(pos1.x - pos0.x) + Math.abs(pos1.y - pos0.y);
     },
     neighbors: function(grid, node) {
         var ret = [];
+        var n = 0;
         var x = node.x;
         var y = node.y;
 
         if(grid[x-1] && grid[x-1][y]) {
-            ret.push(grid[x-1][y]);
+            ret[n++] = grid[x-1][y];
         }
         if(grid[x+1] && grid[x+1][y]) {
-            ret.push(grid[x+1][y]);
+            ret[n++] = grid[x+1][y];
         }
         if(grid[x] && grid[x][y-1]) {
-            ret.push(grid[x][y-1]);
+            ret[n++] = grid[x][y-1];
         }
         if(grid[x] && grid[x][y+1]) {
-            ret.push(grid[x][y+1]);
+            ret[n++] = grid[x][y+1];
         }
         return ret;
     }
