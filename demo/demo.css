@@ -22,13 +22,14 @@ h2 {
 }
 .links {
     clear:both;
-    background: #666;
+    background: rgba(0, 0, 0, .1);
     padding: 4px;
     padding-left: 20px;
 	padding-bottom:5px;
 }
 .links a {
-    color: white;
+    padding: 3px;
+    color: #339;
 }
 .buttons { 
     float:right;
