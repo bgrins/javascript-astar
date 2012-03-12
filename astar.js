@@ -17,11 +17,17 @@ var astar = {
             }
         }
     },
+    heap: function() {
+        return new BinaryHeap(function(node) { 
+            return node.f; 
+        });
+    },
     search: function(grid, start, end, heuristic) {
         astar.init(grid);
         heuristic = heuristic || astar.manhattan;
 
-        var openHeap = new BinaryHeap(function(node){return node.f;});
+        var openHeap = astar.heap();
+
         openHeap.push(start);
 
         while(openHeap.size() > 0) {
