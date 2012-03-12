@@ -1,51 +1,40 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Astar Search Demo</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="../demo/demo.css" />
+        <title>Benchmark - JavaScript A* Search Algorithm</title>
 
+        <link rel="stylesheet" type="text/css" href="../demo/demo.css" />
         <script type='text/javascript' src='../demo/jquery-1.7.1.min.js'></script>
         <script type='text/javascript' src='../graph.js'></script>
         <script type='text/javascript' src='../astar.js'></script>
-        <script type='text/javascript' src='grid_150x150.js'></script>  
+        <script type='text/javascript' src='grid_150x150.js'></script>
+        <script type='text/javascript' src='benchmark.js'></script>
     </head>
 <body>
-<style>
-#graph {
-    overflow-x:scroll;
-    width: 90%;
-    font-size: .8em;
-    margin:0 auto;
-    white-space:pre;
-    border:none;
-}
-</style>
-<pre id='graph'></pre>
-<div id='summary'></div>
-<ul id='results'></ul>
+	<div id="header"> 
+        <h1>javascript-astar</h1>
+        <div class='buttons'>
+            <a class='btn' href='../docs/astar.html'>Annotated Source</a> 
+            <a class='btn' href='http://github.com/bgrins/javascript-astar'>Github</a> 
+            <a class='btn' href='http://www.briangrinstead.com/blog/astar-search-algorithm-in-javascript-updated'>Article</a>
+        </div>
+        <div class="links">
+            <a href='../'>Home</a> |
+            <a href='../demo/'>Demo</a> |
+            <a href='../test/'>Tests</a> |
+            <a href='../benchmark/'>Benchmark</a>
+        </div>
+	</div>
 
-<script type='text/javascript'> 
-var graph = new Graph(grid);
-var start = graph.nodes[0][0];
-var end = graph.nodes[140][140];
-var results = [];
-var times = 0;
+	<div id="content">
+		<h2>Benchmark</h2>
+        
+        <a href='#' id='runall'>Run benchmark</a>
+        <div id='summary'></div>
+        <pre id='graph'></pre>
+        <ul id='results'></ul>
+    </div>
 
-for (var i = 0; i < 1000; i++) {
-    var startTime = new Date().getTime();
-    var result = astar.search(graph.nodes, start, end);
-    var endTime = new Date().getTime();
-    times = times + (endTime - startTime);
-    
-    results.push(
-        '<li>Found path with ' + result.length + ' steps.  ' +
-        'Took ' + (endTime - startTime) + ' milliseconds.</li>'
-    );
-}
-
-$("#graph").html(graph.toString());
-$("#summary").html('Average time: ' + (times / 1000) + 'ms');
-$("#results").html(results.join(''));
-</script>
+        
 </body>
