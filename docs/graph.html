@@ -6,18 +6,19 @@ http://eloquentjavascript.net/appendix2.html</p>             </td>             <
     <span class="nx">OPEN</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> 
     <span class="nx">WALL</span><span class="o">:</span> <span class="mi">1</span> 
 <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Creates a Graph class used in the astar search algorithm.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">function</span> <span class="nx">Graph</span><span class="p">(</span><span class="nx">grid</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">elements</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="p">[];</span>
 
     <span class="kd">var</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">rowLength</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
     <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">row</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">[</span><span class="nx">x</span><span class="p">];</span>
         <span class="nx">rowLength</span> <span class="o">=</span> <span class="nx">row</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-        <span class="nx">nodes</span><span class="p">[</span><span class="nx">x</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">rowLength</span><span class="p">);</span> <span class="c1">// optimum array with size</span>
+        <span class="nx">nodes</span><span class="p">[</span><span class="nx">x</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">rowLength</span><span class="p">);</span>
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">rowLength</span><span class="p">;</span> <span class="o">++</span><span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">nodes</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GraphNode</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">row</span><span class="p">[</span><span class="nx">y</span><span class="p">]);</span>
         <span class="p">}</span>
     <span class="p">}</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">input</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span> <span class="o">=</span> <span class="nx">nodes</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -25,11 +26,11 @@ http://eloquentjavascript.net/appendix2.html</p>             </td>             <
     <span class="kd">var</span> <span class="nx">graphString</span> <span class="o">=</span> <span class="s2">&quot;\n&quot;</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">rowDebug</span><span class="p">,</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">l</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">nodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">nodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">rowDebug</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-        <span class="nx">row</span> <span class="o">=</span> <span class="nx">nodes</span><span class="p">[</span><span class="nx">x</span><span class="o">++</span><span class="p">];</span>
-        <span class="k">for</span> <span class="p">(</span><span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">row</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">;)</span> <span class="p">{</span>
-            <span class="nx">rowDebug</span> <span class="o">+=</span> <span class="nx">row</span><span class="p">[</span><span class="nx">y</span><span class="o">++</span><span class="p">].</span><span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">;</span>
+        <span class="nx">row</span> <span class="o">=</span> <span class="nx">nodes</span><span class="p">[</span><span class="nx">x</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">row</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">;</span> <span class="nx">y</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">rowDebug</span> <span class="o">+=</span> <span class="nx">row</span><span class="p">[</span><span class="nx">y</span><span class="p">].</span><span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="nx">graphString</span> <span class="o">=</span> <span class="nx">graphString</span> <span class="o">+</span> <span class="nx">rowDebug</span> <span class="o">+</span> <span class="s2">&quot;\n&quot;</span><span class="p">;</span>
     <span class="p">}</span>
@@ -37,10 +38,13 @@ http://eloquentjavascript.net/appendix2.html</p>             </td>             <
 <span class="p">};</span>
 
 <span class="kd">function</span> <span class="nx">GraphNode</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">,</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="p">{</span> <span class="p">};</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">x</span><span class="p">;</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">y</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">pos</span> <span class="o">=</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="nx">y</span><span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">pos</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">x</span><span class="o">:</span> <span class="nx">x</span><span class="p">,</span> 
+        <span class="nx">y</span><span class="o">:</span> <span class="nx">y</span>
+    <span class="p">};</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">type</span><span class="p">;</span>
 <span class="p">}</span>
 

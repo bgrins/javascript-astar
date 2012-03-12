@@ -10,20 +10,21 @@ var GraphNodeType = {
     WALL: 1 
 };
 
-//Creates a Graph class used in the astar search algorithm.
+// Creates a Graph class used in the astar search algorithm.
 function Graph(grid) {
-    this.elements = grid;
     var nodes = [];
 
     var row, rowLength, len = grid.length;
     for (var x = 0; x < len; ++x) {
         row = grid[x];
         rowLength = row.length;
-        nodes[x] = new Array(rowLength); // optimum array with size
+        nodes[x] = new Array(rowLength);
         for (var y = 0; y < rowLength; ++y) {
             nodes[x][y] = new GraphNode(x, y, row[y]);
         }
     }
+
+    this.input = grid;
     this.nodes = nodes;
 }
 
@@ -31,11 +32,11 @@ Graph.prototype.toString = function() {
     var graphString = "\n";
     var nodes = this.nodes;
     var rowDebug, row, y, l;
-    for (var x = 0, len = nodes.length; x < len;) {
+    for (var x = 0, len = nodes.length; x < len; x++) {
         rowDebug = "";
-        row = nodes[x++];
-        for (y = 0, l = row.length; y < l;) {
-            rowDebug += row[y++].type + " ";
+        row = nodes[x];
+        for (y = 0, l = row.length; y < l; y++) {
+            rowDebug += row[y].type + " ";
         }
         graphString = graphString + rowDebug + "\n";
     }
@@ -43,10 +44,13 @@ Graph.prototype.toString = function() {
 };
 
 function GraphNode(x,y,type) {
-    this.data = {};
+    this.data = { };
     this.x = x;
     this.y = y;
-    this.pos = {x:x, y:y};
+    this.pos = {
+        x: x, 
+        y: y
+    };
     this.type = type;
 }
 
