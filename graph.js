@@ -1,11 +1,8 @@
-/*  graph.js http://github.com/bgrins/javascript-astar
-    MIT License
-    
-    Creates a Graph class used in the astar search algorithm.
-    Includes Binary Heap (with modifications) from Marijn Haverbeke 
-        URL: http://eloquentjavascript.net/appendix2.html
-        License: http://creativecommons.org/licenses/by/3.0/
-*/
+// javascript-astar
+// http://github.com/bgrins/javascript-astar
+// MIT License
+// Includes Binary Heap (with modifications) from Marijn Haverbeke 
+// http://eloquentjavascript.net/appendix2.html
 
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function(elt /*, from*/) {
@@ -32,6 +29,7 @@ if (!Array.prototype.remove) {
     };
 }
 
+//Creates a Graph class used in the astar search algorithm.
 var GraphNodeType = { OPEN: 0, WALL: 1 };
 function Graph(grid) {
     this.elements = grid;

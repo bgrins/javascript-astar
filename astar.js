@@ -1,19 +1,7 @@
-/*  astar.js http://github.com/bgrins/javascript-astar
-    MIT License
-    
-    Implements the astar search algorithm in javascript using a binary heap
-    **Requires graph.js**
-
-    Example Usage:
-        var graph = new Graph([
-            [0,0,0,0],
-            [1,0,0,1],
-            [1,1,0,0]
-        ]);
-        var start = graph.nodes[0][0];
-        var end = graph.nodes[1][2];
-        astar.search(graph.nodes, start, end);
-*/
+// javascript-astar
+// http://github.com/bgrins/javascript-astar
+// MIT License
+// Implements the astar search algorithm in javascript using a binary heap
 
 var astar = {
     init: function(grid) {

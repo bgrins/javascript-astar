@@ -1,7 +1,7 @@
 require 'rubygems'
 
 HEADER = /((^\s*\/\/.*\n)+)/
-HEADER = /()/
+
 desc "rebuild the javascript-astar files for distribution"
 task :build do
   begin
@@ -10,11 +10,13 @@ task :build do
     puts "closure-compiler not found.\nInstall it by running 'gem install closure-compiler"
     exit
   end
-  source = File.read('graph.js') + File.read ('astar.js')
-  header = source.match(HEADER)
+  graph = File.read('graph.js')
+  astar = File.read('astar.js')
+  header = astar.match(HEADER)
   File.open('dist/astar-min.js', 'w+') do |file|
-    compressed = Closure::Compiler.new.compress(source)
-    file.write header[1].squeeze(' ') + compressed
+    compressedAstar = Closure::Compiler.new.compress(astar)
+    compressedGraph = Closure::Compiler.new.compress(graph)
+    file.write header[1].squeeze(' ') + compressedAstar + compressedGraph
   end
   
   
