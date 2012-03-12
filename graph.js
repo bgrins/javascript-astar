@@ -4,33 +4,13 @@
 // Includes Binary Heap (with modifications) from Marijn Haverbeke. 
 // http://eloquentjavascript.net/appendix2.html
 
-if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function(elt /*, from*/) {
-        var len = this.length;
-        var from = Number(arguments[1]) || 0;
-        from = (from < 0) ? Math.ceil(from) : Math.floor(from);
-        if (from < 0) {
-            from += len;
-        }
-        for (; from < len; ++from) {
-            if (from in this && this[from] === elt) {
-                return from;
-            }
-        }
-        return -1;
-    };
-}
 
-if (!Array.prototype.remove) {
-    Array.prototype.remove = function(from, to) {
-        var rest = this.slice((to || from) + 1 || this.length);
-        this.length = from < 0 ? this.length + from : from;
-        return this.push.apply(this, rest);
-    };
-}
+var GraphNodeType = { 
+    OPEN: 0, 
+    WALL: 1 
+};
 
 //Creates a Graph class used in the astar search algorithm.
-var GraphNodeType = { OPEN: 0, WALL: 1 };
 function Graph(grid) {
     this.elements = grid;
     var nodes = [];
@@ -46,6 +26,7 @@ function Graph(grid) {
     }
     this.nodes = nodes;
 }
+
 Graph.prototype.toString = function() {
     var graphString = "\n";
     var nodes = this.nodes;
@@ -68,9 +49,11 @@ function GraphNode(x,y,type) {
     this.pos = {x:x, y:y};
     this.type = type;
 }
+
 GraphNode.prototype.toString = function() {
     return "[" + this.x + " " + this.y + "]";
 };
+
 GraphNode.prototype.isWall = function() {
     return this.type == GraphNodeType.WALL;
 };

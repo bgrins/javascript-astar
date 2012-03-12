@@ -2,31 +2,10 @@
 http://github.com/bgrins/javascript-astar
 Freely distributable under the MIT License.
 Includes Binary Heap (with modifications) from Marijn Haverbeke. 
-http://eloquentjavascript.net/appendix2.html</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">indexOf</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">elt</span> <span class="cm">/*, from*/</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">from</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">||</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="nx">from</span> <span class="o">=</span> <span class="p">(</span><span class="nx">from</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span><span class="p">(</span><span class="nx">from</span><span class="p">)</span> <span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">from</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">from</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">from</span> <span class="o">+=</span> <span class="nx">len</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">for</span> <span class="p">(;</span> <span class="nx">from</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">from</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">from</span> <span class="k">in</span> <span class="k">this</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">[</span><span class="nx">from</span><span class="p">]</span> <span class="o">===</span> <span class="nx">elt</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">return</span> <span class="nx">from</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-    <span class="p">};</span>
-<span class="p">}</span>
-
-<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">remove</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">remove</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">from</span><span class="p">,</span> <span class="nx">to</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">rest</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">slice</span><span class="p">((</span><span class="nx">to</span> <span class="o">||</span> <span class="nx">from</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="nx">from</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="nx">from</span> <span class="o">:</span> <span class="nx">from</span><span class="p">;</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">push</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">rest</span><span class="p">);</span>
-    <span class="p">};</span>
-<span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Creates a Graph class used in the astar search algorithm.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">GraphNodeType</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">OPEN</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">WALL</span><span class="o">:</span> <span class="mi">1</span> <span class="p">};</span>
-<span class="kd">function</span> <span class="nx">Graph</span><span class="p">(</span><span class="nx">grid</span><span class="p">)</span> <span class="p">{</span>
+http://eloquentjavascript.net/appendix2.html</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">GraphNodeType</span> <span class="o">=</span> <span class="p">{</span> 
+    <span class="nx">OPEN</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> 
+    <span class="nx">WALL</span><span class="o">:</span> <span class="mi">1</span> 
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Creates a Graph class used in the astar search algorithm.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">function</span> <span class="nx">Graph</span><span class="p">(</span><span class="nx">grid</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">elements</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="p">[];</span>
 
@@ -41,6 +20,7 @@ http://eloquentjavascript.net/appendix2.html</p>             </td>             <
     <span class="p">}</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span> <span class="o">=</span> <span class="nx">nodes</span><span class="p">;</span>
 <span class="p">}</span>
+
 <span class="nx">Graph</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">graphString</span> <span class="o">=</span> <span class="s2">&quot;\n&quot;</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">nodes</span><span class="p">;</span>
@@ -63,9 +43,11 @@ http://eloquentjavascript.net/appendix2.html</p>             </td>             <
     <span class="k">this</span><span class="p">.</span><span class="nx">pos</span> <span class="o">=</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="nx">y</span><span class="p">};</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">type</span><span class="p">;</span>
 <span class="p">}</span>
+
 <span class="nx">GraphNode</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">;</span>
 <span class="p">};</span>
+
 <span class="nx">GraphNode</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">isWall</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">==</span> <span class="nx">GraphNodeType</span><span class="p">.</span><span class="nx">WALL</span><span class="p">;</span>
 <span class="p">};</span>
