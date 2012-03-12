@@ -13,7 +13,6 @@ var astar = {
                 node.h = 0;
                 node.visited = false;
                 node.closed = false;
-                node.debug = "";
                 node.parent = null;
             }
         }
@@ -67,7 +66,6 @@ var astar = {
                     neighbor.h = neighbor.h || heuristic(neighbor.pos, end.pos);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
-                    neighbor.debug = "F: " + neighbor.f + "<br />G: " + neighbor.g + "<br />H: " + neighbor.h;
 
                     if (!beenVisited) {
                         // Pushing to heap will put it in proper place based on the 'f' value.

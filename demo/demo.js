@@ -171,8 +171,13 @@ GraphSearch.prototype.drawDebugInfo = function(show) {
     this.$cells.html(" ");
     var that = this;
     if(show) {
-    	that.$cells.each(function(i) {
-    		var debug = that.nodeFromElement($(this)).debug;
+    	that.$cells.each(function(i) { 
+            var node = that.nodeFromElement($(this));
+    		var debug = false;
+            if (node.visited) {
+                debug = "F: " + node.f + "<br />G: " + node.g + "<br />H: " + node.h;
+            }
+
     		if (debug) {
     			$(this).html(debug);
     		}
