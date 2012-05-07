@@ -14,12 +14,10 @@ var GraphNodeType = {
 function Graph(grid) {
     var nodes = [];
 
-    var row, rowLength, len = grid.length;
-    for (var x = 0; x < len; x++) {
-        row = grid[x];
-        rowLength = row.length;
+    for (var x = 0; x < grid.length; x++) {
         nodes[x] = [];
-        for (var y = 0; y < rowLength; y++) {
+        
+        for (var y = 0, row = grid[x]; y < row.length; y++) {
             nodes[x][y] = new GraphNode(x, y, row[y]);
         }
     }
@@ -196,6 +194,7 @@ var astar = {
                 node.f = 0;
                 node.g = 0;
                 node.h = 0;
+                node.cost = 1;
                 node.visited = false;
                 node.closed = false;
                 node.parent = null;
@@ -207,9 +206,10 @@ var astar = {
             return node.f; 
         });
     },
-    search: function(grid, start, end, heuristic) {
+    search: function(grid, start, end, diagonal, heuristic) {
         astar.init(grid);
         heuristic = heuristic || astar.manhattan;
+        diagonal = !!diagonal;
 
         var openHeap = astar.heap();
 
@@ -234,7 +234,9 @@ var astar = {
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
             currentNode.closed = true;
 
-            var neighbors = astar.neighbors(grid, currentNode);
+            // Find all neighbors for the current node. Optionally find diagonal neighbors as well (false by default).
+            var neighbors = astar.neighbors(grid, currentNode, diagonal);
+
             for(var i=0, il = neighbors.length; i < il; i++) {
                 var neighbor = neighbors[i];
 
@@ -245,8 +247,7 @@ var astar = {
 
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
-                // 1 is the distance from a node to it's neighbor - this could be variable for weighted paths.
-                var gScore = currentNode.g + 1;
+                var gScore = currentNode.g + neighbor.cost;
                 var beenVisited = neighbor.visited;
 
                 if(!beenVisited || gScore < neighbor.g) {
@@ -280,23 +281,55 @@ var astar = {
         var d2 = Math.abs (pos1.y - pos0.y);
         return d1 + d2;
     },
-    neighbors: function(grid, node) {
+    neighbors: function(grid, node, diagonals) {
         var ret = [];
         var x = node.x;
         var y = node.y;
 
+        // West
         if(grid[x-1] && grid[x-1][y]) {
             ret.push(grid[x-1][y]);
         }
+
+        // East
         if(grid[x+1] && grid[x+1][y]) {
             ret.push(grid[x+1][y]);
         }
+
+        // South
         if(grid[x] && grid[x][y-1]) {
             ret.push(grid[x][y-1]);
         }
+
+        // North
         if(grid[x] && grid[x][y+1]) {
             ret.push(grid[x][y+1]);
         }
+
+        if (diagonals) {
+
+            // Southwest
+            if(grid[x-1] && grid[x-1][y-1]) {
+                ret.push(grid[x-1][y-1]);
+            }
+
+            // Southeast
+            if(grid[x+1] && grid[x+1][y-1]) {
+                ret.push(grid[x+1][y-1]);
+            }
+
+            // Northwest
+            if(grid[x-1] && grid[x-1][y+1]) {
+                ret.push(grid[x-1][y+1]);
+            }
+
+            // Northeast
+            if(grid[x+1] && grid[x+1][y+1]) {
+                ret.push(grid[x+1][y+1]);
+            }
+
+        }
+
         return ret;
     }
 };
