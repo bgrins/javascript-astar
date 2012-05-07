@@ -18,7 +18,7 @@ function Graph(grid) {
     for (var x = 0; x < len; ++x) {
         row = grid[x];
         rowLength = row.length;
-        nodes[x] = new Array(rowLength);
+        nodes[x] = [];
         for (var y = 0; y < rowLength; ++y) {
             nodes[x][y] = new GraphNode(x, y, row[y]);
         }
