@@ -23,9 +23,10 @@ var astar = {
             return node.f; 
         });
     },
-    search: function(grid, start, end, heuristic) {
+    search: function(grid, start, end, diagonal, heuristic) {
         astar.init(grid);
         heuristic = heuristic || astar.manhattan;
+        diagonal = !!diagonal;
 
         var openHeap = astar.heap();
 
@@ -50,7 +51,9 @@ var astar = {
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
             currentNode.closed = true;
 
-            var neighbors = astar.neighbors(grid, currentNode);
+            // Find all neighbors for the current node. Optionally find diagonal neighbors as well (false by default).
+            var neighbors = astar.neighbors(grid, currentNode, diagonal);
+
             for(var i=0, il = neighbors.length; i < il; i++) {
                 var neighbor = neighbors[i];
 
@@ -95,23 +98,55 @@ var astar = {
         var d2 = Math.abs (pos1.y - pos0.y);
         return d1 + d2;
     },
-    neighbors: function(grid, node) {
+    neighbors: function(grid, node, diagonals) {
         var ret = [];
         var x = node.x;
         var y = node.y;
 
+        // West
         if(grid[x-1] && grid[x-1][y]) {
             ret.push(grid[x-1][y]);
         }
+
+        // East
         if(grid[x+1] && grid[x+1][y]) {
             ret.push(grid[x+1][y]);
         }
+
+        // South
         if(grid[x] && grid[x][y-1]) {
             ret.push(grid[x][y-1]);
         }
+
+        // North
         if(grid[x] && grid[x][y+1]) {
             ret.push(grid[x][y+1]);
         }
+
+        if (diagonals) {
+
+            // Southwest
+            if(grid[x-1] && grid[x-1][y-1]) {
+                ret.push(grid[x-1][y-1]);
+            }
+
+            // Southeast
+            if(grid[x+1] && grid[x+1][y-1]) {
+                ret.push(grid[x+1][y-1]);
+            }
+
+            // Northwest
+            if(grid[x-1] && grid[x-1][y+1]) {
+                ret.push(grid[x-1][y+1]);
+            }
+
+            // Northeast
+            if(grid[x+1] && grid[x+1][y+1]) {
+                ret.push(grid[x+1][y+1]);
+            }
+
+        }
+
         return ret;
     }
 };

@@ -42,11 +42,13 @@ $(function() {
     var $selectWallFrequency = $("#selectWallFrequency");
     var $selectGridSize = $("#selectGridSize");
     var $checkDebug = $("#checkDebug");
+    var $searchDiagonal = $("#searchDiagonal");
 
     var opts = {
         wallFrequency: $selectWallFrequency.val(),
         gridSize: $selectGridSize.val(),
-        debug: $checkDebug.is("checked")
+        debug: $checkDebug.is("checked"),
+        diagonal: $searchDiagonal.is("checked")
     };
 
     var grid = new GraphSearch($grid, opts, astar.search);
@@ -66,7 +68,11 @@ $(function() {
     });
 
     $checkDebug.change(function() {
-        grid.setOption({debug: $(this).attr("checked")});
+        grid.setOption({debug: $(this).is(":checked")});
+    });
+    
+    $searchDiagonal.change(function() {
+        grid.setOption({diagonal: $(this).is(":checked")});
     });
 
 });
@@ -152,7 +158,7 @@ GraphSearch.prototype.cellClicked = function($end) {
    	var start = this.nodeFromElement($start);
 
 	var sTime = new Date();
-    var path = this.search(this.graph.nodes, start, end);
+    var path = this.search(this.graph.nodes, start, end, this.opts.diagonal);
 	var fTime = new Date();
 
 	if(!path || path.length == 0)	{

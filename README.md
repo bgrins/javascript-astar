@@ -32,6 +32,11 @@ If you want just the A* search code (not the demo visualization), use code like 
 		var end = graph.nodes[1][2];
 		var result = astar.search(graph.nodes, start, end);
 		// result is an array containing the shortest path
+		
+		
+		
+		var resultWithDiagonals = astar.search(graph.nodes, start, end, true);
+		// result now searches diagonal neighbors as well
 	</script>
 
 
