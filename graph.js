@@ -52,11 +52,6 @@ function GraphNode(x,y,type) {
     this.type = type;
 }
 
-// Return the 'cost' of the node. This could be variable based on the input.
-GraphNode.prototype.cost = function() {
-    return 1;
-};
-
 GraphNode.prototype.toString = function() {
     return "[" + this.x + " " + this.y + "]";
 };
