@@ -60,8 +60,7 @@ var astar = {
 
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
-                // 1 is the distance from a node to it's neighbor - this could be variable for weighted paths.
-                var gScore = currentNode.g + 1;
+                var gScore = currentNode.g + neighbor.cost();
                 var beenVisited = neighbor.visited;
 
                 if(!beenVisited || gScore < neighbor.g) {
