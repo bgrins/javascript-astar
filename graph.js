@@ -14,12 +14,10 @@ var GraphNodeType = {
 function Graph(grid) {
     var nodes = [];
 
-    var row, rowLength, len = grid.length;
-    for (var x = 0; x < len; x++) {
-        row = grid[x];
-        rowLength = row.length;
+    for (var x = 0; x < grid.length; x++) {
         nodes[x] = [];
-        for (var y = 0; y < rowLength; y++) {
+        
+        for (var y = 0, row = grid[x]; y < row.length; y++) {
             nodes[x][y] = new GraphNode(x, y, row[y]);
         }
     }
