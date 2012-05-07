@@ -13,10 +13,14 @@ task :build do
   graph = File.read('graph.js')
   astar = File.read('astar.js')
   header = astar.match(HEADER)
+  File.open('dist/astar-concat.js', 'w+') do |file|
+  
+    file.write graph + astar
+  end
   File.open('dist/astar-min.js', 'w+') do |file|
     compressedAstar = Closure::Compiler.new.compress(astar)
     compressedGraph = Closure::Compiler.new.compress(graph)
-    file.write header[1].squeeze(' ') + compressedAstar + compressedGraph
+    file.write header[1].squeeze(' ') + compressedGraph + compressedAstar
   end
   
   
