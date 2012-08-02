@@ -23,9 +23,9 @@ $(function() {
     $("#runall").click(function() {
 
         var result1 = runTest([
-            [0,0,0,0],
-            [1,0,0,1],
-            [1,1,0,0]
+            [1,1,1,1],
+            [0,1,1,0],
+            [0,0,1,1]
         ], [0,0], [2,3]);
 
         $("#test-output").append(result1.text);
