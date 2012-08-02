@@ -24,9 +24,9 @@ If you want just the A* search code (not the demo visualization), use code like 
 	<script type='text/javascript' src='astar.js'></script>
 	<script type='text/javascript'>
 		var graph = new Graph([
-			[0,0,0,0],
-			[1,0,0,1],
-			[1,1,0,0]
+			[1,1,1,1],
+			[0,1,1,0],
+			[0,0,1,1]
 		]);
 		var start = graph.nodes[0][0];
 		var end = graph.nodes[1][2];
