@@ -148,7 +148,19 @@ pre span.key {
 	font-size:10px;
 }
 .grid_item.wall {
-	background-color: #9CA69D;
+  background-color: #000000;
+}
+.grid_item.weight1 {
+  background-color: #ffffff;
+}
+.grid_item.weight2 {
+  background-color: #fff6f5;
+}
+.grid_item.weight3 {
+  background-color: ##ffe5e6;
+}
+.grid_item.weight7 {
+  background-color: #c51302;
 }
 .grid_item.start {
 	background-color: #FF703F;
