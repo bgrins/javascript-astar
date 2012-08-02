@@ -124,7 +124,15 @@ GraphSearch.prototype.initialize = function() {
     			$cell.addClass(css.wall);
     		}
     		else  {
-    			nodeRow.push(GraphNodeType.OPEN);
+	                // generate some random weights from 1-3, with an unlikey occurance of a weight of 7:
+	                var cell_weight = Math.floor(Math.random() * 21) + 1;
+	                if (cell_weight != 21) {
+	                    cell_weight = Math.floor(cell_weight/7)+1;
+	                } else {
+	                    cell_weight = 7;
+	                }
+    			nodeRow.push(cell_weight);
+            		$cell.addClass('weight' + cell_weight);
     			if (!startSet) {
     				$cell.addClass(css.start);
     				startSet = true;
