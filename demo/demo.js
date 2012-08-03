@@ -215,7 +215,7 @@ GraphSearch.prototype.animateNoPath = function() {
 };
 GraphSearch.prototype.animatePath = function(path) {
 	var grid = this.grid;
-	var timeout = 100 / grid.length;
+	var timeout = 1000 / grid.length;
 	var elementFromNode = function(node) {
 		return grid[node.x][node.y];
 	};
