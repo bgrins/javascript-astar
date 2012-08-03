@@ -51,10 +51,27 @@
 	    		<label for="checkDebug">Show search info?</label>
 	    		<input type="checkbox" name="checkDebug" id="checkDebug" />
 	    		<br />
-	    		<label for="checkDebug">Allow diagonal movement?</label>
+	    		<label for="searchDiagonal">Allow diagonal movement?</label>
 	    		<input type="checkbox" name="searchDiagonal" id="searchDiagonal" />
 	    		<br />
+	    		<label for="generateWeights">Add random weights?</label>
+	    		<input type="checkbox" name="generateWeights" id="generateWeights" />
+	    		<br />
+	    		<label for="displayWeights">Display weight values?</label>
+	    		<input type="checkbox" name="displayWeights" id="displayWeights" />
+	    		<br />
 	    		<input type="button" id="btnGenerate" value="Generate New Map" />
+	    		<fieldset id='weightsKey'>
+	    			<legend>Key:</legend>
+	    			<div>
+	    			<span class="grid_item weight1" style="width: 14.25px; height: 14.25px; margin-right: 6px;" id="keyWeight3"></span> Weight of 1 </div>
+	    			<div>
+	    			<span class="grid_item weight3" style="width: 14.25px; height: 14.25px; margin-right: 6px;" id="keyWeight3"></span> Weight of 3 </div>
+	    			<div>
+	    			<span class="grid_item weight5" style="width: 14.25px; height: 14.25px; margin-right: 6px;" id="keyWeight3"></span> Weight of 5 </div>
+	    			<div>
+	    			<span class="grid_item wall" style="width: 14.25px; height: 14.25px; margin-right: 6px;" id="keyWall"></span> Wall (imapassable) </div>
+	    		</fieldset>
 				<br />
 		<span id="message">Click on a grid position to search</span>
 	    </div>

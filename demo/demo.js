@@ -74,6 +74,13 @@ $(function() {
     $searchDiagonal.change(function() {
         grid.setOption({diagonal: $(this).is(":checked")});
     });
+    $("#generateWeights").click( function () {
+        if ($("#generateWeights").prop("checked")) {
+            $('#weightsKey').slideDown();
+        } else {
+            $('#weightsKey').slideUp();
+        }
+    });
 
 });
 
@@ -124,7 +131,10 @@ GraphSearch.prototype.initialize = function() {
     			$cell.addClass(css.wall);
     		}
     		else  {
-    			nodeRow.push(GraphNodeType.OPEN);
+                var cell_weight = ($("#generateWeights").prop("checked") ? (Math.floor(Math.random() * 3)) * 2 + 1 : 1);
+    			nodeRow.push(cell_weight);
+        		$cell.addClass('weight' + cell_weight);
+                if ($("#displayWeights").prop("checked")) {$cell.html(cell_weight)};
     			if (!startSet) {
     				$cell.addClass(css.start);
     				startSet = true;
@@ -207,7 +217,7 @@ GraphSearch.prototype.animateNoPath = function() {
 };
 GraphSearch.prototype.animatePath = function(path) {
 	var grid = this.grid;
-	var timeout = 100 / grid.length;
+	var timeout = 1000 / grid.length;
 	var elementFromNode = function(node) {
 		return grid[node.x][node.y];
 	};
@@ -215,14 +225,14 @@ GraphSearch.prototype.animatePath = function(path) {
     var removeClass = function(path, i) {
 	    if(i>=path.length) return;
 	    elementFromNode(path[i]).removeClass(css.active);
-	    setTimeout( function() { removeClass(path, i+1) }, timeout);
+	    setTimeout( function() { removeClass(path, i+1) }, timeout*path[i].cost);
     }
     var addClass = function(path, i)  {
 	    if(i>=path.length) {  // Finished showing path, now remove
 	    	return removeClass(path, 0);
 	    }
 	    elementFromNode(path[i]).addClass(css.active);
-	    setTimeout( function() { addClass(path, i+1) }, timeout);
+	    setTimeout( function() { addClass(path, i+1) }, timeout*path[i].cost);
     };
 
     addClass(path, 0)
