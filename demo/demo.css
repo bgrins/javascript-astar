@@ -153,14 +153,11 @@ pre span.key {
 .grid_item.weight1 {
   background-color: #ffffff;
 }
-.grid_item.weight2 {
-  background-color: #fff6f5;
-}
 .grid_item.weight3 {
-  background-color: ##ffe5e6;
+  background-color: #D6EAFF;
 }
-.grid_item.weight7 {
-  background-color: #c51302;
+.grid_item.weight5 {
+  background-color: #ABD1FF;
 }
 .grid_item.start {
 	background-color: #FF703F;
@@ -171,7 +168,9 @@ pre span.key {
 .grid_item.finish {
 
 }
-
+#weightsKey {
+  display: none;
+}
 
 .btn {
   display: inline-block;

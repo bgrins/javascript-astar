@@ -74,6 +74,13 @@ $(function() {
     $searchDiagonal.change(function() {
         grid.setOption({diagonal: $(this).is(":checked")});
     });
+    $("#generateWeights").click( function () {
+        if ($("#generateWeights").prop("checked")) {
+            $('#weightsKey').slideDown();
+        } else {
+            $('#weightsKey').slideUp();
+        }
+    });
 
 });
 
@@ -124,15 +131,10 @@ GraphSearch.prototype.initialize = function() {
     			$cell.addClass(css.wall);
     		}
     		else  {
-	                // generate some random weights from 1-3, with an unlikey occurance of a weight of 7:
-	                var cell_weight = Math.floor(Math.random() * 21) + 1;
-	                if (cell_weight != 21) {
-	                    cell_weight = Math.floor(cell_weight/7)+1;
-	                } else {
-	                    cell_weight = 7;
-	                }
+                var cell_weight = ($("#generateWeights").prop("checked") ? (Math.floor(Math.random() * 3)) * 2 + 1 : 1);
     			nodeRow.push(cell_weight);
-            		$cell.addClass('weight' + cell_weight);
+        		$cell.addClass('weight' + cell_weight);
+                if ($("#displayWeights").prop("checked")) {$cell.html(cell_weight)};
     			if (!startSet) {
     				$cell.addClass(css.start);
     				startSet = true;
