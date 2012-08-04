@@ -3,8 +3,8 @@ http://github.com/bgrins/javascript-astar
 Freely distributable under the MIT License.
 Includes Binary Heap (with modifications) from Marijn Haverbeke. 
 http://eloquentjavascript.net/appendix2.html</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">GraphNodeType</span> <span class="o">=</span> <span class="p">{</span> 
-    <span class="nx">OPEN</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> 
-    <span class="nx">WALL</span><span class="o">:</span> <span class="mi">1</span> 
+    <span class="nx">OPEN</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> 
+    <span class="nx">WALL</span><span class="o">:</span> <span class="mi">0</span> 
 <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Creates a Graph class used in the astar search algorithm.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">function</span> <span class="nx">Graph</span><span class="p">(</span><span class="nx">grid</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="p">[];</span>
 

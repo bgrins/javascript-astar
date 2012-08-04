@@ -6,8 +6,8 @@
 
 
 var GraphNodeType = { 
-    OPEN: 0, 
-    WALL: 1 
+    OPEN: 1, 
+    WALL: 0 
 };
 
 // Creates a Graph class used in the astar search algorithm.
@@ -194,7 +194,7 @@ var astar = {
                 node.f = 0;
                 node.g = 0;
                 node.h = 0;
-                node.cost = 1;
+                node.cost = node.type;
                 node.visited = false;
                 node.closed = false;
                 node.parent = null;
