@@ -1,6 +1,6 @@
 /*  test.js http://github.com/bgrins/javascript-astar
     MIT License
-    
+
     Start of a test page for the astar search.  Still needs to be implemented...
 */
 
@@ -19,6 +19,20 @@ function runTest(grid, start, end) {
     };
 }
 
+// https://gist.github.com/bgrins/581352
+function runBasic() {
+    var graph = new Graph([
+        [1,1,1,1],
+        [0,1,1,0],
+        [0,0,1,1]
+    ]);
+    var start = graph.nodes[0][0];
+    var end = graph.nodes[1][2];
+    var result = astar.search(graph.nodes, start, end);
+
+    return "<pre>" + result.join(", ") + "</pre>";
+}
+
 $(function() {
     $("#runall").click(function() {
 
@@ -29,6 +43,7 @@ $(function() {
         ], [0,0], [2,3]);
 
         $("#test-output").append(result1.text);
+        $("#test-output").append(runBasic());
         return false;
     });
 });
