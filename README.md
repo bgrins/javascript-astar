@@ -18,7 +18,7 @@ I left it in because it may be a little easier for some people to understand, bu
 
 ## Sample Usage
 
-If you want just the A* search code (not the demo visualization), use code like this http://gist.github.com/581352:
+If you want just the A* search code (not the demo visualization), use code like this http://gist.github.com/581352
 
 	<script type='text/javascript' src='graph.js'></script>
 	<script type='text/javascript' src='astar.js'></script>
