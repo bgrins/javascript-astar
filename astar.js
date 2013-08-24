@@ -23,7 +23,7 @@ var astar = {
             return node.f; 
         });
     },
-    search: function(grid, start, end, diagonal, heuristic, costDiagonal, costStraight) {
+    search: function(grid, start, end, diagonal, heuristic, costStraight, costDiagonal) {
         costDiagonal = costDiagonal || 1;
         costStraight = costStraight || 1;
         astar.init(grid);
