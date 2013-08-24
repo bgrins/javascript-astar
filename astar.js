@@ -23,7 +23,9 @@ var astar = {
             return node.f; 
         });
     },
-    search: function(grid, start, end, diagonal, heuristic) {
+    search: function(grid, start, end, diagonal, heuristic, costDiagonal, costStraight) {
+        costDiagonal = costDiagonal || 1;
+        costStraight = costStraight || 1;
         astar.init(grid);
         heuristic = heuristic || astar.manhattan;
         diagonal = !!diagonal;
@@ -72,7 +74,7 @@ var astar = {
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
                     neighbor.visited = true;
                     neighbor.parent = currentNode;
-                    neighbor.h = neighbor.h || heuristic(neighbor.pos, end.pos);
+                    neighbor.h = neighbor.h || heuristic(neighbor.pos, end.pos, costStraight, costDiagonal);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
 
@@ -97,6 +99,11 @@ var astar = {
         var d1 = Math.abs (pos1.x - pos0.x);
         var d2 = Math.abs (pos1.y - pos0.y);
         return d1 + d2;
+    },
+    diagonal: function(pos0, pos1, D, D2) {
+      var d1 = Math.abs (pos1.x - pos0.x);
+      var d2 = Math.abs (pos1.y - pos0.y);
+      return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2));
     },
     neighbors: function(grid, node, diagonals) {
         var ret = [];
