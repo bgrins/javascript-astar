@@ -90,7 +90,9 @@ var astar = {
                     if( closest ){
                         neighbor.c =
                             (closestHeuristic === heuristic) ? neighbor.h : closestHeuristic(neighbor.pos, end.pos);
-                        if(neighbor.c < closestNode.c){
+                        if(neighbor.c < closestNode.c ||
+                            (neighbor.c === closestNode.c && neighbor.g < closestNode.g)){
+
                             closestNode = neighbor;
                         }
                     }
