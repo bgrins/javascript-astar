@@ -23,12 +23,22 @@ var astar = {
             return node.f;
         });
     },
-    search: function(grid, start, end, diagonal, heuristic, closest, closestHeuristic) {
+    // supported options:
+    // {
+    //   heuristic: heuristic function to use
+    //   closest: boolean specifying whether to return closest node if
+    //            target is unreachable
+    //   closestHeuristic: heuristic function to use to determine closeness.
+    //            Will use main heuristic if not specified.
+    //   diagonal: boolean specifying whether diagonal moves are allowed
+    // }
+    search: function(grid, start, end, options) {
         astar.init(grid);
-        heuristic = heuristic || astar.manhattan;
-        closest = closest || false;
-        closestHeuristic = closestHeuristic || heuristic;
-        diagonal = !!diagonal;
+        options = options || {};
+        var heuristic = options.heuristic || astar.manhattan;
+        var closest = options.closest || false;
+        var closestHeuristic = options.closestHeuristic || heuristic;
+        var diagonal = !!options.diagonal;
 
 
         var openHeap = astar.heap();

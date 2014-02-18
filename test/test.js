@@ -4,33 +4,21 @@
     Start of a test page for the astar search.  Still needs to be implemented...
 */
 
-function runTest(grid, start, end) {
+function runTest(grid, start, end, options) {
     var graph = new Graph(grid);
-    var start = graph.nodes[start[0]][start[1]];
-    var end = graph.nodes[end[0]][end[1]];
+    start = graph.nodes[start[0]][start[1]];
+    end = graph.nodes[end[0]][end[1]];
     var sTime = new Date();
-    var result = astar.search(graph.nodes, start, end);
+    var result = astar.search(graph.nodes, start, end, options);
     var eTime = new Date();
-    var text = "<pre>" + graph.toString() + "\n"+ result.length +" Steps (" + (eTime - sTime) + "ms)</pre>";
+    var text = "<pre>" + start + " to " + end + (options ? " - " + JSON.stringify(options) : "") + "\n" +
+        graph.toString() + "\n" +
+        result.length + " Steps (" + (eTime - sTime) + "ms)</pre>";
     return {
         result: result,
         time: (eTime - sTime),
         text: text
     };
-}
-
-// https://gist.github.com/bgrins/581352
-function runBasic() {
-    var graph = new Graph([
-        [1,1,1,1],
-        [0,1,1,0],
-        [0,0,1,1]
-    ]);
-    var start = graph.nodes[0][0];
-    var end = graph.nodes[1][2];
-    var result = astar.search(graph.nodes, start, end);
-
-    return "<pre>" + result.join(", ") + "</pre>";
 }
 
 $(function() {
@@ -40,10 +28,28 @@ $(function() {
             [1,1,1,1],
             [0,1,1,0],
             [0,0,1,1]
-        ], [0,0], [2,3]);
+        ], [0,0], [1,2]);
 
         $("#test-output").append(result1.text);
-        $("#test-output").append(runBasic());
+        $("#test-output").append('<pre> Path:' + result1.result.join(', ') + '</pre>');
+
+        var result2 = runTest([
+            [1,1,1,1],
+            [0,1,1,0],
+            [0,0,1,1]
+        ], [0,0], [1,3], {closest: true});
+
+        $("#test-output").append(result2.text);
+        $("#test-output").append('<pre> Path:' + result2.result.join(', ') + '</pre>');
+
+        var result3 = runTest([
+            [1,1,1,1],
+            [0,1,1,0],
+            [0,0,1,1]
+        ], [0,0], [1,3], {closest: true, diagonal: true});
+
+        $("#test-output").append(result3.text);
+        $("#test-output").append('<pre> Path: ' + result3.result.join(', ') + '</pre>');
         return false;
     });
 });
