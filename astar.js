@@ -23,14 +23,31 @@ var astar = {
             return node.f;
         });
     },
-    search: function(grid, start, end, diagonal, heuristic) {
+    search: function(grid, start, end, diagonal, heuristic, closest, closestHeuristic) {
         astar.init(grid);
         heuristic = heuristic || astar.manhattan;
+        closest = closest || false;
+        closestHeuristic = closestHeuristic || heuristic;
         diagonal = !!diagonal;
 
+
         var openHeap = astar.heap();
+        var closestNode = start;
+        if(closest){
+            start.c = closestHeuristic(start.pos, end.pos);
+        }
 
         openHeap.push(start);
+
+        function pathTo( node ){
+            var curr = node;
+            var ret = [];
+            while(curr.parent) {
+                ret.push(curr);
+                curr = curr.parent;
+            }
+            return ret.reverse();
+        }
 
         while(openHeap.size() > 0) {
 
@@ -39,13 +56,7 @@ var astar = {
 
             // End case -- result has been found, return the traced path.
             if(currentNode === end) {
-                var curr = currentNode;
-                var ret = [];
-                while(curr.parent) {
-                    ret.push(curr);
-                    curr = curr.parent;
-                }
-                return ret.reverse();
+                return pathTo( currentNode );
             }
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
@@ -76,6 +87,14 @@ var astar = {
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
 
+                    if( closest ){
+                        neighbor.c =
+                            (closestHeuristic === heuristic) ? neighbor.h : closestHeuristic(neighbor.pos, end.pos);
+                        if(neighbor.c < closestNode.c){
+                            closestNode = neighbor;
+                        }
+                    }
+
                     if (!beenVisited) {
                         // Pushing to heap will put it in proper place based on the 'f' value.
                         openHeap.push(neighbor);
@@ -88,6 +107,9 @@ var astar = {
             }
         }
 
+        if(closest){
+            return pathTo(closestNode);
+        }
         // No result was found - empty array signifies failure to find path.
         return [];
     },
