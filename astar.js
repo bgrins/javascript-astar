@@ -33,6 +33,8 @@ var astar = {
 
         var openHeap = astar.heap();
         var closestNode = start;
+
+        // set the start node to be the closest if required
         if(closest){
             start.c = closestHeuristic(start.pos, end.pos);
         }
@@ -90,6 +92,8 @@ var astar = {
                     if( closest ){
                         neighbor.c =
                             (closestHeuristic === heuristic) ? neighbor.h : closestHeuristic(neighbor.pos, end.pos);
+                        // If the neighbour is closer than the current closestNode or if it's equally close but has
+                        // a cheaper path than the current closest node then it becomes the closest node
                         if(neighbor.c < closestNode.c ||
                             (neighbor.c === closestNode.c && neighbor.g < closestNode.g)){
 
