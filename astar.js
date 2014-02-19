@@ -19,8 +19,8 @@ var astar = {
         }
     },
     heap: function() {
-        return new BinaryHeap(function(node) { 
-            return node.f; 
+        return new BinaryHeap(function(node) {
+            return node.f;
         });
     },
     search: function(grid, start, end, diagonal, heuristic) {

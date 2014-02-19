@@ -1,13 +1,13 @@
 // javascript-astar
 // http://github.com/bgrins/javascript-astar
 // Freely distributable under the MIT License.
-// Includes Binary Heap (with modifications) from Marijn Haverbeke. 
+// Includes Binary Heap (with modifications) from Marijn Haverbeke.
 // http://eloquentjavascript.net/appendix2.html
 
 
-var GraphNodeType = { 
-    OPEN: 1, 
-    WALL: 0 
+var GraphNodeType = {
+    OPEN: 1,
+    WALL: 0
 };
 
 // Creates a Graph class used in the astar search algorithm.
@@ -16,7 +16,7 @@ function Graph(grid) {
 
     for (var x = 0; x < grid.length; x++) {
         nodes[x] = [];
-        
+
         for (var y = 0, row = grid[x]; y < row.length; y++) {
             nodes[x][y] = new GraphNode(x, y, row[y]);
         }
@@ -46,7 +46,7 @@ function GraphNode(x,y,type) {
     this.x = x;
     this.y = y;
     this.pos = {
-        x: x, 
+        x: x,
         y: y
     };
     this.type = type;
@@ -57,7 +57,7 @@ GraphNode.prototype.toString = function() {
 };
 
 GraphNode.prototype.isWall = function() {
-    return this.type == GraphNodeType.WALL;
+    return this.type === GraphNodeType.WALL;
 };
 
 
@@ -82,21 +82,21 @@ BinaryHeap.prototype = {
         // If there are any elements left, put the end element at the
         // start, and let it bubble up.
         if (this.content.length > 0) {
-             this.content[0] = end;
-             this.bubbleUp(0);
+            this.content[0] = end;
+            this.bubbleUp(0);
         }
         return result;
     },
     remove: function(node) {
         var i = this.content.indexOf(node);
-    
+
         // When it is found, the process seen in 'pop' is repeated
         // to fill up the hole.
         var end = this.content.pop();
 
         if (i !== this.content.length - 1) {
             this.content[i] = end;
-            
+
             if (this.scoreFunction(end) < this.scoreFunction(node)) {
                 this.sinkDown(i);
             }
@@ -140,22 +140,24 @@ BinaryHeap.prototype = {
         var length = this.content.length,
             element = this.content[n],
             elemScore = this.scoreFunction(element);
-        
+
         while(true) {
             // Compute the indices of the child elements.
             var child2N = (n + 1) << 1, child1N = child2N - 1;
             // This is used to store the new position of the element,
             // if any.
             var swap = null;
+            var child1Score;
             // If the first child exists (is inside the array)...
             if (child1N < length) {
-            // Look it up and compute its score.
-            var child1 = this.content[child1N],
+                // Look it up and compute its score.
+                var child1 = this.content[child1N];
                 child1Score = this.scoreFunction(child1);
 
-            // If the score is less than our element's, we need to swap.
-            if (child1Score < elemScore)
-                swap = child1N;
+                // If the score is less than our element's, we need to swap.
+                if (child1Score < elemScore){
+                    swap = child1N;
+                }
             }
 
             // Do the same checks for the other child.
