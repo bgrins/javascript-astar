@@ -3,6 +3,17 @@
 // Freely distributable under the MIT License.
 // Implements the astar search algorithm in javascript using a binary heap.
 
+
+(function(definition) {
+    if(typeof exports === 'object') {
+        module.exports = definition();
+    } else if(typeof define === 'function' && define.amd) {
+        define([], definition);
+    } else {
+        window.astar = definition();
+    }
+})(function() {
+
 var astar = {
     init: function(grid) {
         for(var x = 0, xl = grid.length; x < xl; x++) {
@@ -151,4 +162,6 @@ var astar = {
     }
 };
 
+return astar;
 
+});
