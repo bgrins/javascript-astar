@@ -23,14 +23,43 @@ var astar = {
             return node.f;
         });
     },
-    search: function(grid, start, end, diagonal, heuristic) {
+    // supported options:
+    // {
+    //   heuristic: heuristic function to use
+    //   closest: boolean specifying whether to return closest node if
+    //            target is unreachable
+    //   closestHeuristic: heuristic function to use to determine closeness.
+    //            Will use main heuristic if not specified.
+    //   diagonal: boolean specifying whether diagonal moves are allowed
+    // }
+    search: function(grid, start, end, options) {
         astar.init(grid);
-        heuristic = heuristic || astar.manhattan;
-        diagonal = !!diagonal;
+        options = options || {};
+        var heuristic = options.heuristic || astar.manhattan;
+        var closest = options.closest || false;
+        var closestHeuristic = options.closestHeuristic || heuristic;
+        var diagonal = !!options.diagonal;
+
 
         var openHeap = astar.heap();
+        var closestNode = start;
+
+        // set the start node to be the closest if required
+        if(closest){
+            start.c = closestHeuristic(start.pos, end.pos);
+        }
 
         openHeap.push(start);
+
+        function pathTo( node ){
+            var curr = node;
+            var ret = [];
+            while(curr.parent) {
+                ret.push(curr);
+                curr = curr.parent;
+            }
+            return ret.reverse();
+        }
 
         while(openHeap.size() > 0) {
 
@@ -39,13 +68,7 @@ var astar = {
 
             // End case -- result has been found, return the traced path.
             if(currentNode === end) {
-                var curr = currentNode;
-                var ret = [];
-                while(curr.parent) {
-                    ret.push(curr);
-                    curr = curr.parent;
-                }
-                return ret.reverse();
+                return pathTo( currentNode );
             }
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
@@ -76,6 +99,18 @@ var astar = {
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
 
+                    if( closest ){
+                        neighbor.c =
+                            (closestHeuristic === heuristic) ? neighbor.h : closestHeuristic(neighbor.pos, end.pos);
+                        // If the neighbour is closer than the current closestNode or if it's equally close but has
+                        // a cheaper path than the current closest node then it becomes the closest node
+                        if(neighbor.c < closestNode.c ||
+                            (neighbor.c === closestNode.c && neighbor.g < closestNode.g)){
+
+                            closestNode = neighbor;
+                        }
+                    }
+
                     if (!beenVisited) {
                         // Pushing to heap will put it in proper place based on the 'f' value.
                         openHeap.push(neighbor);
@@ -88,6 +123,9 @@ var astar = {
             }
         }
 
+        if(closest){
+            return pathTo(closestNode);
+        }
         // No result was found - empty array signifies failure to find path.
         return [];
     },
