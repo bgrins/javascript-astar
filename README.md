@@ -3,6 +3,7 @@
 ## An implementation of the A* Search Algorithm in JavaScript
 
 See a demo at http://www.briangrinstead.com/files/astar/
+[![Build Status](https://travis-ci.org/bgrins/javascript-astar.png?branch=master)](https://travis-ci.org/bgrins/javascript-astar)
 
 ## Sample Usage
 
