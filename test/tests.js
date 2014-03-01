@@ -30,6 +30,18 @@ test( "Basic Vertical", function() {
 
 });
 
+test( "Basic Weighting", function() {
+
+  var result1 = runSearch([[1, 1],
+                           [2, 1]], [0,0], [1,1]);
+  equal (result1.text, "(0,1)(1,1)", "Takes less weighted path");
+
+  var result2 = runSearch([[1, 2],
+                           [1, 1]], [0,0], [1,1]);
+  equal (result2.text, "(1,0)(1,1)", "Takes less weighted path");
+
+});
+
 test( "Pathfinding", function() {
   var result1 = runSearch([
       [1,1,1,1],

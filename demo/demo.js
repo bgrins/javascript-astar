@@ -23,10 +23,10 @@ var generateRandom = function (width, height, wallFrequency) {
 
     		var isWall = Math.floor(Math.random()*(1/wallFrequency));
     		if(isWall == 0) {
-    			nodeRow.push(GraphNodeType.WALL);
+    			nodeRow.push(Graph.GraphNodeType.WALL);
     		}
     		else  {
-    			nodeRow.push(GraphNodeType.OPEN);
+    			nodeRow.push(Graph.GraphNodeType.OPEN);
     		}
     	}
     	nodes.push(nodeRow);
@@ -127,7 +127,7 @@ GraphSearch.prototype.initialize = function() {
 
     		var isWall = Math.floor(Math.random()*(1/self.opts.wallFrequency));
     		if(isWall == 0) {
-    			nodeRow.push(GraphNodeType.WALL);
+    			nodeRow.push(Graph.GraphNodeType.WALL);
     			$cell.addClass(css.wall);
     		}
     		else  {
