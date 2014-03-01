@@ -37,12 +37,21 @@ var astar = {
             return node.f;
         });
     },
-    search: function(grid, start, end, diagonal, heuristic, costStraight, costDiagonal) {
-        costDiagonal = costDiagonal || 1;
-        costStraight = costStraight || 1;
+
+    // astar.search
+    // supported options:
+    // {
+    //   heuristic: heuristic function to use
+    //   diagonal: boolean specifying whether diagonal moves are allowed
+    // }
+    search: function(grid, start, end, options) {
         astar.init(grid);
-        heuristic = heuristic || astar.manhattan;
-        diagonal = !!diagonal;
+
+        options = options || {};
+        var heuristic = options.heuristic || astar.manhattan;
+        var diagonal = !!options.diagonal;
+        var costDiagonal = options.costDiagonal || 1;
+        var costStraight = options.costStraight || 1;
 
         var openHeap = astar.heap();
 

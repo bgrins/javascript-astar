@@ -170,7 +170,9 @@ GraphSearch.prototype.cellClicked = function($end) {
    	var start = this.nodeFromElement($start);
 
 	var sTime = new Date();
-    var path = this.search(this.graph.nodes, start, end, this.opts.diagonal);
+    var path = this.search(this.graph.nodes, start, end, {
+        diagonal: this.opts.diagonal
+    });
 	var fTime = new Date();
 
 	if(!path || path.length == 0)	{
