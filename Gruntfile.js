@@ -16,7 +16,7 @@ module.exports = function(grunt) {
         globals: {
         }
       },
-      all: ['graph.js', 'astar.js']
+      all: ['astar.js']
     }
   });
 
