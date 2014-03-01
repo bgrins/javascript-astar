@@ -9,9 +9,8 @@ See a demo at http://www.briangrinstead.com/files/astar/
 The newest version of the algorithm using a Binary Heap.  It is quite faster than the original.
 http://www.briangrinstead.com/blog/astar-search-algorithm-in-javascript-updated
 Binary Heap taken from http://eloquentjavascript.net/appendix2.html (license: http://creativecommons.org/licenses/by/3.0/)
-	
-	
-### original-implementation/astar-list.js: 
+
+### original-implementation/astar-list.js:
 
 The original version of the algorithm based off the original blog post at: http://www.briangrinstead.com/blog/astar-search-algorithm-in-javascript
 I left it in because it may be a little easier for some people to understand, but if you are planning on actually using this, I would strongly recommend using astar.js instead.
@@ -32,7 +31,7 @@ If you want just the A* search code (not the demo visualization), use code like 
 		var end = graph.nodes[1][2];
 		var result = astar.search(graph.nodes, start, end);
 		// result is an array containing the shortest path
-		
+
 		var resultWithDiagonals = astar.search(graph.nodes, start, end, true);
 		// result now searches diagonal neighbors as well
 
