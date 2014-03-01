@@ -3,7 +3,6 @@
 ## An implementation of the A* Search Algorithm in JavaScript
 
 See a demo at http://www.briangrinstead.com/files/astar/
-[![Build Status](https://travis-ci.org/bgrins/javascript-astar.png?branch=master)](https://travis-ci.org/bgrins/javascript-astar)
 
 ## Sample Usage
 
@@ -47,6 +46,8 @@ Binary Heap taken from http://eloquentjavascript.net/appendix2.html (license: ht
 
 
 ## Running the test suite
+
+[![Build Status](https://travis-ci.org/bgrins/javascript-astar.png?branch=master)](https://travis-ci.org/bgrins/javascript-astar)
 
 If you don't have grunt installed, follow the [grunt getting started guide](http://gruntjs.com/getting-started) first.
 
