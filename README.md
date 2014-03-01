@@ -48,5 +48,11 @@ If you want just the A* search code (not the demo visualization), use code like 
 		// resultWithWeight is an array containing the shortest path taking into account the weight of a node
 	</script>
 
+## Running the test suite
 
+If you don't have grunt installed, follow the [grunt getting started guide](http://gruntjs.com/getting-started) first.
 
+Pull down the project, then run:
+
+		npm install
+		grunt
