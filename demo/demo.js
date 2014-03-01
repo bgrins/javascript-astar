@@ -10,6 +10,8 @@ window.log = function(){
 	}
 };
 
+var WALL = 0;
+var OPEN = 1;
 
 var generateRandom = function (width, height, wallFrequency) {
 
@@ -23,10 +25,10 @@ var generateRandom = function (width, height, wallFrequency) {
 
     		var isWall = Math.floor(Math.random()*(1/wallFrequency));
     		if(isWall == 0) {
-    			nodeRow.push(GraphNodeType.WALL);
+    			nodeRow.push(WALL);
     		}
     		else  {
-    			nodeRow.push(GraphNodeType.OPEN);
+    			nodeRow.push(OPEN);
     		}
     	}
     	nodes.push(nodeRow);
@@ -127,7 +129,7 @@ GraphSearch.prototype.initialize = function() {
 
     		var isWall = Math.floor(Math.random()*(1/self.opts.wallFrequency));
     		if(isWall == 0) {
-    			nodeRow.push(GraphNodeType.WALL);
+    			nodeRow.push(WALL);
     			$cell.addClass(css.wall);
     		}
     		else  {
