@@ -1,6 +1,6 @@
 {
   "name": "javascript-astar",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "astar search algorithm in JavaScript",
   "main": "astar.js",
   "repository": {
