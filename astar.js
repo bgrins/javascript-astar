@@ -45,8 +45,6 @@ var astar = {
     //   diagonal: boolean specifying whether diagonal moves are allowed
     //   closest: boolean specifying whether to return closest node if
     //            target is unreachable
-    //   closestHeuristic: heuristic function to use to determine closeness.
-    //            Will use main heuristic if not specified.
     // }
     search: function(grid, start, end, options) {
         astar.init(grid);
@@ -57,14 +55,13 @@ var astar = {
         var costDiagonal = options.costDiagonal || 1;
         var costStraight = options.costStraight || 1;
         var closest = options.closest || false;
-        var closestHeuristic = options.closestHeuristic || heuristic;
 
         var openHeap = astar.heap();
 
         // set the start node to be the closest if required
         var closestNode = start;
         if(closest){
-            start.c = closestHeuristic(start.pos, end.pos);
+            start.h = start.h || heuristic(start.pos, end.pos, costStraight, costDiagonal);
         }
 
         function pathTo( node ){
@@ -119,12 +116,9 @@ var astar = {
                     neighbor.f = neighbor.g + neighbor.h;
 
                     if( closest ){
-                        neighbor.c =
-                            (closestHeuristic === heuristic) ? neighbor.h : closestHeuristic(neighbor.pos, end.pos);
                         // If the neighbour is closer than the current closestNode or if it's equally close but has
                         // a cheaper path than the current closest node then it becomes the closest node
-                        if(neighbor.c < closestNode.c || (neighbor.c === closestNode.c && neighbor.g < closestNode.g)){
-
+                        if(neighbor.h < closestNode.h || (neighbor.h === closestNode.h && neighbor.g < closestNode.g)){
                             closestNode = neighbor;
                         }
                     }
