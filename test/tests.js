@@ -59,7 +59,23 @@ test( "Pathfinding to closest", function() {
       [0,0,1,1]
   ], [0,0], [2,1], {closest: true});
 
-  equal (result1.text, "(0,1)(1,1)", "Result is expected");
+  equal (result1.text, "(0,1)(1,1)", "Result is expected - pathed to closest node");
+
+  var result2 = runSearch([
+      [1,0,1,1],
+      [0,1,1,0],
+      [0,0,1,1]
+  ], [0,0], [2,1], {closest: true});
+
+  equal (result2.text, "", "Result is expected - start node was closest node");
+
+  var result3 = runSearch([
+      [1,1,1,1],
+      [0,1,1,0],
+      [0,1,1,1]
+  ], [0,0], [2,1], {closest: true});
+
+  equal (result3.text, "(0,1)(1,1)(2,1)", "Result is expected - target node was reachable");
 });
 
 function runSearch(grid, start, end, options) {
