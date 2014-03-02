@@ -60,9 +60,8 @@ var astar = {
 
         // set the start node to be the closest if required
         var closestNode = start;
-        if(closest){
-            start.h = start.h || heuristic(start.pos, end.pos, costStraight, costDiagonal);
-        }
+
+        start.h = heuristic(start.pos, end.pos, costStraight, costDiagonal);
 
         function pathTo( node ){
             var curr = node;
