@@ -63,7 +63,7 @@ var astar = {
 
         start.h = heuristic(start.pos, end.pos, costStraight, costDiagonal);
 
-        function pathTo( node ){
+        function pathTo(node){
             var curr = node;
             var path = [];
             while(curr.parent) {
@@ -83,7 +83,7 @@ var astar = {
 
             // End case -- result has been found, return the traced path.
             if(currentNode === end) {
-                return pathTo( currentNode );
+                return pathTo(currentNode);
             }
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
@@ -114,7 +114,7 @@ var astar = {
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
 
-                    if( closest ){
+                    if(closest){
                         // If the neighbour is closer than the current closestNode or if it's equally close but has
                         // a cheaper path than the current closest node then it becomes the closest node
                         if(neighbor.h < closestNode.h || (neighbor.h === closestNode.h && neighbor.g < closestNode.g)){
@@ -238,7 +238,7 @@ Graph.prototype.toString = function() {
     return graphString;
 };
 
-function GraphNode(x,y,type) {
+function GraphNode(x, y, type) {
     this.data = { };
     this.x = x;
     this.y = y;
