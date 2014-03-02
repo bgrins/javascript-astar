@@ -52,12 +52,22 @@ test( "Pathfinding", function() {
   equal (result1.text, "(0,1)(1,1)(1,2)(2,2)(2,3)", "Result is expected");
 });
 
-function runSearch(grid, start, end) {
+test( "Pathfinding to closest", function() {
+  var result1 = runSearch([
+      [1,1,1,1],
+      [0,1,1,0],
+      [0,0,1,1]
+  ], [0,0], [2,1], {closest: true});
+
+  equal (result1.text, "(0,1)(1,1)", "Result is expected");
+});
+
+function runSearch(grid, start, end, options) {
   var graph = new Graph(grid);
   var start = graph.nodes[start[0]][start[1]];
   var end = graph.nodes[end[0]][end[1]];
   var sTime = new Date();
-  var result = astar.search(graph.nodes, start, end);
+  var result = astar.search(graph.nodes, start, end, options);
   var eTime = new Date();
   return {
     result: result,
