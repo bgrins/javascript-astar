@@ -1,6 +1,6 @@
 /* 	demo.js http://github.com/bgrins/javascript-astar
 	MIT License
-	
+
 	Set up the demo page for the A* Search
 */
 
@@ -45,12 +45,15 @@ $(function() {
     var $selectGridSize = $("#selectGridSize");
     var $checkDebug = $("#checkDebug");
     var $searchDiagonal = $("#searchDiagonal");
+    var $checkClosest = $("#checkClosest");
+
 
     var opts = {
         wallFrequency: $selectWallFrequency.val(),
         gridSize: $selectGridSize.val(),
         debug: $checkDebug.is("checked"),
-        diagonal: $searchDiagonal.is("checked")
+        diagonal: $searchDiagonal.is("checked"),
+        closest: $checkClosest.is("checked")
     };
 
     var grid = new GraphSearch($grid, opts, astar.search);
@@ -72,10 +75,15 @@ $(function() {
     $checkDebug.change(function() {
         grid.setOption({debug: $(this).is(":checked")});
     });
-    
+
     $searchDiagonal.change(function() {
         grid.setOption({diagonal: $(this).is(":checked")});
     });
+
+    $checkClosest.change(function() {
+        grid.setOption({closest: $(this).is(":checked")});
+    });
+
     $("#generateWeights").click( function () {
         if ($("#generateWeights").prop("checked")) {
             $('#weightsKey').slideDown();
@@ -171,7 +179,8 @@ GraphSearch.prototype.cellClicked = function($end) {
 
 	var sTime = new Date();
     var path = this.search(this.graph.nodes, start, end, {
-        diagonal: this.opts.diagonal
+        diagonal: this.opts.diagonal,
+        closest: this.opts.closest
     });
 	var fTime = new Date();
 
@@ -191,7 +200,7 @@ GraphSearch.prototype.drawDebugInfo = function(show) {
     this.$cells.html(" ");
     var that = this;
     if(show) {
-    	that.$cells.each(function(i) { 
+    	that.$cells.each(function(i) {
             var node = that.nodeFromElement($(this));
     		var debug = false;
             if (node.visited) {
@@ -226,10 +235,20 @@ GraphSearch.prototype.animatePath = function(path) {
 		return grid[node.x][node.y];
 	};
 
+    var self = this;
+    // will add start class if final
     var removeClass = function(path, i) {
-	    if(i>=path.length) return;
-	    elementFromNode(path[i]).removeClass(css.active);
+	    if(i>=path.length){ // finished removing path, set start positions
+            return setStartClass(path, i);
+        }
+        elementFromNode(path[i]).removeClass(css.active);
 	    setTimeout( function() { removeClass(path, i+1) }, timeout*path[i].cost);
+    }
+    var setStartClass = function(path, i){
+        if(i === path.length){
+            self.$graph.find("." + css.start).removeClass(css.start);
+            elementFromNode(path[i-1]).addClass(css.start);
+        }
     }
     var addClass = function(path, i)  {
 	    if(i>=path.length) {  // Finished showing path, now remove

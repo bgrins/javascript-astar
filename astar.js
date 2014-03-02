@@ -43,6 +43,8 @@ var astar = {
     // {
     //   heuristic: heuristic function to use
     //   diagonal: boolean specifying whether diagonal moves are allowed
+    //   closest: boolean specifying whether to return closest node if
+    //            target is unreachable
     // }
     search: function(grid, start, end, options) {
         astar.init(grid);
@@ -52,8 +54,25 @@ var astar = {
         var diagonal = !!options.diagonal;
         var costDiagonal = options.costDiagonal || 1;
         var costStraight = options.costStraight || 1;
+        var closest = options.closest || false;
 
         var openHeap = astar.heap();
+
+        // set the start node to be the closest if required
+        var closestNode = start;
+
+        start.h = heuristic(start.pos, end.pos, costStraight, costDiagonal);
+
+        function pathTo(node){
+            var curr = node;
+            var path = [];
+            while(curr.parent) {
+                path.push(curr);
+                curr = curr.parent;
+            }
+            return path.reverse();
+        }
+
 
         openHeap.push(start);
 
@@ -64,13 +83,7 @@ var astar = {
 
             // End case -- result has been found, return the traced path.
             if(currentNode === end) {
-                var curr = currentNode;
-                var ret = [];
-                while(curr.parent) {
-                    ret.push(curr);
-                    curr = curr.parent;
-                }
-                return ret.reverse();
+                return pathTo(currentNode);
             }
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
@@ -101,6 +114,16 @@ var astar = {
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
 
+                    if(closest){
+                        // If the neighbour is closer than the current closestNode or if it's equally close but has
+                        // a cheaper path than the current closest node then it becomes the closest node
+                        if(neighbor.h < closestNode.h || (neighbor.h === closestNode.h && neighbor.g < closestNode.g)){
+                            closestNode = neighbor;
+                        }
+                    }
+
+
+
                     if (!beenVisited) {
                         // Pushing to heap will put it in proper place based on the 'f' value.
                         openHeap.push(neighbor);
@@ -111,6 +134,10 @@ var astar = {
                     }
                 }
             }
+        }
+
+        if(closest){
+            return pathTo(closestNode);
         }
 
         // No result was found - empty array signifies failure to find path.
@@ -211,7 +238,7 @@ Graph.prototype.toString = function() {
     return graphString;
 };
 
-function GraphNode(x,y,type) {
+function GraphNode(x, y, type) {
     this.data = { };
     this.x = x;
     this.y = y;
