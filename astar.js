@@ -114,10 +114,10 @@ var astar = {
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
 
-                    if(closest){
+                    if (closest) {
                         // If the neighbour is closer than the current closestNode or if it's equally close but has
                         // a cheaper path than the current closest node then it becomes the closest node
-                        if(neighbor.h < closestNode.h || (neighbor.h === closestNode.h && neighbor.g < closestNode.g)){
+                        if (neighbor.h < closestNode.h || (neighbor.h === closestNode.h && neighbor.g < closestNode.g)) {
                             closestNode = neighbor;
                         }
                     }
@@ -136,7 +136,7 @@ var astar = {
             }
         }
 
-        if(closest){
+        if (closest) {
             return pathTo(closestNode);
         }
 
