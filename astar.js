@@ -24,7 +24,7 @@ var astar = {
             node.f = 0;
             node.g = 0;
             node.h = 0;
-            node.cost = node.type;
+            node.cost = node.weight;
             node.visited = false;
             node.closed = false;
             node.parent = null;
@@ -259,17 +259,17 @@ Graph.prototype.toString = function() {
         rowDebug = "";
         row = nodes[x];
         for (y = 0, l = row.length; y < l; y++) {
-            rowDebug += row[y].type + " ";
+            rowDebug += row[y].weight + " ";
         }
         graphString = graphString + rowDebug + "\n";
     }
     return graphString;
 };
 
-function GraphNode(x, y, type) {
+function GraphNode(x, y, weight) {
     this.x = x;
     this.y = y;
-    this.type = type;
+    this.weight = weight;
 }
 
 GraphNode.prototype.toString = function() {
@@ -277,7 +277,7 @@ GraphNode.prototype.toString = function() {
 };
 
 GraphNode.prototype.isWall = function() {
-    return this.type === 0;
+    return this.weight === 0;
 };
 
 function BinaryHeap(scoreFunction){
