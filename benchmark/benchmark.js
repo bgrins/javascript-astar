@@ -13,19 +13,19 @@ $(function() {
         var times = 0;
         
         for (var i = 0; i < 1000; i++) {
-            var startTime = new Date().getTime();
+            var startTime = performance ? performance.now() : new Date().getTime();
             var result = astar.search(graph, start, end);
-            var endTime = new Date().getTime();
+            var endTime = performance ? performance.now() : new Date().getTime();
             times = times + (endTime - startTime);
             
             results.push(
                 '<li>Found path with ' + result.length + ' steps.  ' +
-                'Took ' + (endTime - startTime) + ' milliseconds.</li>'
+                'Took ' + (endTime - startTime).toFixed(2) + ' milliseconds.</li>'
             );
         }
         
         $("#graph").html(graph.toString());
-        $("#summary").html('Average time: ' + (times / 1000) + 'ms');
+        $("#summary").html('Average time: ' + (times / 1000).toFixed(2) + 'ms');
         $("#results").html(results.join(''));
 
         running = false;
