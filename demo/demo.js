@@ -77,7 +77,9 @@ $(function() {
     });
 
     $searchDiagonal.change(function() {
-        grid.setOption({diagonal: $(this).is(":checked")});
+        var val = $(this).is(":checked");
+        grid.setOption({diagonal: val});
+        grid.graph.diagonal = val;
     });
 
     $checkClosest.change(function() {
@@ -178,8 +180,7 @@ GraphSearch.prototype.cellClicked = function($end) {
    	var start = this.nodeFromElement($start);
 
 	var sTime = new Date();
-    var path = this.search(this.graph.nodes, start, end, {
-        diagonal: this.opts.diagonal,
+    var path = this.search(this.graph, start, end, {
         closest: this.opts.closest
     });
 	var fTime = new Date();
@@ -215,7 +216,7 @@ GraphSearch.prototype.drawDebugInfo = function(show) {
     }
 };
 GraphSearch.prototype.nodeFromElement = function($cell) {
-    return this.graph.nodes[parseInt($cell.attr("x"))][parseInt($cell.attr("y"))];
+    return this.graph.grid[parseInt($cell.attr("x"))][parseInt($cell.attr("y"))];
 };
 GraphSearch.prototype.animateNoPath = function() {
     var $graph = this.$graph;

@@ -7,14 +7,14 @@ $(function() {
         running = true;
 
         var graph = new Graph(grid);
-        var start = graph.nodes[0][0];
-        var end = graph.nodes[140][140];
+        var start = graph.grid[0][0];
+        var end = graph.grid[140][140];
         var results = [];
         var times = 0;
         
         for (var i = 0; i < 1000; i++) {
             var startTime = new Date().getTime();
-            var result = astar.search(graph.nodes, start, end);
+            var result = astar.search(graph, start, end);
             var endTime = new Date().getTime();
             times = times + (endTime - startTime);
             

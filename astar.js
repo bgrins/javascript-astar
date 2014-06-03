@@ -18,18 +18,16 @@
 })(function() {
 
 var astar = {
-    init: function(grid) {
-        for(var x = 0, xl = grid.length; x < xl; x++) {
-            for(var y = 0, yl = grid[x].length; y < yl; y++) {
-                var node = grid[x][y];
-                node.f = 0;
-                node.g = 0;
-                node.h = 0;
-                node.cost = node.type;
-                node.visited = false;
-                node.closed = false;
-                node.parent = null;
-            }
+    init: function(graph) {
+        for (var i = 0, len = graph.nodes.length; i < len; ++i) {
+            var node = graph.nodes[i];
+            node.f = 0;
+            node.g = 0;
+            node.h = 0;
+            node.cost = node.type;
+            node.visited = false;
+            node.closed = false;
+            node.parent = null;
         }
     },
     heap: function() {
@@ -42,16 +40,14 @@ var astar = {
     // supported options:
     // {
     //   heuristic: heuristic function to use
-    //   diagonal: boolean specifying whether diagonal moves are allowed
     //   closest: boolean specifying whether to return closest node if
     //            target is unreachable
     // }
-    search: function(grid, start, end, options) {
-        astar.init(grid);
+    search: function(graph, start, end, options) {
+        astar.init(graph);
 
         options = options || {};
-        var heuristic = options.heuristic || astar.manhattan;
-        var diagonal = !!options.diagonal;
+        var heuristic = options.heuristic || astar.heuristics.manhattan;
         var closest = options.closest || false;
 
         var openHeap = astar.heap();
@@ -59,7 +55,7 @@ var astar = {
         // set the start node to be the closest if required
         var closestNode = start;
 
-        start.h = heuristic(start.pos, end.pos);
+        start.h = heuristic(start, end);
 
         function pathTo(node){
             var curr = node;
@@ -87,8 +83,8 @@ var astar = {
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
             currentNode.closed = true;
 
-            // Find all neighbors for the current node. Optionally find diagonal neighbors as well (false by default).
-            var neighbors = astar.neighbors(grid, currentNode, diagonal);
+            // Find all neighbors for the current node.
+            var neighbors = graph.neighbors(currentNode);
 
             for(var i=0, il = neighbors.length; i < il; i++) {
                 var neighbor = neighbors[i];
@@ -108,7 +104,7 @@ var astar = {
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
                     neighbor.visited = true;
                     neighbor.parent = currentNode;
-                    neighbor.h = neighbor.h || heuristic(neighbor.pos, end.pos);
+                    neighbor.h = neighbor.h || heuristic(neighbor, end);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
 
@@ -141,24 +137,70 @@ var astar = {
         // No result was found - empty array signifies failure to find path.
         return [];
     },
-    manhattan: function(pos0, pos1) {
-        // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
+    // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
+    heuristics: {
+        manhattan: function(pos0, pos1) {
+            var d1 = Math.abs (pos1.x - pos0.x);
+            var d2 = Math.abs (pos1.y - pos0.y);
+            return d1 + d2;
+        },
+        diagonal: function(pos0, pos1) {
+            var D = 1;
+            var D2 = Math.sqrt(2);
+            var d1 = Math.abs (pos1.x - pos0.x);
+            var d2 = Math.abs (pos1.y - pos0.y);
+            return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2));
+        },
+        gps: function(node0, node1) {
+            var x = (node1.longRad - node0.longRad) * Math.cos((node0.latRad + node1.latRad)/2),
+                y = node1.latRad - node0.latRad,
+                res = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) * 6371;
+            //printErr("Distance from " + node0.name + " to " + node1.name + " = " + res);
+            return res;
+        }
+    }
+};
 
-        var d1 = Math.abs (pos1.x - pos0.x);
-        var d2 = Math.abs (pos1.y - pos0.y);
-        return d1 + d2;
-    },
-    diagonal: function(pos0, pos1) {
-        var D = 1;
-        var D2 = Math.sqrt(2);
-        var d1 = Math.abs (pos1.x - pos0.x);
-        var d2 = Math.abs (pos1.y - pos0.y);
-        return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2));
-    },
-    neighbors: function(grid, node, diagonals) {
-        var ret = [];
-        var x = node.x;
-        var y = node.y;
+/**
+* A graph memory structure
+* @param {Array} [gridIn] Facultative grid of input weights
+* @param {bool} [diagonal] Specify whether diagonal moves are allowed
+*/
+function Graph(gridIn, diagonal) {
+    var nodes = [];
+
+    if (gridIn) {
+        var grid = [],
+            node;
+        for (var x = 0; x < gridIn.length; x++) {
+            grid[x] = [];
+
+            for (var y = 0, row = gridIn[x]; y < row.length; y++) {
+                node = new GraphNode(x, y, row[y]);
+                grid[x][y] = node;
+                nodes.push(node);
+            }
+        }
+        this.grid = grid;
+    }
+
+    this.nodes = nodes;
+    this.diagonal = !!diagonal; // Optionally find diagonal neighbors as well (false by default).
+}
+
+Graph.prototype.add = function(node) {
+    if (this.nodes.indexOf(node) == -1) {
+        this.nodes.push(node);
+    }
+};
+
+Graph.prototype.neighbors = function(node) {
+    var ret = [],
+        x = node.x,
+        y = node.y;
+    
+    if (this.grid) {
+        var grid = this.grid;
 
         // West
         if(grid[x-1] && grid[x-1][y]) {
@@ -180,8 +222,7 @@ var astar = {
             ret.push(grid[x][y+1]);
         }
 
-        if (diagonals) {
-
+        if (this.diagonal) {
             // Southwest
             if(grid[x-1] && grid[x-1][y-1]) {
                 ret.push(grid[x-1][y-1]);
@@ -201,27 +242,14 @@ var astar = {
             if(grid[x+1] && grid[x+1][y+1]) {
                 ret.push(grid[x+1][y+1]);
             }
-
         }
-
-        return ret;
     }
+    else {
+        // Your neighbors implementation!
+    }
+
+    return ret;
 };
-
-function Graph(grid) {
-    var nodes = [];
-
-    for (var x = 0; x < grid.length; x++) {
-        nodes[x] = [];
-
-        for (var y = 0, row = grid[x]; y < row.length; y++) {
-            nodes[x][y] = new GraphNode(x, y, row[y]);
-        }
-    }
-
-    this.input = grid;
-    this.nodes = nodes;
-}
 
 Graph.prototype.toString = function() {
     var graphString = "\n";
@@ -239,13 +267,8 @@ Graph.prototype.toString = function() {
 };
 
 function GraphNode(x, y, type) {
-    this.data = { };
     this.x = x;
     this.y = y;
-    this.pos = {
-        x: x,
-        y: y
-    };
     this.type = type;
 }
 
