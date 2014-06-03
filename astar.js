@@ -47,13 +47,11 @@ var astar = {
         astar.init(graph);
 
         options = options || {};
-        var heuristic = options.heuristic || astar.heuristics.manhattan;
-        var closest = options.closest || false;
+        var heuristic = options.heuristic || astar.heuristics.manhattan,
+            closest = options.closest || false;
 
-        var openHeap = astar.heap();
-
-        // set the start node to be the closest if required
-        var closestNode = start;
+        var openHeap = astar.heap(),
+            closestNode = start; // set the start node to be the closest if required
 
         start.h = heuristic(start, end);
 
@@ -66,7 +64,6 @@ var astar = {
             }
             return path.reverse();
         }
-
 
         openHeap.push(start);
 
@@ -86,7 +83,7 @@ var astar = {
             // Find all neighbors for the current node.
             var neighbors = graph.neighbors(currentNode);
 
-            for(var i=0, il = neighbors.length; i < il; i++) {
+            for(var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
                 if(neighbor.closed || neighbor.isWall()) {
@@ -96,8 +93,8 @@ var astar = {
 
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
-                var gScore = currentNode.g + neighbor.cost;
-                var beenVisited = neighbor.visited;
+                var gScore = currentNode.g + neighbor.cost,
+                    beenVisited = neighbor.visited;
 
                 if(!beenVisited || gScore < neighbor.g) {
 
@@ -115,8 +112,6 @@ var astar = {
                             closestNode = neighbor;
                         }
                     }
-
-
 
                     if (!beenVisited) {
                         // Pushing to heap will put it in proper place based on the 'f' value.
@@ -347,7 +342,6 @@ BinaryHeap.prototype = {
                 // Update 'n' to continue at the new position.
                 n = parentN;
             }
-
             // Found a parent that is less, no need to sink any further.
             else {
                 break;
@@ -362,11 +356,11 @@ BinaryHeap.prototype = {
 
         while(true) {
             // Compute the indices of the child elements.
-            var child2N = (n + 1) << 1, child1N = child2N - 1;
-            // This is used to store the new position of the element,
-            // if any.
-            var swap = null;
-            var child1Score;
+            var child2N = (n + 1) << 1,
+                child1N = child2N - 1;
+            // This is used to store the new position of the element, if any.
+            var swap = null,
+                child1Score;
             // If the first child exists (is inside the array)...
             if (child1N < length) {
                 // Look it up and compute its score.
@@ -394,7 +388,6 @@ BinaryHeap.prototype = {
                 this.content[swap] = element;
                 n = swap;
             }
-
             // Otherwise, we are done.
             else {
                 break;
