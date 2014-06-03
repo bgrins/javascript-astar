@@ -17,6 +17,16 @@
     }
 })(function() {
 
+function pathTo(node){
+    var curr = node,
+        path = [];
+    while(curr.parent) {
+        path.push(curr);
+        curr = curr.parent;
+    }
+    return path.reverse();
+}
+
 var astar = {
     init: function(graph) {
         for (var i = 0, len = graph.nodes.length; i < len; ++i) {
@@ -55,17 +65,6 @@ var astar = {
         var closestNode = start;
 
         start.h = heuristic(start, end);
-
-        function pathTo(node){
-            var curr = node;
-            var path = [];
-            while(curr.parent) {
-                path.push(curr);
-                curr = curr.parent;
-            }
-            return path.reverse();
-        }
-
 
         openHeap.push(start);
 
