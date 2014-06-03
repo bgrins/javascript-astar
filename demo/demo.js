@@ -179,18 +179,19 @@ GraphSearch.prototype.cellClicked = function($end) {
    	var $start = this.$cells.filter("." + css.start);
    	var start = this.nodeFromElement($start);
 
-	var sTime = new Date();
+	var sTime = performance ? performance.now() : new Date().getTime();
     var path = this.search(this.graph, start, end, {
         closest: this.opts.closest
     });
-	var fTime = new Date();
+	var fTime = performance ? performance.now() : new Date().getTime();
+	var duration = (fTime-sTime).toFixed(2);
 
 	if(!path || path.length == 0)	{
-	    $("#message").text("couldn't find a path ("+(fTime-sTime)+"ms)");
+	    $("#message").text("couldn't find a path (" + duration + "ms)");
 	    this.animateNoPath();
 	}
 	else {
-	    $("#message").text("search took " + (fTime-sTime) + "ms.");
+	    $("#message").text("search took " + duration + "ms.");
     	if(this.opts.debug) {
 	    	this.drawDebugInfo(this.opts.debug);
 	    }
