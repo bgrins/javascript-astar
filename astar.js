@@ -247,18 +247,18 @@ Graph.prototype.neighbors = function(node) {
 };
 
 Graph.prototype.toString = function() {
-    var graphString = "\n";
-    var nodes = this.nodes;
-    var rowDebug, row, y, l;
+    var graphString = [],
+        nodes = this.grid, // when using grid
+        rowDebug, row, y, l;
     for (var x = 0, len = nodes.length; x < len; x++) {
-        rowDebug = "";
+        rowDebug = [];
         row = nodes[x];
         for (y = 0, l = row.length; y < l; y++) {
-            rowDebug += row[y].weight + " ";
+            rowDebug.push(row[y].weight);
         }
-        graphString = graphString + rowDebug + "\n";
+        graphString.push(rowDebug.join(" "));
     }
-    return graphString;
+    return graphString.join("\n");
 };
 
 function GraphNode(x, y, weight) {
