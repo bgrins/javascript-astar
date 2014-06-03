@@ -77,7 +77,9 @@ $(function() {
     });
 
     $searchDiagonal.change(function() {
-        grid.setOption({diagonal: $(this).is(":checked")});
+        var val = $(this).is(":checked");
+        grid.setOption({diagonal: val});
+        grid.graph.diagonal = val;
     });
 
     $checkClosest.change(function() {
@@ -177,19 +179,19 @@ GraphSearch.prototype.cellClicked = function($end) {
    	var $start = this.$cells.filter("." + css.start);
    	var start = this.nodeFromElement($start);
 
-	var sTime = new Date();
-    var path = this.search(this.graph.nodes, start, end, {
-        diagonal: this.opts.diagonal,
+	var sTime = performance ? performance.now() : new Date().getTime();
+    var path = this.search(this.graph, start, end, {
         closest: this.opts.closest
     });
-	var fTime = new Date();
+	var fTime = performance ? performance.now() : new Date().getTime();
+	var duration = (fTime-sTime).toFixed(2);
 
 	if(!path || path.length == 0)	{
-	    $("#message").text("couldn't find a path ("+(fTime-sTime)+"ms)");
+	    $("#message").text("couldn't find a path (" + duration + "ms)");
 	    this.animateNoPath();
 	}
 	else {
-	    $("#message").text("search took " + (fTime-sTime) + "ms.");
+	    $("#message").text("search took " + duration + "ms.");
     	if(this.opts.debug) {
 	    	this.drawDebugInfo(this.opts.debug);
 	    }
@@ -215,7 +217,7 @@ GraphSearch.prototype.drawDebugInfo = function(show) {
     }
 };
 GraphSearch.prototype.nodeFromElement = function($cell) {
-    return this.graph.nodes[parseInt($cell.attr("x"))][parseInt($cell.attr("y"))];
+    return this.graph.grid[parseInt($cell.attr("x"))][parseInt($cell.attr("y"))];
 };
 GraphSearch.prototype.animateNoPath = function() {
     var $graph = this.$graph;
