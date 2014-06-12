@@ -175,7 +175,7 @@ function Graph(gridIn, diagonal) {
             this.grid[x] = [];
 
             for (var y = 0, row = gridIn[x]; y < row.length; y++) {
-                var node = new GraphNode(x, y, row[y]);
+                var node = new GridNode(x, y, row[y]);
                 this.grid[x][y] = node;
                 this.nodes.push(node);
             }
@@ -261,17 +261,17 @@ Graph.prototype.toString = function() {
     return graphString;
 };
 
-function GraphNode(x, y, type) {
+function GridNode(x, y, type) {
     this.x = x;
     this.y = y;
     this.type = type;
 }
 
-GraphNode.prototype.toString = function() {
+GridNode.prototype.toString = function() {
     return "[" + this.x + " " + this.y + "]";
 };
 
-GraphNode.prototype.isWall = function() {
+GridNode.prototype.isWall = function() {
     return this.type === 0;
 };
 
