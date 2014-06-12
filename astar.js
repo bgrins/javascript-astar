@@ -166,25 +166,21 @@ var astar = {
 * @param {bool} [diagonal] Specify whether diagonal moves are allowed
 */
 function Graph(gridIn, diagonal) {
-    var nodes = [];
+    this.nodes = [];
+    this.diagonal = !!diagonal; // Optionally find diagonal neighbors as well (false by default).
 
     if (gridIn) {
-        var grid = [],
-            node;
+        this.grid = [];
         for (var x = 0; x < gridIn.length; x++) {
-            grid[x] = [];
+            this.grid[x] = [];
 
             for (var y = 0, row = gridIn[x]; y < row.length; y++) {
-                node = new GraphNode(x, y, row[y]);
-                grid[x][y] = node;
-                nodes.push(node);
+                var node = new GraphNode(x, y, row[y]);
+                this.grid[x][y] = node;
+                this.nodes.push(node);
             }
         }
-        this.grid = grid;
     }
-
-    this.nodes = nodes;
-    this.diagonal = !!diagonal; // Optionally find diagonal neighbors as well (false by default).
 }
 
 Graph.prototype.add = function(node) {
