@@ -92,11 +92,11 @@ function runSearch(graph, start, end, options) {
   if (!(graph instanceof Graph)) {
     graph = new Graph(graph);
   }
-  var start = graph.grid[start[0]][start[1]];
-  var end = graph.grid[end[0]][end[1]];
-  var sTime = new Date();
-  var result = astar.search(graph, start, end, options);
-  var eTime = new Date();
+  start = graph.grid[start[0]][start[1]];
+  end = graph.grid[end[0]][end[1]];
+  var sTime = new Date(),
+    result = astar.search(graph, start, end, options),
+    eTime = new Date();
   return {
     result: result,
     text: pathToString(result),
@@ -132,7 +132,9 @@ test( "GPS Pathfinding", function() {
 
   function CityGraph(data, links) {
     this.nodes = [];
-    var cities = this.cities = {};
+    this.links = links;
+    this.cities = {};
+
     for (var i = 0; i < data.length; ++i) {
       var city = data[i],
           obj = new CityNode(city.name, city.lat, city.lng);
@@ -141,11 +143,8 @@ test( "GPS Pathfinding", function() {
           this.nodes.push(obj);
       }
 
-      cities[obj.name] = obj;
+      this.cities[obj.name] = obj;
     }
-
-    this.cities = cities;
-    this.links = links;
   }
 
   CityGraph.prototype.neighbors = function (node) {
