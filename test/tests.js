@@ -132,6 +132,19 @@ test( "GPS Pathfinding", function() {
   CityNode.prototype.isWall = function() {
       return this.weight === 0;
   };
+  // Heuristic function
+  CityNode.prototype.GPS_distance = function(city) {
+      var x = (city.longRad - this.longRad) * Math.cos((this.latRad + city.latRad)/2),
+          y = city.latRad - this.latRad,
+          res = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) * 6371;
+      return res;
+  };
+  // Real cost function
+  CityNode.prototype.Real_distance = function(city) {
+    // Re-use heuristic function for now
+    // TODO: Determine the real distance between cities (from another data set)
+    return this.GPS_distance(city);
+  };
 
   //---
 
@@ -147,15 +160,14 @@ test( "GPS Pathfinding", function() {
   graph.cities = cities;
   graph.links = links;
 
-  var GPSheuristic = astar.heuristics.gps;
-
-  graph.neighbors = function (node) { // Override neighbors function for this specific graph
+  // Override neighbors function for this specific graph
+  graph.neighbors = function (node) {
     var neighbors = [],
       ids = this.links[node.name];
     for (var i = 0, len = ids.length; i < len; ++i) {
       var name = ids[i],
         neighbor = this.cities[name];
-      neighbor.cost = GPSheuristic(node, neighbor); // Compute real cost!
+      neighbor.cost = node.Real_distance(neighbor); // Compute real cost!
       neighbors.push(neighbor);
     }
     return neighbors;
@@ -163,7 +175,11 @@ test( "GPS Pathfinding", function() {
 
   var start = cities["Paris"],
     end = cities["Cannes"];
-  
+
+  var GPSheuristic = function(node0, node1) {
+    return node0.GPS_distance(node1);
+  };
+
   var result = astar.search(graph, start, end, {heuristic: GPSheuristic});
   equal(result.length, 3, "Cannes is 3 cities away from Paris");
   equal(result[0].name, "Lyon", "City #1 is Lyon");

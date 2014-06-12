@@ -150,12 +150,6 @@ var astar = {
             var d1 = Math.abs (pos1.x - pos0.x);
             var d2 = Math.abs (pos1.y - pos0.y);
             return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2));
-        },
-        gps: function(node0, node1) {
-            var x = (node1.longRad - node0.longRad) * Math.cos((node0.latRad + node1.latRad)/2),
-                y = node1.latRad - node0.latRad,
-                res = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) * 6371;
-            return res;
         }
     }
 };
