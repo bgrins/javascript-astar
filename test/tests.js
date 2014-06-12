@@ -80,8 +80,8 @@ test( "Pathfinding to closest", function() {
 
 function runSearch(grid, start, end, options) {
   var graph = new Graph(grid);
-  var start = graph.grid[start[0]][start[1]];
-  var end = graph.grid[end[0]][end[1]];
+  start = graph.grid[start[0]][start[1]];
+  end = graph.grid[end[0]][end[1]];
   var sTime = new Date();
   var result = astar.search(graph, start, end, options);
   var eTime = new Date();
