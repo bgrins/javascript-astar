@@ -155,7 +155,6 @@ var astar = {
             var x = (node1.longRad - node0.longRad) * Math.cos((node0.latRad + node1.latRad)/2),
                 y = node1.latRad - node0.latRad,
                 res = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) * 6371;
-            //printErr("Distance from " + node0.name + " to " + node1.name + " = " + res);
             return res;
         }
     }
