@@ -231,17 +231,17 @@ Graph.prototype.toString = function() {
         rowDebug = "";
         row = nodes[x];
         for (y = 0, l = row.length; y < l; y++) {
-            rowDebug += row[y].type + " ";
+            rowDebug += row[y].weight + " ";
         }
         graphString = graphString + rowDebug + "\n";
     }
     return graphString;
 };
 
-function GridNode(x, y, type) {
+function GridNode(x, y, weight) {
     this.x = x;
     this.y = y;
-    this.type = type;
+    this.weight = weight;
 }
 
 GridNode.prototype.toString = function() {
@@ -249,11 +249,11 @@ GridNode.prototype.toString = function() {
 };
 
 GridNode.prototype.getCost = function() {
-    return this.type;
+    return this.weight;
 };
 
 GridNode.prototype.isWall = function() {
-    return this.type === 0;
+    return this.weight === 0;
 };
 
 function BinaryHeap(scoreFunction){

@@ -166,7 +166,7 @@ test( "GPS Pathfinding", function() {
     this.longRad = this.lng * Math.PI / 180;
     this.latRad = this.lat * Math.PI / 180;
   }
-  CityNode.prototype.type = 1;
+  CityNode.prototype.weight = 1;
   CityNode.prototype.toString = function() {
       return "[" + this.name + " (" + this.lat + ", " + this.lng + ")]";
   };
