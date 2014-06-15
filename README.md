@@ -15,13 +15,19 @@ If you want just the A* search code (not the demo visualization), use code like 
 			[0,1,1,0],
 			[0,0,1,1]
 		]);
-		var start = graph.nodes[0][0];
-		var end = graph.nodes[1][2];
-		var result = astar.search(graph.nodes, start, end);
+		var start = graph.grid[0][0];
+		var end = graph.grid[1][2];
+		var result = astar.search(graph, start, end);
 		// result is an array containing the shortest path
 
-		var resultWithDiagonals = astar.search(graph.nodes, start, end, true);
-		// result now searches diagonal neighbors as well
+		var graphDiagonal = new Graph([
+			[1,1,1,1],
+			[0,1,1,0],
+			[0,0,1,1]
+		], { diagonal: true });
+		var start = graphDiagonal.grid[0][0];
+		var end = graphDiagonal.grid[1][2];
+		var resultWithDiagonals = astar.search(graphDiagonal, start, end);
 
 		// Weight can easily be added by increasing the values within the graph, and where 0 is infinite (a wall)
 		var graphWithWeight = new Graph([
@@ -29,9 +35,9 @@ If you want just the A* search code (not the demo visualization), use code like 
 			[0,4,1.3,0],
 			[0,0,5,1]
 		]);
-		var startWithWeight = graphWithWeight.nodes[0][0];
-		var endWithWeight = graphWithWeight.nodes[1][2];
-		var resultWithWeight = astar.search(graphWithWeight.nodes, startWithWeight, endWithWeight);
+		var startWithWeight = graphWithWeight.grid[0][0];
+		var endWithWeight = graphWithWeight.grid[1][2];
+		var resultWithWeight = astar.search(graphWithWeight, startWithWeight, endWithWeight);
 
 		// resultWithWeight is an array containing the shortest path taking into account the weight of a node
 	</script>

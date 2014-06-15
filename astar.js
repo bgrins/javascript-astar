@@ -24,7 +24,6 @@ var astar = {
             node.f = 0;
             node.g = 0;
             node.h = 0;
-            node.cost = node.type;
             node.visited = false;
             node.closed = false;
             node.parent = null;
@@ -96,7 +95,7 @@ var astar = {
 
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
-                var gScore = currentNode.g + neighbor.cost;
+                var gScore = currentNode.g + neighbor.getCost(currentNode);
                 var beenVisited = neighbor.visited;
 
                 if(!beenVisited || gScore < neighbor.g) {
@@ -115,8 +114,6 @@ var astar = {
                             closestNode = neighbor;
                         }
                     }
-
-
 
                     if (!beenVisited) {
                         // Pushing to heap will put it in proper place based on the 'f' value.
@@ -157,84 +154,70 @@ var astar = {
 /**
 * A graph memory structure
 * @param {Array} [gridIn] Facultative grid of input weights
-* @param {bool} [diagonal] Specify whether diagonal moves are allowed
+* @param {bool} options
+*          [diagonal] Specify whether diagonal moves are allowed
 */
-function Graph(gridIn, diagonal) {
+function Graph(gridIn, options) {
+    options = options || {};
     this.nodes = [];
-    this.diagonal = !!diagonal; // Optionally find diagonal neighbors as well (false by default).
+    this.diagonal = !!options.diagonal;
+    this.grid = [];
+    for (var x = 0; x < gridIn.length; x++) {
+        this.grid[x] = [];
 
-    if (gridIn) {
-        this.grid = [];
-        for (var x = 0; x < gridIn.length; x++) {
-            this.grid[x] = [];
-
-            for (var y = 0, row = gridIn[x]; y < row.length; y++) {
-                var node = new GridNode(x, y, row[y]);
-                this.grid[x][y] = node;
-                this.nodes.push(node);
-            }
+        for (var y = 0, row = gridIn[x]; y < row.length; y++) {
+            var node = new GridNode(x, y, row[y]);
+            this.grid[x][y] = node;
+            this.nodes.push(node);
         }
     }
 }
-
-Graph.prototype.add = function(node) {
-    if (this.nodes.indexOf(node) == -1) {
-        this.nodes.push(node);
-    }
-};
-
 Graph.prototype.neighbors = function(node) {
     var ret = [],
         x = node.x,
-        y = node.y;
-    
-    if (this.grid) {
-        var grid = this.grid;
+        y = node.y,
+        grid = this.grid;
 
-        // West
-        if(grid[x-1] && grid[x-1][y]) {
-            ret.push(grid[x-1][y]);
-        }
-
-        // East
-        if(grid[x+1] && grid[x+1][y]) {
-            ret.push(grid[x+1][y]);
-        }
-
-        // South
-        if(grid[x] && grid[x][y-1]) {
-            ret.push(grid[x][y-1]);
-        }
-
-        // North
-        if(grid[x] && grid[x][y+1]) {
-            ret.push(grid[x][y+1]);
-        }
-
-        if (this.diagonal) {
-            // Southwest
-            if(grid[x-1] && grid[x-1][y-1]) {
-                ret.push(grid[x-1][y-1]);
-            }
-
-            // Southeast
-            if(grid[x+1] && grid[x+1][y-1]) {
-                ret.push(grid[x+1][y-1]);
-            }
-
-            // Northwest
-            if(grid[x-1] && grid[x-1][y+1]) {
-                ret.push(grid[x-1][y+1]);
-            }
-
-            // Northeast
-            if(grid[x+1] && grid[x+1][y+1]) {
-                ret.push(grid[x+1][y+1]);
-            }
-        }
+    // West
+    if(grid[x-1] && grid[x-1][y]) {
+        ret.push(grid[x-1][y]);
     }
-    else {
-        // Your neighbors implementation!
+
+    // East
+    if(grid[x+1] && grid[x+1][y]) {
+        ret.push(grid[x+1][y]);
+    }
+
+    // South
+    if(grid[x] && grid[x][y-1]) {
+        ret.push(grid[x][y-1]);
+    }
+
+    // North
+    if(grid[x] && grid[x][y+1]) {
+        ret.push(grid[x][y+1]);
+    }
+
+    if (this.diagonal) {
+        // Southwest
+        if(grid[x-1] && grid[x-1][y-1]) {
+            ret.push(grid[x-1][y-1]);
+        }
+
+        // Southeast
+        if(grid[x+1] && grid[x+1][y-1]) {
+            ret.push(grid[x+1][y-1]);
+        }
+
+        // Northwest
+        if(grid[x-1] && grid[x-1][y+1]) {
+            ret.push(grid[x-1][y+1]);
+        }
+
+        // Northeast
+        if(grid[x+1] && grid[x+1][y+1]) {
+            ret.push(grid[x+1][y+1]);
+        }
     }
 
     return ret;
@@ -263,6 +246,10 @@ function GridNode(x, y, type) {
 
 GridNode.prototype.toString = function() {
     return "[" + this.x + " " + this.y + "]";
+};
+
+GridNode.prototype.getCost = function() {
+    return this.type;
 };
 
 GridNode.prototype.isWall = function() {

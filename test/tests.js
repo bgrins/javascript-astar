@@ -52,6 +52,16 @@ test( "Pathfinding", function() {
   equal (result1.text, "(0,1)(1,1)(1,2)(2,2)(2,3)", "Result is expected");
 });
 
+test( "Diagonal Pathfinding", function() {
+  var result1 = runSearch(new Graph([
+      [1,1,1,1],
+      [0,1,1,0],
+      [0,0,1,1]
+  ], { diagonal: true}), [0,0], [2,3]);
+
+  equal (result1.text, "(1,1)(2,2)(2,3)", "Result is expected");
+});
+
 test( "Pathfinding to closest", function() {
   var result1 = runSearch([
       [1,1,1,1],
@@ -78,8 +88,10 @@ test( "Pathfinding to closest", function() {
   equal (result3.text, "(0,1)(1,1)(2,1)", "Result is expected - target node was reachable");
 });
 
-function runSearch(grid, start, end, options) {
-  var graph = new Graph(grid);
+function runSearch(graph, start, end, options) {
+  if (!(graph instanceof Graph)) {
+    graph = new Graph(graph);
+  }
   var start = graph.grid[start[0]][start[1]];
   var end = graph.grid[end[0]][end[1]];
   var sTime = new Date();
@@ -118,6 +130,35 @@ test( "GPS Pathfinding", function() {
     "Reims": ["Paris"]
   };
 
+  function CityGraph(data, links) {
+    this.nodes = [];
+    var cities = this.cities = {};
+    for (var i = 0; i < data.length; ++i) {
+      var city = data[i],
+          obj = new CityNode(city.name, city.lat, city.lng);
+
+      if (this.nodes.indexOf(obj) == -1) {
+          this.nodes.push(obj);
+      }
+
+      cities[obj.name] = obj;
+    }
+
+    this.cities = cities;
+    this.links = links;
+  }
+
+  CityGraph.prototype.neighbors = function (node) {
+    var neighbors = [],
+        ids = this.links[node.name];
+    for (var i = 0, len = ids.length; i < len; ++i) {
+      var name = ids[i],
+          neighbor = this.cities[name];
+      neighbors.push(neighbor);
+    }
+    return neighbors;
+  };
+
   function CityNode(name, lat, lng) {
     this.name = name;
     this.lat = lat;
@@ -140,41 +181,16 @@ test( "GPS Pathfinding", function() {
       return res;
   };
   // Real cost function
-  CityNode.prototype.Real_distance = function(city) {
+  CityNode.prototype.getCost = function(city) {
     // Re-use heuristic function for now
     // TODO: Determine the real distance between cities (from another data set)
     return this.GPS_distance(city);
   };
 
-  //---
+  var graph = new CityGraph(data, links);
 
-  var graph = new Graph(),
-    cities = {};
-  for (var i = 0; i < data.length; ++i) {
-    var city = data[i],
-      obj = new CityNode(city.name, city.lat, city.lng);
-    graph.add(obj);
-    cities[obj.name] = obj;
-  }
-
-  graph.cities = cities;
-  graph.links = links;
-
-  // Override neighbors function for this specific graph
-  graph.neighbors = function (node) {
-    var neighbors = [],
-      ids = this.links[node.name];
-    for (var i = 0, len = ids.length; i < len; ++i) {
-      var name = ids[i],
-        neighbor = this.cities[name];
-      neighbor.cost = node.Real_distance(neighbor); // Compute real cost!
-      neighbors.push(neighbor);
-    }
-    return neighbors;
-  };
-
-  var start = cities["Paris"],
-    end = cities["Cannes"];
+  var start = graph.cities["Paris"],
+      end = graph.cities["Cannes"];
 
   var GPSheuristic = function(node0, node1) {
     return node0.GPS_distance(node1);
