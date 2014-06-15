@@ -153,9 +153,9 @@ var astar = {
 
 /**
 * A graph memory structure
-* @param {Array} [gridIn] Facultative grid of input weights
+* @param {Array} [gridIn] 2D array of input weights
 * @param {bool} options
-*          [diagonal] Specify whether diagonal moves are allowed
+*               diagonal: Specifies whether diagonal moves are allowed
 */
 function Graph(gridIn, options) {
     options = options || {};
