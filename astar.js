@@ -152,9 +152,9 @@ var astar = {
 
 /**
 * A graph memory structure
-* @param {Array} [gridIn] 2D array of input weights
-* @param {bool} options
-*               diagonal: Specifies whether diagonal moves are allowed
+* @param {Array} gridIn: 2D array of input weights
+* @param {Object} options:
+*                  - diagonal: Specifies whether diagonal moves are allowed.
 */
 function Graph(gridIn, options) {
     options = options || {};
