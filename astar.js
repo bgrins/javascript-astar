@@ -6,6 +6,7 @@
 // http://eloquentjavascript.net/appendix2.html
 
 (function(definition) {
+    /* global module, define */
     if(typeof module === 'object' && typeof module.exports === 'object') {
         module.exports = definition();
     } else if(typeof define === 'function' && define.amd) {

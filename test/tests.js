@@ -1,4 +1,7 @@
 
+/* global Graph, astar, ok, test, equal */
+
+
 test( "Sanity Checks", function() {
   ok (typeof Graph !== "undefined", "Graph exists");
   ok (typeof astar !== "undefined", "Astar exists");

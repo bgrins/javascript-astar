@@ -3,36 +3,10 @@
 
     Set up the demo page for the A* Search
 */
-
-window.log = function(){
-    if(this.console){
-        console.log( Array.prototype.slice.call(arguments) );
-    }
-};
+/* global Graph, astar, $ */
 
 var WALL = 0,
-    OPEN = 1;
-
-var generateRandom = function (width, height, wallFrequency) {
-    var nodes = [];
-    for (var x = 0; x < width; x++) {
-        var nodeRow = [],
-            gridRow = [];
-
-        for (var y = 0; y < height; y++) {
-            var isWall = Math.floor(Math.random()*(1/wallFrequency));
-            if (isWall === 0) {
-                nodeRow.push(WALL);
-            }
-            else {
-                nodeRow.push(OPEN);
-            }
-        }
-        nodes.push(nodeRow);
-    }
-
-    return new Graph(nodes);
-};
+    performance = window.performance;
 
 $(function() {
 
@@ -165,7 +139,6 @@ GraphSearch.prototype.cellClicked = function($end) {
     var end = this.nodeFromElement($end);
 
     if($end.hasClass(css.wall) || $end.hasClass(css.start)) {
-        log("clicked on wall or start...", $end);
         return;
     }
 
@@ -196,7 +169,7 @@ GraphSearch.prototype.drawDebugInfo = function() {
     this.$cells.html(" ");
     var that = this;
     if(this.opts.debug) {
-        that.$cells.each(function(i) {
+        that.$cells.each(function() {
             var node = that.nodeFromElement($(this)),
                 debug = false;
             if (node.visited) {
