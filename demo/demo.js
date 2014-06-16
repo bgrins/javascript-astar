@@ -21,7 +21,7 @@ var generateRandom = function (width, height, wallFrequency) {
 
         for (var y = 0; y < height; y++) {
             var isWall = Math.floor(Math.random()*(1/wallFrequency));
-            if (isWall == 0) {
+            if (isWall === 0) {
                 nodeRow.push(WALL);
             }
             else {
@@ -96,7 +96,7 @@ var css = { start: "start", finish: "finish", wall: "wall", active: "active" };
 function GraphSearch($graph, options, implementation) {
     this.$graph = $graph;
     this.search = implementation;
-    this.opts = $.extend({wallFrequency:.1, debug:true, gridSize:10}, options);
+    this.opts = $.extend({wallFrequency:0.1, debug:true, gridSize:10}, options);
     this.initialize();
 }
 GraphSearch.prototype.setOption = function(opt) {
@@ -131,7 +131,7 @@ GraphSearch.prototype.initialize = function() {
             gridRow.push($cell);
 
             var isWall = Math.floor(Math.random()*(1/self.opts.wallFrequency));
-            if(isWall == 0) {
+            if(isWall === 0) {
                 nodeRow.push(WALL);
                 $cell.addClass(css.wall);
             }
@@ -184,7 +184,7 @@ GraphSearch.prototype.cellClicked = function($end) {
     var fTime = performance ? performance.now() : new Date().getTime(),
         duration = (fTime-sTime).toFixed(2);
 
-    if(!path || path.length == 0) {
+    if(path.length === 0) {
         $("#message").text("couldn't find a path (" + duration + "ms)");
         this.animateNoPath();
     }
@@ -239,7 +239,7 @@ GraphSearch.prototype.animatePath = function(path) {
     var self = this;
     // will add start class if final
     var removeClass = function(path, i) {
-        if(i>=path.length){ // finished removing path, set start positions
+        if(i >= path.length) { // finished removing path, set start positions
             return setStartClass(path, i);
         }
         elementFromNode(path[i]).removeClass(css.active);
@@ -254,7 +254,7 @@ GraphSearch.prototype.animatePath = function(path) {
         }
     };
     var addClass = function(path, i) {
-        if(i>=path.length) {  // Finished showing path, now remove
+        if(i >= path.length) { // Finished showing path, now remove
             return removeClass(path, 0);
         }
         elementFromNode(path[i]).addClass(css.active);
