@@ -6,6 +6,7 @@
 // http://eloquentjavascript.net/appendix2.html
 
 (function(definition) {
+    /* global module, define */
     if(typeof module === 'object' && typeof module.exports === 'object') {
         module.exports = definition();
     } else if(typeof define === 'function' && define.amd) {
@@ -56,13 +57,11 @@ var astar = {
         astar.init(graph);
 
         options = options || {};
-        var heuristic = options.heuristic || astar.heuristics.manhattan;
-        var closest = options.closest || false;
+        var heuristic = options.heuristic || astar.heuristics.manhattan,
+            closest = options.closest || false;
 
-        var openHeap = astar.heap();
-
-        // set the start node to be the closest if required
-        var closestNode = start;
+        var openHeap = astar.heap(),
+            closestNode = start; // set the start node to be the closest if required
 
         start.h = heuristic(start, end);
 
@@ -84,7 +83,7 @@ var astar = {
             // Find all neighbors for the current node.
             var neighbors = graph.neighbors(currentNode);
 
-            for(var i=0, il = neighbors.length; i < il; i++) {
+            for(var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
                 if(neighbor.closed || neighbor.isWall()) {
@@ -94,8 +93,8 @@ var astar = {
 
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
-                var gScore = currentNode.g + neighbor.getCost(currentNode);
-                var beenVisited = neighbor.visited;
+                var gScore = currentNode.g + neighbor.getCost(currentNode),
+                    beenVisited = neighbor.visited;
 
                 if(!beenVisited || gScore < neighbor.g) {
 
@@ -136,15 +135,15 @@ var astar = {
     // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
     heuristics: {
         manhattan: function(pos0, pos1) {
-            var d1 = Math.abs (pos1.x - pos0.x);
-            var d2 = Math.abs (pos1.y - pos0.y);
+            var d1 = Math.abs(pos1.x - pos0.x);
+            var d2 = Math.abs(pos1.y - pos0.y);
             return d1 + d2;
         },
         diagonal: function(pos0, pos1) {
             var D = 1;
             var D2 = Math.sqrt(2);
-            var d1 = Math.abs (pos1.x - pos0.x);
-            var d2 = Math.abs (pos1.y - pos0.y);
+            var d1 = Math.abs(pos1.x - pos0.x);
+            var d2 = Math.abs(pos1.y - pos0.y);
             return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2));
         }
     }
@@ -322,7 +321,6 @@ BinaryHeap.prototype = {
                 // Update 'n' to continue at the new position.
                 n = parentN;
             }
-
             // Found a parent that is less, no need to sink any further.
             else {
                 break;
@@ -337,11 +335,11 @@ BinaryHeap.prototype = {
 
         while(true) {
             // Compute the indices of the child elements.
-            var child2N = (n + 1) << 1, child1N = child2N - 1;
-            // This is used to store the new position of the element,
-            // if any.
-            var swap = null;
-            var child1Score;
+            var child2N = (n + 1) << 1,
+                child1N = child2N - 1;
+            // This is used to store the new position of the element, if any.
+            var swap = null,
+                child1Score;
             // If the first child exists (is inside the array)...
             if (child1N < length) {
                 // Look it up and compute its score.
@@ -369,7 +367,6 @@ BinaryHeap.prototype = {
                 this.content[swap] = element;
                 n = swap;
             }
-
             // Otherwise, we are done.
             else {
                 break;
