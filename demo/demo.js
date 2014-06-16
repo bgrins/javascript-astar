@@ -101,9 +101,7 @@ function GraphSearch($graph, options, implementation) {
 }
 GraphSearch.prototype.setOption = function(opt) {
     this.opts = $.extend(this.opts, opt);
-    if(opt["debug"]||opt["debug"]==false) {
-        this.drawDebugInfo(opt["debug"]);
-    }
+    this.drawDebugInfo();
 };
 GraphSearch.prototype.initialize = function() {
     this.grid = [];
@@ -190,16 +188,14 @@ GraphSearch.prototype.cellClicked = function($end) {
     }
     else {
         $("#message").text("search took " + duration + "ms.");
-        if(this.opts.debug) {
-            this.drawDebugInfo(this.opts.debug);
-        }
+        this.drawDebugInfo();
         this.animatePath(path);
     }
 };
-GraphSearch.prototype.drawDebugInfo = function(show) {
+GraphSearch.prototype.drawDebugInfo = function() {
     this.$cells.html(" ");
     var that = this;
-    if(show) {
+    if(this.opts.debug) {
         that.$cells.each(function(i) {
             var node = that.nodeFromElement($(this)),
                 debug = false;
