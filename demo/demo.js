@@ -241,7 +241,7 @@ GraphSearch.prototype.animatePath = function(path) {
         elementFromNode(path[i]).removeClass(css.active);
         setTimeout(function() {
             removeClass(path, i+1);
-        }, timeout*path[i].cost);
+        }, timeout*path[i].getCost());
     };
     var setStartClass = function(path, i) {
         if(i === path.length) {
@@ -256,7 +256,7 @@ GraphSearch.prototype.animatePath = function(path) {
         elementFromNode(path[i]).addClass(css.active);
         setTimeout(function() {
             addClass(path, i+1);
-        }, timeout*path[i].cost);
+        }, timeout*path[i].getCost());
     };
 
     addClass(path, 0);
