@@ -28,6 +28,12 @@ function pathTo(node){
     return path.reverse();
 }
 
+function getHeap() {
+    return new BinaryHeap(function(node) {
+        return node.f;
+    });
+}
+
 var astar = {
     init: function(graph) {
         for (var i = 0, len = graph.nodes.length; i < len; ++i) {
@@ -39,11 +45,6 @@ var astar = {
             node.closed = false;
             node.parent = null;
         }
-    },
-    heap: function() {
-        return new BinaryHeap(function(node) {
-            return node.f;
-        });
     },
 
     /**
@@ -64,7 +65,7 @@ var astar = {
         var heuristic = options.heuristic || astar.heuristics.manhattan,
             closest = options.closest || false;
 
-        var openHeap = astar.heap(),
+        var openHeap = getHeap(),
             closestNode = start; // set the start node to be the closest if required
 
         start.h = heuristic(start, end);
@@ -87,10 +88,10 @@ var astar = {
             // Find all neighbors for the current node.
             var neighbors = graph.neighbors(currentNode);
 
-            for(var i = 0, il = neighbors.length; i < il; ++i) {
+            for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
-                if(neighbor.closed || neighbor.isWall()) {
+                if (neighbor.closed || neighbor.isWall()) {
                     // Not a valid node to process, skip to next neighbor.
                     continue;
                 }
@@ -100,7 +101,7 @@ var astar = {
                 var gScore = currentNode.g + neighbor.getCost(currentNode),
                     beenVisited = neighbor.visited;
 
-                if(!beenVisited || gScore < neighbor.g) {
+                if (!beenVisited || gScore < neighbor.g) {
 
                     // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
                     neighbor.visited = true;
@@ -174,6 +175,7 @@ function Graph(gridIn, options) {
         }
     }
 }
+
 Graph.prototype.neighbors = function(node) {
     var ret = [],
         x = node.x,
