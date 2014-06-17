@@ -14,7 +14,6 @@
     } else {
         var exports = definition();
         window.astar = exports.astar;
-        window.Graph = exports.Graph;
     }
 })(function() {
 
@@ -381,9 +380,10 @@ BinaryHeap.prototype = {
     }
 };
 
+astar.Graph = Graph;
+
 return {
-    astar: astar,
-    Graph: Graph
+    astar: astar
 };
 
 });

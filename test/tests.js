@@ -1,10 +1,10 @@
 
-/* global Graph, astar, ok, test, equal */
+/* global astar, ok, test, equal */
 
 
 test( "Sanity Checks", function() {
-  ok (typeof Graph !== "undefined", "Graph exists");
   ok (typeof astar !== "undefined", "Astar exists");
+  ok (typeof astar.Graph !== "undefined", "Graph exists");
 });
 
 test( "Basic Horizontal", function() {
@@ -56,7 +56,7 @@ test( "Pathfinding", function() {
 });
 
 test( "Diagonal Pathfinding", function() {
-  var result1 = runSearch(new Graph([
+  var result1 = runSearch(new astar.Graph([
       [1,1,1,1],
       [0,1,1,0],
       [0,0,1,1]
@@ -92,8 +92,8 @@ test( "Pathfinding to closest", function() {
 });
 
 function runSearch(graph, start, end, options) {
-  if (!(graph instanceof Graph)) {
-    graph = new Graph(graph);
+  if (!(graph instanceof astar.Graph)) {
+    graph = new astar.Graph(graph);
   }
   start = graph.grid[start[0]][start[1]];
   end = graph.grid[end[0]][end[1]];
@@ -207,7 +207,7 @@ test( "GPS Pathfinding", function() {
 
 // // https://gist.github.com/bgrins/581352
 // function runBasic() {
-//     var graph = new Graph([
+//     var graph = new astar.Graph([
 //         [1,1,1,1],
 //         [0,1,1,0],
 //         [0,0,1,1]

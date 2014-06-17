@@ -3,7 +3,7 @@
 
     Set up the demo page for the A* Search
 */
-/* global Graph, astar, $ */
+/* global astar, $ */
 
 var WALL = 0,
     performance = window.performance;
@@ -126,7 +126,7 @@ GraphSearch.prototype.initialize = function() {
         nodes.push(nodeRow);
     }
 
-    this.graph = new Graph(nodes);
+    this.graph = new astar.Graph(nodes);
 
     // bind cell event, set start/wall positions
     this.$cells = $graph.find(".grid_item");
