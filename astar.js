@@ -46,13 +46,17 @@ var astar = {
         });
     },
 
-    // astar.search
-    // supported options:
-    // {
-    //   heuristic: heuristic function to use
-    //   closest: boolean specifying whether to return closest node if
-    //            target is unreachable
-    // }
+    /**
+    * Perform an A* Search on a graph given a start and end node.
+    * @param {Graph} graph
+    * @param {GridNode} start
+    * @param {GridNode} end
+    * @param {Object} [options]
+    * @param {bool} [options.closest] Specifies whether to return the
+               path to the closest node if the target is unreachable.
+    * @param {Function} [options.heuristic] Heuristic function (see
+    *          astar.heuristics).
+    */
     search: function(graph, start, end, options) {
         astar.init(graph);
 
