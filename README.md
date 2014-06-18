@@ -10,7 +10,7 @@ If you want just the A* search code (not the demo visualization), use code like 
 
 	<script type='text/javascript' src='astar.js'></script>
 	<script type='text/javascript'>
-		var graph = new Graph([
+		var graph = new astar.Graph([
 			[1,1,1,1],
 			[0,1,1,0],
 			[0,0,1,1]
@@ -20,7 +20,7 @@ If you want just the A* search code (not the demo visualization), use code like 
 		var result = astar.search(graph, start, end);
 		// result is an array containing the shortest path
 
-		var graphDiagonal = new Graph([
+		var graphDiagonal = new astar.Graph([
 			[1,1,1,1],
 			[0,1,1,0],
 			[0,0,1,1]
@@ -30,7 +30,7 @@ If you want just the A* search code (not the demo visualization), use code like 
 		var resultWithDiagonals = astar.search(graphDiagonal, start, end);
 
 		// Weight can easily be added by increasing the values within the graph, and where 0 is infinite (a wall)
-		var graphWithWeight = new Graph([
+		var graphWithWeight = new astar.Graph([
 			[1,1,2,30],
 			[0,4,1.3,0],
 			[0,0,5,1]
@@ -49,7 +49,6 @@ The original version of the algorithm used a list, and was a bit clearer but muc
 The newest version of the algorithm using a Binary Heap.  It is quite faster than the original.
 http://www.briangrinstead.com/blog/astar-search-algorithm-in-javascript-updated
 Binary Heap taken from http://eloquentjavascript.net/appendix2.html (license: http://creativecommons.org/licenses/by/3.0/)
-
 
 ## Running the test suite
 
