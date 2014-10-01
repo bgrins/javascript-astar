@@ -16,14 +16,13 @@
         window.astar = exports.astar;
         window.Graph = exports.Graph;
     }
+
 })(function() {
 
-function pathTo(node){
-    var curr = node,
-        path = [];
-    while(curr.parent) {
-        path.push(curr);
-        curr = curr.parent;
+function pathTo(node) {
+    var path = [];
+    while((node = node.parent)) {
+        path.push(node);
     }
     return path.reverse();
 }
@@ -35,7 +34,9 @@ function getHeap() {
 }
 
 var astar = {
+
     init: function(graph) {
+
         for (var i = 0, len = graph.nodes.length; i < len; ++i) {
             var node = graph.nodes[i];
             node.f = 0;
@@ -72,7 +73,7 @@ var astar = {
 
         openHeap.push(start);
 
-        while(openHeap.size() > 0) {
+        while(openHeap.size()) {
 
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
             var currentNode = openHeap.pop();
@@ -140,16 +141,19 @@ var astar = {
     // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
     heuristics: {
         manhattan: function(pos0, pos1) {
-            var d1 = Math.abs(pos1.x - pos0.x);
-            var d2 = Math.abs(pos1.y - pos0.y);
-            return d1 + d2;
+            var d1 = pos1.x - pos0.x;
+            var d2 = pos1.y - pos0.y;
+            return (d1 < 0 ? -d1 : +d1) + (d2 < 0 ? -d2 : +d2);
         },
         diagonal: function(pos0, pos1) {
-            var D = 1;
-            var D2 = Math.sqrt(2);
-            var d1 = Math.abs(pos1.x - pos0.x);
-            var d2 = Math.abs(pos1.y - pos0.y);
-            return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2));
+            //var D = 1;
+            var D2 = 1.4142135623730951; //Math.sqrt(2);
+            var d1 = pos1.x - pos0.x;
+            var d2 = pos1.y - pos0.y;
+            if (d1 < 0) d1 = -d1;
+            if (d2 < 0) d2 = -d2;
+            // (D * (d1 + d2)) + ((D2 - (2 * D))
+            return (d1 + d2) + ((D2 - 2) * (d1 < d2 ? d1 : d2));
         }
     }
 };
@@ -162,84 +166,98 @@ var astar = {
 */
 function Graph(gridIn, options) {
     options = options || {};
-    this.nodes = [];
     this.diagonal = !!options.diagonal;
-    this.grid = [];
-    for (var x = 0; x < gridIn.length; x++) {
-        this.grid[x] = [];
+    var nodes = [];
+    var grid = [];
+    var line;
+    for (var x = 0, l = gridIn.length; x < l; x++) {
+        grid[x] = line = [];
 
-        for (var y = 0, row = gridIn[x]; y < row.length; y++) {
+        for (var y = 0, row = gridIn[x], k = row.length; y < k; y++) {
             var node = new GridNode(x, y, row[y]);
-            this.grid[x][y] = node;
-            this.nodes.push(node);
+            line[y] = node;
+            nodes.push(node);
         }
     }
+    this.nodes = nodes;
+    this.grid = grid;
 }
 
-Graph.prototype.neighbors = function(node) {
-    var ret = [],
-        x = node.x,
-        y = node.y,
-        grid = this.grid;
+Graph.prototype = {
+    neighbors: function(node) {
+        var ret = [],
+            x = node.x,
+            y = node.y,
+            grid = this.grid,
+            gridX;
 
-    // West
-    if(grid[x-1] && grid[x-1][y]) {
-        ret.push(grid[x-1][y]);
-    }
-
-    // East
-    if(grid[x+1] && grid[x+1][y]) {
-        ret.push(grid[x+1][y]);
-    }
-
-    // South
-    if(grid[x] && grid[x][y-1]) {
-        ret.push(grid[x][y-1]);
-    }
-
-    // North
-    if(grid[x] && grid[x][y+1]) {
-        ret.push(grid[x][y+1]);
-    }
-
-    if (this.diagonal) {
-        // Southwest
-        if(grid[x-1] && grid[x-1][y-1]) {
-            ret.push(grid[x-1][y-1]);
+        // West
+        gridX = grid[x-1];
+        if(gridX && gridX[y]) {
+            ret.push(gridX[y]);
         }
 
-        // Southeast
-        if(grid[x+1] && grid[x+1][y-1]) {
-            ret.push(grid[x+1][y-1]);
+        // East
+        gridX = grid[x+1];
+        if(gridX && gridX[y]) {
+            ret.push(gridX[y]);
         }
 
-        // Northwest
-        if(grid[x-1] && grid[x-1][y+1]) {
-            ret.push(grid[x-1][y+1]);
+        // South
+        gridX = grid[x];
+
+        if(gridX && gridX[y-1]) {
+            ret.push(gridX[y-1]);
         }
 
-        // Northeast
-        if(grid[x+1] && grid[x+1][y+1]) {
-            ret.push(grid[x+1][y+1]);
+        // North
+        if(gridX && gridX[y+1]) {
+            ret.push(gridX[y+1]);
         }
+
+        if (this.diagonal) {
+            // Southwest
+            gridX = grid[x-1];
+            if(gridX && gridX[y-1]) {
+                ret.push(gridX[y-1]);
+            }
+
+            // Southeast
+            gridX = grid[x+1];
+            if(gridX && gridX[y-1]) {
+                ret.push(gridX[y-1]);
+            }
+
+            // Northwest
+            gridX = grid[x-1];
+            if(gridX && gridX[y+1]) {
+                ret.push(gridX[y+1]);
+            }
+
+            // Northeast
+            gridX = grid[x+1];
+            if(gridX && gridX[y+1]) {
+                ret.push(gridX[y+1]);
+            }
+        }
+
+        return ret;
+    },
+
+    toString: function() {
+        var graphString = [],
+            nodes = this.grid, // when using grid
+            rowDebug, row, y, l;
+        for (var x = 0, len = nodes.length; x < len; x++) {
+            rowDebug = [];
+            row = nodes[x];
+            for (y = 0, l = row.length; y < l; y++) {
+                rowDebug.push(row[y].weight);
+            }
+            graphString.push(rowDebug.join(" "));
+        }
+        return graphString.join("\n");
     }
-
-    return ret;
-};
-
-Graph.prototype.toString = function() {
-    var graphString = [],
-        nodes = this.grid, // when using grid
-        rowDebug, row, y, l;
-    for (var x = 0, len = nodes.length; x < len; x++) {
-        rowDebug = [];
-        row = nodes[x];
-        for (y = 0, l = row.length; y < l; y++) {
-            rowDebug.push(row[y].weight);
-        }
-        graphString.push(rowDebug.join(" "));
-    }
-    return graphString.join("\n");
 };
 
 function GridNode(x, y, weight) {
@@ -248,16 +266,22 @@ function GridNode(x, y, weight) {
     this.weight = weight;
 }
 
-GridNode.prototype.toString = function() {
-    return "[" + this.x + " " + this.y + "]";
-};
+GridNode.prototype = {
+    x: 0,
+    y: 0,
+    weight: 0,
 
-GridNode.prototype.getCost = function() {
-    return this.weight;
-};
+    toString: function() {
+        return "[" + this.x + " " + this.y + "]";
+    },
 
-GridNode.prototype.isWall = function() {
-    return this.weight === 0;
+    getCost: function() {
+        return this.weight;
+    },
+
+    isWall: function() {
+        return this.weight === 0;
+    }
 };
 
 function BinaryHeap(scoreFunction){
@@ -268,33 +292,32 @@ function BinaryHeap(scoreFunction){
 BinaryHeap.prototype = {
     push: function(element) {
         // Add the new element to the end of the array.
-        this.content.push(element);
-
         // Allow it to sink down.
-        this.sinkDown(this.content.length - 1);
+        this.sinkDown(this.content.push(element) - 1); // push returns length, better compression
     },
     pop: function() {
         // Store the first element so we can return it later.
-        var result = this.content[0];
-        // Get the element at the end of the array.
-        var end = this.content.pop();
+        var content = this.content;
+        var result = content[0];
+
         // If there are any elements left, put the end element at the
         // start, and let it bubble up.
-        if (this.content.length > 0) {
-            this.content[0] = end;
+        if (content.length > 0) {
+            content[0] = content.pop(); // Get the element at the end of the array.
             this.bubbleUp(0);
         }
         return result;
     },
     remove: function(node) {
-        var i = this.content.indexOf(node);
+        var content = this.content;
+        var i = content.indexOf(node);
 
         // When it is found, the process seen in 'pop' is repeated
         // to fill up the hole.
-        var end = this.content.pop();
+        var end = content.pop();
 
-        if (i !== this.content.length - 1) {
-            this.content[i] = end;
+        if (content.length - 1 !== i) {
+            content[i] = end;
 
             if (this.scoreFunction(end) < this.scoreFunction(node)) {
                 this.sinkDown(i);
@@ -311,19 +334,21 @@ BinaryHeap.prototype = {
         this.sinkDown(this.content.indexOf(node));
     },
     sinkDown: function(n) {
+        var content = this.content;
+
         // Fetch the element that has to be sunk.
-        var element = this.content[n];
+        var element = content[n];
 
         // When at 0, an element can not sink any further.
         while (n > 0) {
 
             // Compute the parent element's index, and fetch it.
             var parentN = ((n + 1) >> 1) - 1,
-                parent = this.content[parentN];
+                parent = content[parentN];
             // Swap the elements if the parent is greater.
             if (this.scoreFunction(element) < this.scoreFunction(parent)) {
-                this.content[parentN] = element;
-                this.content[n] = parent;
+                content[parentN] = element;
+                content[n] = parent;
                 // Update 'n' to continue at the new position.
                 n = parentN;
             }
@@ -335,8 +360,9 @@ BinaryHeap.prototype = {
     },
     bubbleUp: function(n) {
         // Look up the target element and its score.
-        var length = this.content.length,
-            element = this.content[n],
+        var content = this.content,
+            length = content.length,
+            element = content[n],
             elemScore = this.scoreFunction(element);
 
         while(true) {
@@ -349,7 +375,7 @@ BinaryHeap.prototype = {
             // If the first child exists (is inside the array)...
             if (child1N < length) {
                 // Look it up and compute its score.
-                var child1 = this.content[child1N];
+                var child1 = content[child1N];
                 child1Score = this.scoreFunction(child1);
 
                 // If the score is less than our element's, we need to swap.
@@ -360,7 +386,7 @@ BinaryHeap.prototype = {
 
             // Do the same checks for the other child.
             if (child2N < length) {
-                var child2 = this.content[child2N],
+                var child2 = content[child2N],
                     child2Score = this.scoreFunction(child2);
                 if (child2Score < (swap === null ? elemScore : child1Score)) {
                     swap = child2N;
@@ -369,8 +395,8 @@ BinaryHeap.prototype = {
 
             // If the element needs to be moved, swap it, and continue.
             if (swap !== null) {
-                this.content[n] = this.content[swap];
-                this.content[swap] = element;
+                content[n] = content[swap];
+                content[swap] = element;
                 n = swap;
             }
             // Otherwise, we are done.
