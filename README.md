@@ -42,6 +42,12 @@ If you want just the A* search code (not the demo visualization), use code like 
 		// resultWithWeight is an array containing the shortest path taking into account the weight of a node
 	</script>
 
+A few notes about weight values:
+
+1. A weight of 0 denotes a wall.
+2. A weight cannot be negative.
+3. A weight *can* contain decmial values.
+
 ### Original (slower) implementation
 
 The original version of the algorithm used a list, and was a bit clearer but much slower.  It was based off the [original blog post](http://www.briangrinstead.com/blog/astar-search-algorithm-in-javascript).  The code is available at: https://github.com/bgrins/javascript-astar/tree/0.0.1/original-implementation.
