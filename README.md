@@ -46,7 +46,8 @@ A few notes about weight values:
 
 1. A weight of 0 denotes a wall.
 2. A weight cannot be negative.
-3. A weight *can* contain decmial values.
+3. A weight cannot be between 0 and 1 (exclusive).
+4. A weight can contain decimal values (greater than 1).
 
 ### Original (slower) implementation
 
