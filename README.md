@@ -27,7 +27,7 @@ If you want just the A* search code (not the demo visualization), use code like 
 		], { diagonal: true });
 		var start = graphDiagonal.grid[0][0];
 		var end = graphDiagonal.grid[1][2];
-		var resultWithDiagonals = astar.search(graphDiagonal, start, end);
+		var resultWithDiagonals = astar.search(graphDiagonal, start, end, { heuristic: astar.heuristics.diagonal });
 
 		// Weight can easily be added by increasing the values within the graph, and where 0 is infinite (a wall)
 		var graphWithWeight = new Graph([
