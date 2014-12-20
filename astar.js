@@ -59,7 +59,6 @@ var astar = {
     *          astar.heuristics).
     */
     search: function(graph, start, end, options) {
-        astar.init(graph);
 
         options = options || {};
         var heuristic = options.heuristic || astar.heuristics.manhattan,
