@@ -72,6 +72,7 @@ var astar = {
 
         openHeap.push(start);
 
+        var cleaner = [];
         while(openHeap.size() > 0) {
 
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
@@ -79,7 +80,17 @@ var astar = {
 
             // End case -- result has been found, return the traced path.
             if(currentNode === end) {
-                return pathTo(currentNode);
+                var path = pathTo(currentNode);
+                for (var c = 0; c < cleaner.length; c++) {
+                    var node = cleaner[c];
+                    node.f = 0;
+                    node.g = 0;
+                    node.h = 0;
+                    node.visited = false;
+                    node.closed = false;
+                    node.parent = null;
+                }
+                return path;
             }
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
@@ -109,7 +120,7 @@ var astar = {
                     neighbor.h = neighbor.h || heuristic(neighbor, end);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
-
+                    cleaner.push(neighbor);
                     if (closest) {
                         // If the neighbour is closer than the current closestNode or if it's equally close but has
                         // a cheaper path than the current closest node then it becomes the closest node
@@ -174,6 +185,7 @@ function Graph(gridIn, options) {
             this.nodes.push(node);
         }
     }
+    astar.init(this);
 }
 
 Graph.prototype.neighbors = function(node) {
