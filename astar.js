@@ -46,7 +46,17 @@ var astar = {
             node.parent = null;
         }
     },
-
+    cleanNodes:function(hitNodes){
+        for (var i = 0; i < hitNodes.length; i++) {
+            var node = hitNodes[i];
+            node.f = 0;
+            node.g = 0;
+            node.h = 0;
+            node.visited = false;
+            node.closed = false;
+            node.parent = null;
+        }
+    },
     /**
     * Perform an A* Search on a graph given a start and end node.
     * @param {Graph} graph
@@ -71,7 +81,7 @@ var astar = {
 
         openHeap.push(start);
 
-        var cleaner = [];
+        var hitNodes = [];
         while(openHeap.size() > 0) {
 
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
@@ -80,15 +90,7 @@ var astar = {
             // End case -- result has been found, return the traced path.
             if(currentNode === end) {
                 var path = pathTo(currentNode);
-                for (var c = 0; c < cleaner.length; c++) {
-                    var node = cleaner[c];
-                    node.f = 0;
-                    node.g = 0;
-                    node.h = 0;
-                    node.visited = false;
-                    node.closed = false;
-                    node.parent = null;
-                }
+                astar.cleanNodes(hitNodes);
                 return path;
             }
 
@@ -119,7 +121,7 @@ var astar = {
                     neighbor.h = neighbor.h || heuristic(neighbor, end);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
-                    cleaner.push(neighbor);
+                    hitNodes.push(neighbor);
                     if (closest) {
                         // If the neighbour is closer than the current closestNode or if it's equally close but has
                         // a cheaper path than the current closest node then it becomes the closest node
@@ -141,9 +143,12 @@ var astar = {
         }
 
         if (closest) {
-            return pathTo(closestNode);
+            var closestPath = pathTo(closestNode);
+            astar.cleanNodes(hitNodes);
+            return closestPath;
         }
 
+        astar.cleanNodes(hitNodes);
         // No result was found - empty array signifies failure to find path.
         return [];
     },
