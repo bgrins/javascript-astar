@@ -158,7 +158,6 @@ var astar = {
 function Graph(gridIn, options) {
     options = options || {};
     this.nodes = [];
-    this.dirtyNodes=[];
     this.diagonal = !!options.diagonal;
     this.grid = [];
     for (var x = 0; x < gridIn.length; x++) {
@@ -170,23 +169,24 @@ function Graph(gridIn, options) {
             this.nodes.push(node);
         }
     }
-    this.init(this);
+    this.init();
 }
 
-Graph.prototype.init= function() {
-    for (var i = 0, len = this.nodes.length; i < len; ++i) {
+Graph.prototype.init = function() {
+    this.dirtyNodes = [];
+    for (var i = 0; i < this.nodes.length; i++) {
         astar.cleanNode(this.nodes[i]);
     }
 };
 
-Graph.prototype.cleanDirty=function(){
+Graph.prototype.cleanDirty = function() {
     for (var i = 0; i < this.dirtyNodes.length; i++) {
         astar.cleanNode(this.dirtyNodes[i]);
     }
-    this.dirtyNodes.length=0;
+    this.dirtyNodes = [];
 };
 
-Graph.prototype.markDirty=function(node){
+Graph.prototype.markDirty = function(node) {
     this.dirtyNodes.push(node);
 };
 

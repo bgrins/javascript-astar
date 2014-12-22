@@ -135,7 +135,6 @@ test( "GPS Pathfinding", function() {
 
   function CityGraph(data, links) {
     this.nodes = [];
-    this.dirtyNodes = [];
     this.links = links;
     this.cities = {};
 
@@ -153,22 +152,11 @@ test( "GPS Pathfinding", function() {
     this.init();
   }
 
-  CityGraph.prototype.init= function() {
-      for (var i = 0, len = this.nodes.length; i < len; ++i) {
-        astar.cleanNode(this.nodes[i]);
-      }
-  };
-  CityGraph.prototype.cleanDirty=function(){
-      for (var i = 0; i < this.dirtyNodes.length; i++) {
-        astar.cleanNode(this.dirtyNodes[i]);
-      }
-      this.dirtyNodes.length=0;
-  };
+  CityGraph.prototype.init= Graph.prototype.init;
 
-  CityGraph.prototype.markDirty=function(node){
-      this.dirtyNodes.push(node);
-  };
+  CityGraph.prototype.cleanDirty = Graph.prototype.cleanDirty;
 
+  CityGraph.prototype.markDirty = Graph.prototype.markDirty;
 
   CityGraph.prototype.neighbors = function (node) {
     var neighbors = [],
