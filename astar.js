@@ -35,28 +35,6 @@ function getHeap() {
 }
 
 var astar = {
-    init: function(graph) {
-        for (var i = 0, len = graph.nodes.length; i < len; ++i) {
-            var node = graph.nodes[i];
-            node.f = 0;
-            node.g = 0;
-            node.h = 0;
-            node.visited = false;
-            node.closed = false;
-            node.parent = null;
-        }
-    },
-    cleanNodes:function(hitNodes){
-        for (var i = 0; i < hitNodes.length; i++) {
-            var node = hitNodes[i];
-            node.f = 0;
-            node.g = 0;
-            node.h = 0;
-            node.visited = false;
-            node.closed = false;
-            node.parent = null;
-        }
-    },
     /**
     * Perform an A* Search on a graph given a start and end node.
     * @param {Graph} graph
@@ -69,7 +47,7 @@ var astar = {
     *          astar.heuristics).
     */
     search: function(graph, start, end, options) {
-
+        graph.cleanDirty();
         options = options || {};
         var heuristic = options.heuristic || astar.heuristics.manhattan,
             closest = options.closest || false;
@@ -81,7 +59,6 @@ var astar = {
 
         openHeap.push(start);
 
-        var hitNodes = [];
         while(openHeap.size() > 0) {
 
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
@@ -89,9 +66,7 @@ var astar = {
 
             // End case -- result has been found, return the traced path.
             if(currentNode === end) {
-                var path = pathTo(currentNode);
-                astar.cleanNodes(hitNodes);
-                return path;
+                return pathTo(currentNode);
             }
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
@@ -121,7 +96,7 @@ var astar = {
                     neighbor.h = neighbor.h || heuristic(neighbor, end);
                     neighbor.g = gScore;
                     neighbor.f = neighbor.g + neighbor.h;
-                    hitNodes.push(neighbor);
+                    graph.markDirty(neighbor);
                     if (closest) {
                         // If the neighbour is closer than the current closestNode or if it's equally close but has
                         // a cheaper path than the current closest node then it becomes the closest node
@@ -143,12 +118,9 @@ var astar = {
         }
 
         if (closest) {
-            var closestPath = pathTo(closestNode);
-            astar.cleanNodes(hitNodes);
-            return closestPath;
+            return pathTo(closestNode);
         }
 
-        astar.cleanNodes(hitNodes);
         // No result was found - empty array signifies failure to find path.
         return [];
     },
@@ -166,6 +138,14 @@ var astar = {
             var d2 = Math.abs(pos1.y - pos0.y);
             return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2));
         }
+    },
+    cleanNode:function(node){
+        node.f = 0;
+        node.g = 0;
+        node.h = 0;
+        node.visited = false;
+        node.closed = false;
+        node.parent = null;
     }
 };
 
@@ -178,6 +158,7 @@ var astar = {
 function Graph(gridIn, options) {
     options = options || {};
     this.nodes = [];
+    this.dirtyNodes=[];
     this.diagonal = !!options.diagonal;
     this.grid = [];
     for (var x = 0; x < gridIn.length; x++) {
@@ -189,8 +170,25 @@ function Graph(gridIn, options) {
             this.nodes.push(node);
         }
     }
-    astar.init(this);
+    this.init(this);
 }
+
+Graph.prototype.init= function() {
+    for (var i = 0, len = this.nodes.length; i < len; ++i) {
+        astar.cleanNode(this.nodes[i]);
+    }
+};
+
+Graph.prototype.cleanDirty=function(){
+    for (var i = 0; i < this.dirtyNodes.length; i++) {
+        astar.cleanNode(this.dirtyNodes[i]);
+    }
+    this.dirtyNodes.length=0;
+};
+
+Graph.prototype.markDirty=function(node){
+    this.dirtyNodes.push(node);
+};
 
 Graph.prototype.neighbors = function(node) {
     var ret = [],
