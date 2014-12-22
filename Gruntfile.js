@@ -13,10 +13,10 @@ module.exports = function(grunt) {
       options: {
         browser: true,
         sub: true,
-        globals: {
-        }
+        undef: true,
+        unused: true
       },
-      all: ['astar.js']
+      all: ['astar.js', 'test/tests.js', 'demo/demo.js']
     }
   });
 
