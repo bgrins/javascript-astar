@@ -103,10 +103,8 @@ test( "Path costs", function() {
       diagonalWeightedNeighbor = graph1.grid[2][2].getCost(graph1.grid[1][1]);
 
   equal ((straightNeighbor == 1) , true, "Result is expected - neighbor cost is 1");
-  equal ((diagonalNeighbor > 1 
-       && diagonalNeighbor < 2) , true, "Result is expected - diagonal neighbor cost is more than 1, less than 2");
-  equal ((diagonalWeightedNeighbor > 2  
-       && diagonalWeightedNeighbor < 4), true, "Result is expected - diagonal neighbor cost for 2 weight node is more than 2, less than 4");
+  equal ((diagonalNeighbor > 1 && diagonalNeighbor < 2) , true, "Result is expected - diagonal neighbor cost is more than 1, less than 2");
+  equal ((diagonalWeightedNeighbor > 2 && diagonalWeightedNeighbor < 4), true, "Result is expected - diagonal neighbor cost for 2 weight node is more than 2, less than 4");
 });
 
 function runSearch(graph, start, end, options) {
