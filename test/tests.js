@@ -55,6 +55,18 @@ test( "Pathfinding", function() {
   equal (result1.text, "(0,1)(1,1)(1,2)(2,2)(2,3)", "Result is expected");
 });
 
+test( "Pathfinding (Issue #38)", function() {
+  var result1 = runSearch([
+      [1,1,1,0,1,1,1,1],
+      [1,1,1,0,1,1,1,1],
+      [1,1,1,1,1,1,0,1],
+      [1,1,0,1,0,1,1,0],
+      [1,0,1,1,1,1,1,0],
+  ], [3,5], [4,1]);
+
+  equal (result1.text, "NEEDS PATH", "Result is expected");
+});
+
 test( "Diagonal Pathfinding", function() {
   var result1 = runSearch(new Graph([
       [1,1,1,1],
