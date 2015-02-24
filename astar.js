@@ -266,7 +266,9 @@ GridNode.prototype.toString = function() {
     return "[" + this.x + " " + this.y + "]";
 };
 
-GridNode.prototype.getCost = function() {
+GridNode.prototype.getCost = function(fromNeighbor) {
+    if (fromNeighbor.x != this.x && fromNeighbor.y != this.y)
+        return this.weight * 1.41421;
     return this.weight;
 };
 

@@ -91,6 +91,22 @@ test( "Pathfinding to closest", function() {
   equal (result3.text, "(0,1)(1,1)(2,1)", "Result is expected - target node was reachable");
 });
 
+test( "Path costs", function() {
+  var graph1 = new Graph([
+      [1,2,2],
+      [1,1,2],
+      [1,1,2],
+  ], { diagonal: true});
+
+  var straightNeighbor = graph1.grid[1][0].getCost(graph1.grid[0][0]),
+      diagonalNeighbor = graph1.grid[1][1].getCost(graph1.grid[0][0]),
+      diagonalWeightedNeighbor = graph1.grid[2][2].getCost(graph1.grid[1][1]);
+
+  equal ((straightNeighbor == 1) , true, "Result is expected - neighbor cost is 1");
+  equal ((diagonalNeighbor > 1 && diagonalNeighbor < 2) , true, "Result is expected - diagonal neighbor cost is more than 1, less than 2");
+  equal ((diagonalWeightedNeighbor > 2 && diagonalWeightedNeighbor < 4), true, "Result is expected - diagonal neighbor cost for 2 weight node is more than 2, less than 4");
+});
+
 function runSearch(graph, start, end, options) {
   if (!(graph instanceof Graph)) {
     graph = new Graph(graph);
