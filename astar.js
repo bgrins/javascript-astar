@@ -167,24 +167,24 @@ function Graph(gridIn, options) {
 
         for (var y = 0, row = gridIn[x]; y < row.length; y++) {
             var clearance = 0;
-            if (row[y] != 0) { // Tile isn't a wall, check clearance
+            if (row[y] !== 0) { // Tile isn't a wall, check clearance
                 // Limit loop through the map border
                 var clearanceMax = Math.min(gridIn.length - x, gridIn[x].length - y),
-                    wallFound = false,
-                    clearance = 1;
+                    wallFound = false;
+                clearance = 1;
 
                 while (!wallFound && clearance < clearanceMax) {
                     // Loop over x values
                     for (var i = 0 ; i <= clearance; i++) {
-                        if (gridIn[parseInt(x) + i][parseInt(y) + clearance] == 0) {
+                        if (gridIn[parseInt(x) + i][parseInt(y) + clearance] === 0) {
                             wallFound = true;
                             break;
                         }
                     }
                     // Loop over y values
                     if (!wallFound) {
-                        for (var i = 0 ; i <= clearance; i++) {
-                            if (gridIn[parseInt(x) + clearance][parseInt(y) + i] == 0) {
+                        for (var j = 0 ; j <= clearance; j++) {
+                            if (gridIn[parseInt(x) + clearance][parseInt(y) + j] === 0) {
                                 wallFound = true;
                                 break;
                             }
