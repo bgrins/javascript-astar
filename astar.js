@@ -22,10 +22,10 @@ function pathTo(node){
     var curr = node,
         path = [];
     while(curr.parent) {
-        path.push(curr);
+        path.unshift(curr);
         curr = curr.parent;
     }
-    return path.reverse();
+    return path;
 }
 
 function getHeap() {
