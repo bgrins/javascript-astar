@@ -47,6 +47,7 @@ var astar = {
     *          astar.heuristics).
     */
     search: function(graph, start, end, options) {
+        //graph.init();
         graph.cleanDirty();
         options = options || {};
         var heuristic = options.heuristic || astar.heuristics.manhattan,
@@ -71,6 +72,7 @@ var astar = {
 
             // Normal case -- move currentNode from open to closed, process each of its neighbors.
             currentNode.closed = true;
+            graph.markDirty(currentNode);
 
             // Find all neighbors for the current node.
             var neighbors = graph.neighbors(currentNode);
