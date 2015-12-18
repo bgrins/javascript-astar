@@ -107,6 +107,23 @@ test( "Path costs", function() {
   equal ((diagonalWeightedNeighbor > 2 && diagonalWeightedNeighbor < 4), true, "Result is expected - diagonal neighbor cost for 2 weight node is more than 2, less than 4");
 });
 
+// Make sure that start / end position are re-opened between searches
+// See https://github.com/bgrins/javascript-astar/issues/43.
+test( "Multiple runs on the same graph", function() {
+  var graph = new Graph([
+      [1,1,0,1],
+      [0,1,1,0],
+      [0,0,1,1]
+  ]);
+
+  var result1 = runSearch(graph, [0,0], [2,3]);
+  equal (result1.text, "(0,1)(1,1)(1,2)(2,2)(2,3)", "Result is expected");
+
+  var result2 = runSearch(graph, [2,3], [0,0]);
+  equal (result2.text, "(2,2)(1,2)(1,1)(0,1)(0,0)", "Result is expected");
+
+});
+
 function runSearch(graph, start, end, options) {
   if (!(graph instanceof Graph)) {
     graph = new Graph(graph);
