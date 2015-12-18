@@ -19,8 +19,8 @@
 })(function() {
 
 function pathTo(node){
-    var curr = node,
-        path = [];
+    var curr = node;
+    var path = [];
     while(curr.parent) {
         path.unshift(curr);
         curr = curr.parent;
@@ -49,11 +49,11 @@ var astar = {
     search: function(graph, start, end, options) {
         graph.cleanDirty();
         options = options || {};
-        var heuristic = options.heuristic || astar.heuristics.manhattan,
-            closest = options.closest || false;
+        var heuristic = options.heuristic || astar.heuristics.manhattan;
+        var closest = options.closest || false;
 
-        var openHeap = getHeap(),
-            closestNode = start; // set the start node to be the closest if required
+        var openHeap = getHeap();
+        var closestNode = start; // set the start node to be the closest if required
 
         start.h = heuristic(start, end);
         graph.markDirty(start);
@@ -86,8 +86,8 @@ var astar = {
 
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
-                var gScore = currentNode.g + neighbor.getCost(currentNode),
-                    beenVisited = neighbor.visited;
+                var gScore = currentNode.g + neighbor.getCost(currentNode);
+                var beenVisited = neighbor.visited;
 
                 if (!beenVisited || gScore < neighbor.g) {
 
@@ -192,10 +192,10 @@ Graph.prototype.markDirty = function(node) {
 };
 
 Graph.prototype.neighbors = function(node) {
-    var ret = [],
-        x = node.x,
-        y = node.y,
-        grid = this.grid;
+    var ret = [];
+    var x = node.x;
+    var y = node.y;
+    var grid = this.grid;
 
     // West
     if(grid[x-1] && grid[x-1][y]) {
@@ -243,13 +243,12 @@ Graph.prototype.neighbors = function(node) {
 };
 
 Graph.prototype.toString = function() {
-    var graphString = [],
-        nodes = this.grid, // when using grid
-        rowDebug, row, y, l;
-    for (var x = 0, len = nodes.length; x < len; x++) {
-        rowDebug = [];
-        row = nodes[x];
-        for (y = 0, l = row.length; y < l; y++) {
+    var graphString = [];
+    var nodes = this.grid;
+    for (var x = 0; x < nodes.length; x++) {
+        var rowDebug = [];
+        var row = nodes[x];
+        for (var y = 0; y < row.length; y++) {
             rowDebug.push(row[y].weight);
         }
         graphString.push(rowDebug.join(" "));
@@ -337,8 +336,8 @@ BinaryHeap.prototype = {
         while (n > 0) {
 
             // Compute the parent element's index, and fetch it.
-            var parentN = ((n + 1) >> 1) - 1,
-                parent = this.content[parentN];
+            var parentN = ((n + 1) >> 1) - 1;
+            var parent = this.content[parentN];
             // Swap the elements if the parent is greater.
             if (this.scoreFunction(element) < this.scoreFunction(parent)) {
                 this.content[parentN] = element;
@@ -354,17 +353,17 @@ BinaryHeap.prototype = {
     },
     bubbleUp: function(n) {
         // Look up the target element and its score.
-        var length = this.content.length,
-            element = this.content[n],
-            elemScore = this.scoreFunction(element);
+        var length = this.content.length;
+        var element = this.content[n];
+        var elemScore = this.scoreFunction(element);
 
         while(true) {
             // Compute the indices of the child elements.
-            var child2N = (n + 1) << 1,
-                child1N = child2N - 1;
+            var child2N = (n + 1) << 1;
+            var child1N = child2N - 1;
             // This is used to store the new position of the element, if any.
-            var swap = null,
-                child1Score;
+            var swap = null;
+            var child1Score;
             // If the first child exists (is inside the array)...
             if (child1N < length) {
                 // Look it up and compute its score.
@@ -379,8 +378,8 @@ BinaryHeap.prototype = {
 
             // Do the same checks for the other child.
             if (child2N < length) {
-                var child2 = this.content[child2N],
-                    child2Score = this.scoreFunction(child2);
+                var child2 = this.content[child2N];
+                var child2Score = this.scoreFunction(child2);
                 if (child2Score < (swap === null ? elemScore : child1Score)) {
                     swap = child2N;
                 }
