@@ -229,6 +229,9 @@ test( "GPS Pathfinding", function() {
     // TODO: Determine the real distance between cities (from another data set)
     return this.GPS_distance(city);
   };
+  CityNode.prototype.clearanceLower = function(clearance) {
+    return this.clearance < clearance;
+  };
 
   var graph = new CityGraph(data, links);
 

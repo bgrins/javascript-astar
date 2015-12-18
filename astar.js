@@ -50,7 +50,8 @@ var astar = {
         graph.cleanDirty();
         options = options || {};
         var heuristic = options.heuristic || astar.heuristics.manhattan,
-            closest = options.closest || false;
+            closest = options.closest || false,
+            clearance = options.clearance || 1;
 
         var openHeap = getHeap(),
             closestNode = start; // set the start node to be the closest if required
@@ -59,6 +60,7 @@ var astar = {
         graph.markDirty(start);
 
         openHeap.push(start);
+        graph.markDirty(start);
 
         while(openHeap.size() > 0) {
 
@@ -79,7 +81,7 @@ var astar = {
             for (var i = 0, il = neighbors.length; i < il; ++i) {
                 var neighbor = neighbors[i];
 
-                if (neighbor.closed || neighbor.isWall()) {
+                if (neighbor.closed || neighbor.isWall() || neighbor.clearanceLower(clearance)) {
                     // Not a valid node to process, skip to next neighbor.
                     continue;
                 }
@@ -165,7 +167,37 @@ function Graph(gridIn, options) {
         this.grid[x] = [];
 
         for (var y = 0, row = gridIn[x]; y < row.length; y++) {
-            var node = new GridNode(x, y, row[y]);
+            var clearance = 0;
+            if (row[y] !== 0) { // Tile isn't a wall, check clearance
+                // Limit loop through the map border
+                var clearanceMax = Math.min(gridIn.length - x, gridIn[x].length - y),
+                    wallFound = false;
+                clearance = 1;
+
+                while (!wallFound && clearance < clearanceMax) {
+                    // Loop over x values
+                    for (var i = 0 ; i <= clearance; i++) {
+                        if (gridIn[parseInt(x) + i][parseInt(y) + clearance] === 0) {
+                            wallFound = true;
+                            break;
+                        }
+                    }
+                    // Loop over y values
+                    if (!wallFound) {
+                        for (var j = 0 ; j <= clearance; j++) {
+                            if (gridIn[parseInt(x) + clearance][parseInt(y) + j] === 0) {
+                                wallFound = true;
+                                break;
+                            }
+                        }
+                    }
+                    // No wall found, update clearance
+                    if (!wallFound) {
+                        clearance++;
+                    }
+                }
+            }
+            var node = new GridNode(x, y, row[y], clearance);
             this.grid[x][y] = node;
             this.nodes.push(node);
         }
@@ -257,10 +289,11 @@ Graph.prototype.toString = function() {
     return graphString.join("\n");
 };
 
-function GridNode(x, y, weight) {
+function GridNode(x, y, weight, clearance) {
     this.x = x;
     this.y = y;
     this.weight = weight;
+    this.clearance = clearance;
 }
 
 GridNode.prototype.toString = function() {
@@ -277,6 +310,10 @@ GridNode.prototype.getCost = function(fromNeighbor) {
 
 GridNode.prototype.isWall = function() {
     return this.weight === 0;
+};
+
+GridNode.prototype.clearanceLower = function(clearance) {
+    return this.clearance < clearance;
 };
 
 function BinaryHeap(scoreFunction){
