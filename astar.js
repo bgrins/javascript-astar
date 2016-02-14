@@ -388,7 +388,7 @@ BinaryHeap.prototype = {
       // Do the same checks for the other child.
       if (child2N < length) {
         child2 = content[child2N];
-        if ( scoreFunction(child2) < (swap >= 0 ? elemScore : child1Score)) {
+        if ( scoreFunction(child2) < (swap < 0 ? elemScore : child1Score)) {
           swap = child2N;
         }
       }
