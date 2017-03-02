@@ -17,6 +17,13 @@
   }
 })(function() {
 
+var DIAGONAL_MOVEMENT = {
+  ALWAYS: 1,
+  NEVER: 2,
+  ONE_OBSTACLE: 3,
+  NO_OBSTACLES: 4
+};
+
 function pathTo(node) {
   var curr = node;
   var path = [];
@@ -34,6 +41,8 @@ function getHeap() {
 }
 
 var astar = {
+    DIAGONAL_MOVEMENT: DIAGONAL_MOVEMENT,
+
   /**
   * Perform an A* Search on a graph given a start and end node.
   * @param {Graph} graph
