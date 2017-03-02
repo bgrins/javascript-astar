@@ -166,7 +166,19 @@ var astar = {
 function Graph(gridIn, options) {
   options = options || {};
   this.nodes = [];
-  this.diagonal = !!options.diagonal;
+
+  if (typeof options.diagonal === 'Boolean') {
+    console.warn('options.diagonal was specified as a Boolean. This functionality will be removed in an upcoming version. Use DIAGONAL_MODE instead.');
+
+    if (options.diagonal) {
+      this.diagonal = DIAGONAL_MOVEMENT.ALWAYS;
+    } else {
+      this.diagonal = DIAGONAL_MOVEMENT.NEVER;
+    }
+  } else {
+    this.diagonal = options.diagonal;
+  }
+
   this.grid = [];
   for (var x = 0; x < gridIn.length; x++) {
     this.grid[x] = [];
