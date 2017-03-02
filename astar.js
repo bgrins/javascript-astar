@@ -167,7 +167,7 @@ function Graph(gridIn, options) {
   options = options || {};
   this.nodes = [];
 
-  if (typeof options.diagonal === 'Boolean') {
+  if (typeof options.diagonal === 'boolean') {
     console.warn('options.diagonal was specified as a Boolean. This functionality will be removed in an upcoming version. Use DIAGONAL_MODE instead.');
 
     if (options.diagonal) {
