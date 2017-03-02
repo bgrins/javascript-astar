@@ -236,7 +236,12 @@ Graph.prototype.neighbors = function(node) {
     ret.push(grid[x][y + 1]);
   }
 
-  if (this.diagonal) {
+  if (this.diagonal === DIAGONAL_MOVEMENT.NEVER) {
+    return ret;
+  }
+
+  if (this.diagonal === DIAGONAL_MOVEMENT.ALWAYS) {
+
     // Southwest
     if (grid[x - 1] && grid[x - 1][y - 1]) {
       ret.push(grid[x - 1][y - 1]);
@@ -255,6 +260,52 @@ Graph.prototype.neighbors = function(node) {
     // Northeast
     if (grid[x + 1] && grid[x + 1][y + 1]) {
       ret.push(grid[x + 1][y + 1]);
+    }
+  }
+
+  if (this.diagonal === DIAGONAL_MOVEMENT.ONE_OBSTACLE) {
+
+     // Southwest
+    if (grid[x-1] && grid[x-1][y-1] && (grid[x-1][y].weight || grid[x][y-1].weight)) {
+      ret.push(grid[x-1][y-1]);
+    }
+
+    // Southeast
+    if (grid[x+1] && grid[x+1][y-1] && (grid[x+1][y].weight || grid[x][y-1].weight)) {
+      ret.push(grid[x+1][y-1]);
+    }
+
+    // Northwest
+    if (grid[x-1] && grid[x-1][y+1] && (grid[x-1][y].weight || grid[x][y+1].weight)) {
+      ret.push(grid[x-1][y+1]);
+    }
+
+    // Northeast
+    if (grid[x+1] && grid[x+1][y+1] && (grid[x+1][y].weight || grid[x][y+1].weight)) {
+      ret.push(grid[x+1][y+1]);
+    }
+  }
+
+  if (this.diagonal === DIAGONAL_MOVEMENT.NO_OBSTACLES) {
+
+    // Southwest
+    if (grid[x-1] && grid[x-1][y-1] && grid[x-1][y].weight && grid[x][y-1].weight) {
+      ret.push(grid[x-1][y-1]);
+    }
+
+    // Southeast
+    if (grid[x+1] && grid[x+1][y-1] && grid[x+1][y].weight && grid[x][y-1].weight) {
+      ret.push(grid[x+1][y-1]);
+    }
+
+    // Northwest
+    if (grid[x-1] && grid[x-1][y+1] && grid[x-1][y].weight && grid[x][y+1].weight) {
+      ret.push(grid[x-1][y+1]);
+    }
+
+    // Northeast
+    if (grid[x+1] && grid[x+1][y+1] && grid[x+1][y].weight && grid[x][y+1].weight) {
+      ret.push(grid[x+1][y+1]);
     }
   }
 
