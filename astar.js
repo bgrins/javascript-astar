@@ -17,7 +17,7 @@
   }
 })(function() {
 
-var DIAGONAL_MOVEMENT = {
+var DIAGONAL_MODE = {
   ALWAYS: 1,
   NEVER: 2,
   ONE_OBSTACLE: 3,
@@ -41,7 +41,7 @@ function getHeap() {
 }
 
 var astar = {
-    DIAGONAL_MOVEMENT: DIAGONAL_MOVEMENT,
+    DIAGONAL_MODE: DIAGONAL_MODE,
 
   /**
   * Perform an A* Search on a graph given a start and end node.
@@ -171,9 +171,9 @@ function Graph(gridIn, options) {
     console.warn('options.diagonal was specified as a Boolean. This functionality will be removed in an upcoming version. Use DIAGONAL_MODE instead.');
 
     if (options.diagonal) {
-      this.diagonal = DIAGONAL_MOVEMENT.ALWAYS;
+      this.diagonal = DIAGONAL_MODE.ALWAYS;
     } else {
-      this.diagonal = DIAGONAL_MOVEMENT.NEVER;
+      this.diagonal = DIAGONAL_MODE.NEVER;
     }
   } else {
     this.diagonal = options.diagonal;
@@ -236,11 +236,11 @@ Graph.prototype.neighbors = function(node) {
     ret.push(grid[x][y + 1]);
   }
 
-  if (this.diagonal === DIAGONAL_MOVEMENT.NEVER) {
+  if (this.diagonal === DIAGONAL_MODE.NEVER) {
     return ret;
   }
 
-  if (this.diagonal === DIAGONAL_MOVEMENT.ALWAYS) {
+  if (this.diagonal === DIAGONAL_MODE.ALWAYS) {
 
     // Southwest
     if (grid[x - 1] && grid[x - 1][y - 1]) {
@@ -263,7 +263,7 @@ Graph.prototype.neighbors = function(node) {
     }
   }
 
-  if (this.diagonal === DIAGONAL_MOVEMENT.ONE_OBSTACLE) {
+  if (this.diagonal === DIAGONAL_MODE.ONE_OBSTACLE) {
 
      // Southwest
     if (grid[x-1] && grid[x-1][y-1] && (grid[x-1][y].weight || grid[x][y-1].weight)) {
@@ -286,7 +286,7 @@ Graph.prototype.neighbors = function(node) {
     }
   }
 
-  if (this.diagonal === DIAGONAL_MOVEMENT.NO_OBSTACLES) {
+  if (this.diagonal === DIAGONAL_MODE.NO_OBSTACLES) {
 
     // Southwest
     if (grid[x-1] && grid[x-1][y-1] && grid[x-1][y].weight && grid[x][y-1].weight) {
