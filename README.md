@@ -23,8 +23,8 @@ If you want just the A* search code (not the demo visualization), use code like 
 		[1,1,1,1],
 		[0,1,1,0],
 		[0,0,1,1]
-	], { diagonal: true });
-	
+	], { diagonal: astar.DIAGONAL_MODE.ALWAYS });
+
 	var start = graphDiagonal.grid[0][0];
 	var end = graphDiagonal.grid[1][2];
 	var resultWithDiagonals = astar.search(graphDiagonal, start, end, { heuristic: astar.heuristics.diagonal });
@@ -46,6 +46,17 @@ A few notes about weight values:
 2. A weight cannot be negative.
 3. A weight cannot be between 0 and 1 (exclusive).
 4. A weight can contain decimal values (greater than 1).
+
+##Configuration
+You can modify the default behaviour by passing options as the second argument to `Graph`:
+
+__diagonal__ &mdash; Enable diagonal movement. Values are available in `astar.DIAGONAL_MODE`.
+- *NEVER:* Diable diagonal movement (default)
+- *ALWAYS:* Allow diagonal movement regardless of obstacles
+- *ONE_OBSTACLE:* Allow diagonal movement with at most one obstacle
+- *NO_OBSTACLES:* Allow diagonal movement only when there are no obstacles
+
+_Note: To support legacy implementations, it is also possible to set `diagonal` to `true` or `false`._
 
 ### Original (slower) implementation
 

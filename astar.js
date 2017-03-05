@@ -17,6 +17,13 @@
   }
 })(function() {
 
+var DIAGONAL_MODE = {
+  ALWAYS: 1,
+  NEVER: 2,
+  ONE_OBSTACLE: 3,
+  NO_OBSTACLES: 4
+};
+
 function pathTo(node) {
   var curr = node;
   var path = [];
@@ -34,6 +41,8 @@ function getHeap() {
 }
 
 var astar = {
+    DIAGONAL_MODE: DIAGONAL_MODE,
+
   /**
   * Perform an A* Search on a graph given a start and end node.
   * @param {Graph} graph
@@ -157,7 +166,19 @@ var astar = {
 function Graph(gridIn, options) {
   options = options || {};
   this.nodes = [];
-  this.diagonal = !!options.diagonal;
+
+  if (typeof options.diagonal === 'boolean') {
+    console.warn('options.diagonal was specified as a Boolean. This functionality will be removed in an upcoming version. Use DIAGONAL_MODE instead.');
+
+    if (options.diagonal) {
+      this.diagonal = DIAGONAL_MODE.ALWAYS;
+    } else {
+      this.diagonal = DIAGONAL_MODE.NEVER;
+    }
+  } else {
+    this.diagonal = options.diagonal;
+  }
+
   this.grid = [];
   for (var x = 0; x < gridIn.length; x++) {
     this.grid[x] = [];
@@ -215,7 +236,12 @@ Graph.prototype.neighbors = function(node) {
     ret.push(grid[x][y + 1]);
   }
 
-  if (this.diagonal) {
+  if (this.diagonal === DIAGONAL_MODE.NEVER) {
+    return ret;
+  }
+
+  if (this.diagonal === DIAGONAL_MODE.ALWAYS) {
+
     // Southwest
     if (grid[x - 1] && grid[x - 1][y - 1]) {
       ret.push(grid[x - 1][y - 1]);
@@ -234,6 +260,52 @@ Graph.prototype.neighbors = function(node) {
     // Northeast
     if (grid[x + 1] && grid[x + 1][y + 1]) {
       ret.push(grid[x + 1][y + 1]);
+    }
+  }
+
+  if (this.diagonal === DIAGONAL_MODE.ONE_OBSTACLE) {
+
+     // Southwest
+    if (grid[x-1] && grid[x-1][y-1] && (grid[x-1][y].weight || grid[x][y-1].weight)) {
+      ret.push(grid[x-1][y-1]);
+    }
+
+    // Southeast
+    if (grid[x+1] && grid[x+1][y-1] && (grid[x+1][y].weight || grid[x][y-1].weight)) {
+      ret.push(grid[x+1][y-1]);
+    }
+
+    // Northwest
+    if (grid[x-1] && grid[x-1][y+1] && (grid[x-1][y].weight || grid[x][y+1].weight)) {
+      ret.push(grid[x-1][y+1]);
+    }
+
+    // Northeast
+    if (grid[x+1] && grid[x+1][y+1] && (grid[x+1][y].weight || grid[x][y+1].weight)) {
+      ret.push(grid[x+1][y+1]);
+    }
+  }
+
+  if (this.diagonal === DIAGONAL_MODE.NO_OBSTACLES) {
+
+    // Southwest
+    if (grid[x-1] && grid[x-1][y-1] && grid[x-1][y].weight && grid[x][y-1].weight) {
+      ret.push(grid[x-1][y-1]);
+    }
+
+    // Southeast
+    if (grid[x+1] && grid[x+1][y-1] && grid[x+1][y].weight && grid[x][y-1].weight) {
+      ret.push(grid[x+1][y-1]);
+    }
+
+    // Northwest
+    if (grid[x-1] && grid[x-1][y+1] && grid[x-1][y].weight && grid[x][y+1].weight) {
+      ret.push(grid[x-1][y+1]);
+    }
+
+    // Northeast
+    if (grid[x+1] && grid[x+1][y+1] && grid[x+1][y].weight && grid[x][y+1].weight) {
+      ret.push(grid[x+1][y+1]);
     }
   }
 
