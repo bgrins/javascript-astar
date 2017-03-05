@@ -54,7 +54,45 @@ test( "Pathfinding", function() {
   equal (result1.text, "(0,1)(1,1)(1,2)(2,2)(2,3)", "Result is expected");
 });
 
-test( "Diagonal Pathfinding", function() {
+test("Diagonal Pathfinding - Modes", function() {
+  var result1 = runSearch(new Graph([
+      [1,1,1,1],
+      [1,1,0,1],
+      [1,0,1,1],
+      [1,1,1,1]
+  ], { diagonal: astar.DIAGONAL_MOVEMENT.NO_OBSTACLES }), [0,0], [2,2]);
+
+  equal (result1.text, "(1,0)(2,0)(3,0)(3,1)(3,2)(2,2)", "Result is expected");
+
+  var result2 = runSearch(new Graph([
+      [1,1,1,1],
+      [1,1,0,1],
+      [1,0,1,1],
+      [1,1,1,1]
+  ], { diagonal: astar.DIAGONAL_MOVEMENT.ONE_OBSTACLE }), [0,0], [2,2]);
+
+  equal (result2.text, "(1,0)(2,0)(3,1)(2,2)", "Result is expected");
+
+  var result3 = runSearch(new Graph([
+      [1,1,1,1],
+      [1,1,0,1],
+      [1,0,1,1],
+      [1,1,1,1]
+  ], { diagonal: astar.DIAGONAL_MOVEMENT.ALWAYS }), [0,0], [2,2]);
+
+  equal (result3.text, "(1,1)(2,2)", "Result is expected");
+
+  var result4 = runSearch(new Graph([
+      [1,1,1,1],
+      [1,1,0,1],
+      [1,0,1,1],
+      [1,1,1,1]
+  ], { diagonal: astar.DIAGONAL_MOVEMENT.NEVER }), [0,0], [2,2]);
+
+  equal (result4.text, "(0,1)(0,2)(0,3)(1,3)(2,3)(2,2)", "Result is expected");
+});
+
+test("Diagonal Pathfinding - Legacy Options", function () {
   var result1 = runSearch(new Graph([
       [1,1,1,1],
       [0,1,1,0],
