@@ -1,4 +1,4 @@
-// javascript-astar 0.4.1
+// javascript-astar 0.4.2
 // http://github.com/bgrins/javascript-astar
 // Freely distributable under the MIT License.
 // Implements the astar search algorithm in javascript using a Binary Heap.
