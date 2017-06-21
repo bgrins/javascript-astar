@@ -5,6 +5,144 @@
 // Includes Binary Heap (with modifications) from Marijn Haverbeke.
 // http://eloquentjavascript.net/appendix2.html
 
+function GridNode(x, y, weight) {
+  this.x = x;
+  this.y = y;
+  this.weight = weight;
+  this.clean();
+}
+
+GridNode.prototype.toString = function() {
+  return `[${this.x} ${this.y}]`;
+};
+
+GridNode.prototype.getCost = function(fromNeighbor) {
+  // Take diagonal weight into consideration.
+  if (fromNeighbor && fromNeighbor.x !== this.x && fromNeighbor.y !== this.y) {
+    return this.weight * 1.41421;
+  }
+  return this.weight;
+};
+
+GridNode.prototype.isWall = function() {
+  return this.weight === 0;
+};
+
+GridNode.prototype.clean = function() {
+  this.f = 0;
+  this.g = 0;
+  this.h = 0;
+  this.visited = false;
+  this.closed = false;
+  this.parent = null;
+};
+
+/**
+ * A graph memory structure
+ * @param {Array} gridIn 2D array of input weights
+ * @param {Object} [options]
+ * @param {bool} [options.diagonal] Specifies whether diagonal moves are allowed
+ */
+export function Graph(gridIn, options) {
+  options = options || {};
+  this.nodes = [];
+  this.diagonal = !!options.diagonal;
+  this.grid = [];
+  for (let x = 0; x < gridIn.length; x++) {
+    this.grid[x] = [];
+
+    for (let y = 0, row = gridIn[x]; y < row.length; y++) {
+      const node = new GridNode(x, y, row[y]);
+      this.grid[x][y] = node;
+      this.nodes.push(node);
+    }
+  }
+  this.init();
+}
+
+Graph.prototype.init = function() {
+  this.dirtyNodes = [];
+  for (let i = 0; i < this.nodes.length; i++) {
+    this.nodes[i].clean();
+  }
+};
+
+Graph.prototype.cleanDirty = function() {
+  for (let i = 0; i < this.dirtyNodes.length; i++) {
+    this.dirtyNodes[i].clean();
+  }
+  this.dirtyNodes = [];
+};
+
+Graph.prototype.markDirty = function(node) {
+  this.dirtyNodes.push(node);
+};
+
+Graph.prototype.neighbors = function(node) {
+  const ret = [];
+  const x = node.x;
+  const y = node.y;
+  const grid = this.grid;
+
+  // West
+  if (grid[x - 1] && grid[x - 1][y]) {
+    ret.push(grid[x - 1][y]);
+  }
+
+  // East
+  if (grid[x + 1] && grid[x + 1][y]) {
+    ret.push(grid[x + 1][y]);
+  }
+
+  // South
+  if (grid[x] && grid[x][y - 1]) {
+    ret.push(grid[x][y - 1]);
+  }
+
+  // North
+  if (grid[x] && grid[x][y + 1]) {
+    ret.push(grid[x][y + 1]);
+  }
+
+  if (this.diagonal) {
+    // Southwest
+    if (grid[x - 1] && grid[x - 1][y - 1]) {
+      ret.push(grid[x - 1][y - 1]);
+    }
+
+    // Southeast
+    if (grid[x + 1] && grid[x + 1][y - 1]) {
+      ret.push(grid[x + 1][y - 1]);
+    }
+
+    // Northwest
+    if (grid[x - 1] && grid[x - 1][y + 1]) {
+      ret.push(grid[x - 1][y + 1]);
+    }
+
+    // Northeast
+    if (grid[x + 1] && grid[x + 1][y + 1]) {
+      ret.push(grid[x + 1][y + 1]);
+    }
+  }
+
+  return ret;
+};
+
+Graph.prototype.toString = function() {
+  const graphString = [];
+  const nodes = this.grid;
+  for (let x = 0; x < nodes.length; x++) {
+    const rowDebug = [];
+    const row = nodes[x];
+    for (let y = 0; y < row.length; y++) {
+      rowDebug.push(row[y].weight);
+    }
+    graphString.push(rowDebug.join(' '));
+  }
+  return graphString.join('\n');
+};
+
 function BinaryHeap(scoreFunction) {
   this.content = [];
   this.scoreFunction = scoreFunction;
@@ -126,35 +264,6 @@ BinaryHeap.prototype = {
   }
 };
 
-function GridNode(x, y, weight) {
-  this.x = x;
-  this.y = y;
-  this.weight = weight;
-}
-
-/**
- * A graph memory structure
- * @param {Array} gridIn 2D array of input weights
- * @param {Object} [options]
- * @param {bool} [options.diagonal] Specifies whether diagonal moves are allowed
- */
-export function Graph(gridIn, options) {
-  options = options || {};
-  this.nodes = [];
-  this.diagonal = !!options.diagonal;
-  this.grid = [];
-  for (let x = 0; x < gridIn.length; x++) {
-    this.grid[x] = [];
-
-    for (let y = 0, row = gridIn[x]; y < row.length; y++) {
-      const node = new GridNode(x, y, row[y]);
-      this.grid[x][y] = node;
-      this.nodes.push(node);
-    }
-  }
-  this.init();
-}
-
 export const astar = {
   pathTo: function(node) {
     let curr = node;
@@ -273,112 +382,5 @@ export const astar = {
       const d2 = Math.abs(pos1.y - pos0.y);
       return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2));
     }
-  },
-  cleanNode: function(node) {
-    node.f = 0;
-    node.g = 0;
-    node.h = 0;
-    node.visited = false;
-    node.closed = false;
-    node.parent = null;
   }
-};
-
-Graph.prototype.init = function() {
-  this.dirtyNodes = [];
-  for (let i = 0; i < this.nodes.length; i++) {
-    astar.cleanNode(this.nodes[i]);
-  }
-};
-
-Graph.prototype.cleanDirty = function() {
-  for (let i = 0; i < this.dirtyNodes.length; i++) {
-    astar.cleanNode(this.dirtyNodes[i]);
-  }
-  this.dirtyNodes = [];
-};
-
-Graph.prototype.markDirty = function(node) {
-  this.dirtyNodes.push(node);
-};
-
-Graph.prototype.neighbors = function(node) {
-  const ret = [];
-  const x = node.x;
-  const y = node.y;
-  const grid = this.grid;
-
-  // West
-  if (grid[x - 1] && grid[x - 1][y]) {
-    ret.push(grid[x - 1][y]);
-  }
-
-  // East
-  if (grid[x + 1] && grid[x + 1][y]) {
-    ret.push(grid[x + 1][y]);
-  }
-
-  // South
-  if (grid[x] && grid[x][y - 1]) {
-    ret.push(grid[x][y - 1]);
-  }
-
-  // North
-  if (grid[x] && grid[x][y + 1]) {
-    ret.push(grid[x][y + 1]);
-  }
-
-  if (this.diagonal) {
-    // Southwest
-    if (grid[x - 1] && grid[x - 1][y - 1]) {
-      ret.push(grid[x - 1][y - 1]);
-    }
-
-    // Southeast
-    if (grid[x + 1] && grid[x + 1][y - 1]) {
-      ret.push(grid[x + 1][y - 1]);
-    }
-
-    // Northwest
-    if (grid[x - 1] && grid[x - 1][y + 1]) {
-      ret.push(grid[x - 1][y + 1]);
-    }
-
-    // Northeast
-    if (grid[x + 1] && grid[x + 1][y + 1]) {
-      ret.push(grid[x + 1][y + 1]);
-    }
-  }
-
-  return ret;
-};
-
-Graph.prototype.toString = function() {
-  const graphString = [];
-  const nodes = this.grid;
-  for (let x = 0; x < nodes.length; x++) {
-    const rowDebug = [];
-    const row = nodes[x];
-    for (let y = 0; y < row.length; y++) {
-      rowDebug.push(row[y].weight);
-    }
-    graphString.push(rowDebug.join(' '));
-  }
-  return graphString.join('\n');
-};
-
-GridNode.prototype.toString = function() {
-  return `[${this.x} ${this.y}]`;
-};
-
-GridNode.prototype.getCost = function(fromNeighbor) {
-  // Take diagonal weight into consideration.
-  if (fromNeighbor && fromNeighbor.x !== this.x && fromNeighbor.y !== this.y) {
-    return this.weight * 1.41421;
-  }
-  return this.weight;
-};
-
-GridNode.prototype.isWall = function() {
-  return this.weight === 0;
 };
