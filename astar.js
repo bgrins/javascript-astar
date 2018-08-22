@@ -44,12 +44,15 @@ var astar = {
              path to the closest node if the target is unreachable.
   * @param {Function} [options.heuristic] Heuristic function (see
   *          astar.heuristics).
+  * @param {Number} [options.isWall] Specifies a wall value with
+  *          an initial / undefined value of 0.
   */
   search: function(graph, start, end, options) {
     graph.cleanDirty();
     options = options || {};
     var heuristic = options.heuristic || astar.heuristics.manhattan;
     var closest = options.closest || false;
+    var isWall = options.isWall || 0;
 
     var openHeap = getHeap();
     var closestNode = start; // set the start node to be the closest if required
@@ -78,7 +81,7 @@ var astar = {
       for (var i = 0, il = neighbors.length; i < il; ++i) {
         var neighbor = neighbors[i];
 
-        if (neighbor.closed || neighbor.isWall()) {
+        if (neighbor.closed || neighbor.isWall(isWall)) {
           // Not a valid node to process, skip to next neighbor.
           continue;
         }
@@ -272,8 +275,8 @@ GridNode.prototype.getCost = function(fromNeighbor) {
   return this.weight;
 };
 
-GridNode.prototype.isWall = function() {
-  return this.weight === 0;
+GridNode.prototype.isWall = function(isWall) {
+  return this.weight === isWall;
 };
 
 function BinaryHeap(scoreFunction) {
