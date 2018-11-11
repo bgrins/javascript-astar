@@ -4,6 +4,8 @@
 
 See a demo at http://www.briangrinstead.com/files/astar/
 
+This project is also available to install via npm: `npm install javascript-astar`
+
 ## Sample Usage
 
 If you want just the A* search code (not the demo visualization), use code like this http://gist.github.com/581352
