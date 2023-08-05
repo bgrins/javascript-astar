@@ -5,19 +5,19 @@
 */
 /* global Graph, astar, $ */
 
-var WALL = 0,
+let WALL = 0,
     performance = window.performance;
 
 $(function() {
 
-    var $grid = $("#search_grid"),
+    let $grid = $("#search_grid"),
         $selectWallFrequency = $("#selectWallFrequency"),
         $selectGridSize = $("#selectGridSize"),
         $checkDebug = $("#checkDebug"),
         $searchDiagonal = $("#searchDiagonal"),
         $checkClosest = $("#checkClosest");
 
-    var opts = {
+    let opts = {
         wallFrequency: $selectWallFrequency.val(),
         gridSize: $selectGridSize.val(),
         debug: $checkDebug.is("checked"),
@@ -25,7 +25,7 @@ $(function() {
         closest: $checkClosest.is("checked")
     };
 
-    var grid = new GraphSearch($grid, opts, astar.search);
+    let grid = new GraphSearch($grid, opts, astar.search);
 
     $("#btnGenerate").click(function() {
         grid.initialize();
@@ -46,7 +46,7 @@ $(function() {
     });
 
     $searchDiagonal.change(function() {
-        var val = $(this).is(":checked");
+        let val = $(this).is(":checked");
         grid.setOption({diagonal: val});
         grid.graph.diagonal = val;
     });
@@ -65,7 +65,7 @@ $(function() {
 
 });
 
-var css = { start: "start", finish: "finish", wall: "wall", active: "active" };
+let css = { start: "start", finish: "finish", wall: "wall", active: "active" };
 
 function GraphSearch($graph, options, implementation) {
     this.$graph = $graph;
@@ -79,36 +79,36 @@ GraphSearch.prototype.setOption = function(opt) {
 };
 GraphSearch.prototype.initialize = function() {
     this.grid = [];
-    var self = this,
+    let self = this,
         nodes = [],
         $graph = this.$graph;
 
     $graph.empty();
 
-    var cellWidth = ($graph.width()/this.opts.gridSize)-2,  // -2 for border
+    let cellWidth = ($graph.width()/this.opts.gridSize)-2,  // -2 for border
         cellHeight = ($graph.height()/this.opts.gridSize)-2,
         $cellTemplate = $("<span />").addClass("grid_item").width(cellWidth).height(cellHeight),
         startSet = false;
 
-    for(var x = 0; x < this.opts.gridSize; x++) {
-        var $row = $("<div class='clear' />"),
+    for(let x = 0; x < this.opts.gridSize; x++) {
+        let $row = $("<div class='clear' />"),
             nodeRow = [],
             gridRow = [];
 
-        for(var y = 0; y < this.opts.gridSize; y++) {
-            var id = "cell_"+x+"_"+y,
+        for(let y = 0; y < this.opts.gridSize; y++) {
+            let id = "cell_"+x+"_"+y,
                 $cell = $cellTemplate.clone();
             $cell.attr("id", id).attr("x", x).attr("y", y);
             $row.append($cell);
             gridRow.push($cell);
 
-            var isWall = Math.floor(Math.random()*(1/self.opts.wallFrequency));
+            let isWall = Math.floor(Math.random()*(1/self.opts.wallFrequency));
             if(isWall === 0) {
                 nodeRow.push(WALL);
                 $cell.addClass(css.wall);
             }
             else  {
-                var cell_weight = ($("#generateWeights").prop("checked") ? (Math.floor(Math.random() * 3)) * 2 + 1 : 1);
+                let cell_weight = ($("#generateWeights").prop("checked") ? (Math.floor(Math.random() * 3)) * 2 + 1 : 1);
                 nodeRow.push(cell_weight);
                 $cell.addClass('weight' + cell_weight);
                 if ($("#displayWeights").prop("checked")) {
@@ -136,7 +136,7 @@ GraphSearch.prototype.initialize = function() {
 };
 GraphSearch.prototype.cellClicked = function($end) {
 
-    var end = this.nodeFromElement($end);
+    let end = this.nodeFromElement($end);
 
     if($end.hasClass(css.wall) || $end.hasClass(css.start)) {
         return;
@@ -144,15 +144,15 @@ GraphSearch.prototype.cellClicked = function($end) {
 
     this.$cells.removeClass(css.finish);
     $end.addClass("finish");
-    var $start = this.$cells.filter("." + css.start),
+    let $start = this.$cells.filter("." + css.start),
         start = this.nodeFromElement($start);
 
-    var sTime = performance ? performance.now() : new Date().getTime();
+    let sTime = performance ? performance.now() : new Date().getTime();
 
-    var path = this.search(this.graph, start, end, {
+    let path = this.search(this.graph, start, end, {
         closest: this.opts.closest
     });
-    var fTime = performance ? performance.now() : new Date().getTime(),
+    let fTime = performance ? performance.now() : new Date().getTime(),
         duration = (fTime-sTime).toFixed(2);
 
     if(path.length === 0) {
@@ -167,10 +167,10 @@ GraphSearch.prototype.cellClicked = function($end) {
 };
 GraphSearch.prototype.drawDebugInfo = function() {
     this.$cells.html(" ");
-    var that = this;
+    let that = this;
     if(this.opts.debug) {
         that.$cells.each(function() {
-            var node = that.nodeFromElement($(this)),
+            let node = that.nodeFromElement($(this)),
                 debug = false;
             if (node.visited) {
                 debug = "F: " + node.f + "<br />G: " + node.g + "<br />H: " + node.h;
@@ -186,8 +186,8 @@ GraphSearch.prototype.nodeFromElement = function($cell) {
     return this.graph.grid[parseInt($cell.attr("x"))][parseInt($cell.attr("y"))];
 };
 GraphSearch.prototype.animateNoPath = function() {
-    var $graph = this.$graph;
-    var jiggle = function(lim, i) {
+    let $graph = this.$graph;
+    let jiggle = function(lim, i) {
         if(i>=lim) { $graph.css("top", 0).css("left", 0); return; }
         if(!i) i=0;
         i++;
@@ -199,15 +199,15 @@ GraphSearch.prototype.animateNoPath = function() {
     jiggle(15);
 };
 GraphSearch.prototype.animatePath = function(path) {
-    var grid = this.grid,
+    let grid = this.grid,
         timeout = 1000 / grid.length,
         elementFromNode = function(node) {
         return grid[node.x][node.y];
     };
 
-    var self = this;
+    let self = this;
     // will add start class if final
-    var removeClass = function(path, i) {
+    let removeClass = function(path, i) {
         if(i >= path.length) { // finished removing path, set start positions
             return setStartClass(path, i);
         }
@@ -216,13 +216,13 @@ GraphSearch.prototype.animatePath = function(path) {
             removeClass(path, i+1);
         }, timeout*path[i].getCost());
     };
-    var setStartClass = function(path, i) {
+    let setStartClass = function(path, i) {
         if(i === path.length) {
             self.$graph.find("." + css.start).removeClass(css.start);
             elementFromNode(path[i-1]).addClass(css.start);
         }
     };
-    var addClass = function(path, i) {
+    let addClass = function(path, i) {
         if(i >= path.length) { // Finished showing path, now remove
             return removeClass(path, 0);
         }
