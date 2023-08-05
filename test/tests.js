@@ -8,44 +8,44 @@ test( "Sanity Checks", function() {
 
 test( "Basic Horizontal", function() {
 
-  var result1 = runSearch([[1],[1]], [0,0], [1,0]);
+  let result1 = runSearch([[1],[1]], [0,0], [1,0]);
   equal (result1.text, "(1,0)", "One step down");
 
-  var result2 = runSearch([[1],[1],[1]], [0,0], [2,0]);
+  let result2 = runSearch([[1],[1],[1]], [0,0], [2,0]);
   equal (result2.text, "(1,0)(2,0)", "Two steps down");
 
-  var result3 = runSearch([[1],[1],[1],[1]], [0,0], [3,0]);
+  let result3 = runSearch([[1],[1],[1],[1]], [0,0], [3,0]);
   equal (result3.text, "(1,0)(2,0)(3,0)", "Three steps down");
 
 });
 
 test( "Basic Vertical", function() {
 
-  var result1 = runSearch([[1, 1]], [0,0], [0,1]);
+  let result1 = runSearch([[1, 1]], [0,0], [0,1]);
   equal (result1.text, "(0,1)", "One step across");
 
-  var result2 = runSearch([[1, 1, 1]], [0,0], [0,2]);
+  let result2 = runSearch([[1, 1, 1]], [0,0], [0,2]);
   equal (result2.text, "(0,1)(0,2)", "Two steps across");
 
-  var result3 = runSearch([[1, 1, 1, 1]], [0,0], [0,3]);
+  let result3 = runSearch([[1, 1, 1, 1]], [0,0], [0,3]);
   equal (result3.text, "(0,1)(0,2)(0,3)", "Three steps across");
 
 });
 
 test( "Basic Weighting", function() {
 
-  var result1 = runSearch([[1, 1],
+  let result1 = runSearch([[1, 1],
                            [2, 1]], [0,0], [1,1]);
   equal (result1.text, "(0,1)(1,1)", "Takes less weighted path");
 
-  var result2 = runSearch([[1, 2],
+  let result2 = runSearch([[1, 2],
                            [1, 1]], [0,0], [1,1]);
   equal (result2.text, "(1,0)(1,1)", "Takes less weighted path");
 
 });
 
 test( "Pathfinding", function() {
-  var result1 = runSearch([
+  let result1 = runSearch([
       [1,1,1,1],
       [0,1,1,0],
       [0,0,1,1]
@@ -55,7 +55,7 @@ test( "Pathfinding", function() {
 });
 
 test( "Diagonal Pathfinding", function() {
-  var result1 = runSearch(new Graph([
+  let result1 = runSearch(new Graph([
       [1,1,1,1],
       [0,1,1,0],
       [0,0,1,1]
@@ -65,7 +65,7 @@ test( "Diagonal Pathfinding", function() {
 });
 
 test( "Pathfinding to closest", function() {
-  var result1 = runSearch([
+  let result1 = runSearch([
       [1,1,1,1],
       [0,1,1,0],
       [0,0,1,1]
@@ -73,7 +73,7 @@ test( "Pathfinding to closest", function() {
 
   equal (result1.text, "(0,1)(1,1)", "Result is expected - pathed to closest node");
 
-  var result2 = runSearch([
+  let result2 = runSearch([
       [1,0,1,1],
       [0,1,1,0],
       [0,0,1,1]
@@ -81,7 +81,7 @@ test( "Pathfinding to closest", function() {
 
   equal (result2.text, "", "Result is expected - start node was closest node");
 
-  var result3 = runSearch([
+  let result3 = runSearch([
       [1,1,1,1],
       [0,1,1,0],
       [0,1,1,1]
@@ -91,13 +91,13 @@ test( "Pathfinding to closest", function() {
 });
 
 test( "Path costs", function() {
-  var graph1 = new Graph([
+  let graph1 = new Graph([
       [1,2,2],
       [1,1,2],
       [1,1,2],
   ], { diagonal: true});
 
-  var straightNeighbor = graph1.grid[1][0].getCost(graph1.grid[0][0]),
+  let straightNeighbor = graph1.grid[1][0].getCost(graph1.grid[0][0]),
       diagonalNeighbor = graph1.grid[1][1].getCost(graph1.grid[0][0]),
       diagonalWeightedNeighbor = graph1.grid[2][2].getCost(graph1.grid[1][1]);
 
@@ -109,16 +109,16 @@ test( "Path costs", function() {
 // Make sure that start / end position are re-opened between searches
 // See https://github.com/bgrins/javascript-astar/issues/43.
 test( "Multiple runs on the same graph", function() {
-  var graph = new Graph([
+  let graph = new Graph([
       [1,1,0,1],
       [0,1,1,0],
       [0,0,1,1]
   ]);
 
-  var result1 = runSearch(graph, [0,0], [2,3]);
+  let result1 = runSearch(graph, [0,0], [2,3]);
   equal (result1.text, "(0,1)(1,1)(1,2)(2,2)(2,3)", "Result is expected");
 
-  var result2 = runSearch(graph, [2,3], [0,0]);
+  let result2 = runSearch(graph, [2,3], [0,0]);
   equal (result2.text, "(2,2)(1,2)(1,1)(0,1)(0,0)", "Result is expected");
 
 });
@@ -129,7 +129,7 @@ function runSearch(graph, start, end, options) {
   }
   start = graph.grid[start[0]][start[1]];
   end = graph.grid[end[0]][end[1]];
-  var sTime = new Date(),
+  let sTime = new Date(),
     result = astar.search(graph, start, end, options),
     eTime = new Date();
   return {
@@ -146,7 +146,7 @@ function pathToString(result) {
 }
 
 test( "GPS Pathfinding", function() {
-  var data = [
+  let data = [
     {name: "Paris", lat: 48.8567, lng: 2.3508},
     {name: "Lyon", lat: 45.76, lng: 4.84},
     {name: "Marseille", lat: 43.2964, lng: 5.37},
@@ -170,8 +170,8 @@ test( "GPS Pathfinding", function() {
     this.links = links;
     this.cities = {};
 
-    for (var i = 0; i < data.length; ++i) {
-      var city = data[i],
+    for (let i = 0; i < data.length; ++i) {
+      let city = data[i],
           obj = new CityNode(city.name, city.lat, city.lng);
 
       if (this.nodes.indexOf(obj) == -1) {
@@ -191,10 +191,10 @@ test( "GPS Pathfinding", function() {
   CityGraph.prototype.markDirty = Graph.prototype.markDirty;
 
   CityGraph.prototype.neighbors = function (node) {
-    var neighbors = [],
+    let neighbors = [],
         ids = this.links[node.name];
-    for (var i = 0, len = ids.length; i < len; ++i) {
-      var name = ids[i],
+    for (let i = 0, len = ids.length; i < len; ++i) {
+      let name = ids[i],
           neighbor = this.cities[name];
       neighbors.push(neighbor);
     }
@@ -217,7 +217,7 @@ test( "GPS Pathfinding", function() {
   };
   // Heuristic function
   CityNode.prototype.GPS_distance = function(city) {
-      var x = (city.longRad - this.longRad) * Math.cos((this.latRad + city.latRad)/2),
+      let x = (city.longRad - this.longRad) * Math.cos((this.latRad + city.latRad)/2),
           y = city.latRad - this.latRad,
           res = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) * 6371;
       return res;
@@ -229,16 +229,16 @@ test( "GPS Pathfinding", function() {
     return this.GPS_distance(city);
   };
 
-  var graph = new CityGraph(data, links);
+  let graph = new CityGraph(data, links);
 
-  var start = graph.cities["Paris"],
+  let start = graph.cities["Paris"],
       end = graph.cities["Cannes"];
 
-  var GPSheuristic = function(node0, node1) {
+  let GPSheuristic = function(node0, node1) {
     return node0.GPS_distance(node1);
   };
 
-  var result = astar.search(graph, start, end, {heuristic: GPSheuristic});
+  let result = astar.search(graph, start, end, {heuristic: GPSheuristic});
   equal(result.length, 3, "Cannes is 3 cities away from Paris");
   equal(result[0].name, "Lyon", "City #1 is Lyon");
   equal(result[1].name, "Marseille", "City #2 is Marseille");
