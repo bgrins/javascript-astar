@@ -402,3 +402,6 @@ return {
 };
 
 });
+
+export const astar = window.astar;
+export const Graph = window.Graph;
